@@ -4,9 +4,11 @@
   "private": true,
   "main": "./src/electron-entry.js",
   "dependencies": {
+    "@octokit/rest": "^18.0.11",
     "react": "^16.3.0",
     "react-dom": "^16.3.0",
-    "react-scripts": "1.1.1"
+    "react-scripts": "1.1.1",
+    "request": "^2.88.2"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -18,7 +20,9 @@
     "dist": "build"
   },
   "devDependencies": {
+    "async": "^3.2.0",
     "axios": "^0.18.0",
+    "dotenv": "^8.2.0",
     "electron": "^1.8.4",
     "electron-builder": "^20.8.1"
   },

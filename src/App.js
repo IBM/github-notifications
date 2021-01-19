@@ -1,74 +1,86 @@
-import React, { Component } from 'react';
-import axios from 'axios';
-import AddTodo from './AddTodo'
-import TodoList from './TodoList'
+import React, { useState, useEffect } from 'react';
 import './App.css';
+const GitHubClient = require('./libs/GitHubClient.js').GitHubClient;
 
-const API_URL = 'https://todosapi.dev/api/todos';
+let githubCliEnterprise = new GitHubClient({
+  baseUri:"***REMOVED***/api/v3",
+  token:"***REMOVED***"
+});
 
-class App extends Component {
-  constructor() {
-    super();
+function App() {
+  const [notifications, setNotifications] = useState([]);
 
-    this.state = {
-      todos: []
+  useEffect(async () => {
+    await getNotifications();
+  });
+
+  const getNotifications = async () => {
+    try {
+      const notifications = await githubCliEnterprise.getData({path:'/notifications'});
+      readNotifications(notifications);
+    } catch (error) {
+      console.log(error);
     }
-
-    this.deleteTodo = this.deleteTodo.bind(this);
-    this.completeTodo = this.completeTodo.bind(this);
-    this.createTodo = this.createTodo.bind(this);
   }
 
-  componentDidMount() {
-    axios.get(API_URL)
-      .then((response) => {
-        this.setState({todos: response.data.todos});
-      });
+  const readNotifications = (notifications) => {
+    const newNotifications = processNotifications(notifications);
+    setNotifications({ notifications: newNotifications });
   }
 
-  deleteTodo(todoId) {
-    axios.post(`${API_URL}/delete`,{id: todoId})
-      .then(() => {
-        const todos = this.state.todos.filter((todo) => todo.id !== todoId);
-
-        this.setState({todos});
-      })
+  const processNotifications = (notifications) => {
+    let processedNotification = [];
+    const notificationArray = notifications.data;
+    notificationArray.forEach(async (notification, index) => {
+      const { subject: { title = '', url = '', type = '' } = {}, repository: { full_name = '' } = {}} = notification;
+      const processedUrl = await getUrlBasedOnType(type, url, full_name);
+      const newNotification = {
+        index,
+        title,
+        type,
+        url: processedUrl
+      };
+      processedNotification.push(newNotification);
+      console.log('newNotification: ', newNotification);
+    })
+    console.log('processedNotification: ', processedNotification);
+    return processedNotification;
   }
 
-  completeTodo(todoId) {
-    axios.post(`${API_URL}/complete`,{id: todoId})
-      .then(() => {
-        const todos = this.state.todos.map((todo) => {
-          if (todo.id === todoId) {
-            todo.completed = !todo.completed;
-          }
-
-          return todo;
-        });
-
-        this.setState({todos});
-      })
+  const getUrlBasedOnType = async (type = '', url = '', full_name = '') => {
+    let newUrl;
+    if (type === 'PullRequest') {
+      const urlPath = getUrlPath(url, 7);
+      newUrl = await getPrUrl(full_name, urlPath);
+    }
+    return newUrl;
   }
 
-  createTodo(content) {
-    axios.post(API_URL, {content})
-      .then((response) => {
-        const todos = this.state.todos.concat([response.data.todo]);
-
-        this.setState({todos});
-      })
+  const getUrlPath = (url, number) => {
+    const parseUrl = new URL(url);
+    const pathname = parseUrl.pathname;
+    const path = pathname.split('/');
+    console.log(path);
+    return path[number];
   }
 
-  render() {
-    return (
-      <div className="App">
-        <AddTodo createTodo={this.createTodo}/>
-        <TodoList todos={this.state.todos}
-          completeTodo={this.completeTodo}
-          deleteTodo={this.deleteTodo}/>
-      </div>
-    );
+  const getPrUrl = async (full_name = '', url = '') => {
+    const pr = await githubCliEnterprise.getData({path:`/repos/${full_name}/pulls/${url}`});
+    return pr.data['html_url'];
   }
+
+  return (
+    <div className="App">
+      <button onClick={() => getNotifications()}>
+        Kliknij mnie
+      </button>
+      <ul>
+        {notifications.map((notification) => (
+          <a href={notification.url} target='_blank'><li key={notification.index}>{notification.title}</li></a>
+        ))}
+      </ul>
+    </div>
+  )
 }
 
 export default App;
