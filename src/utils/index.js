@@ -18,16 +18,19 @@ function readNotifications(notifications) {
   return processNotifications(notifications);
 }
 
+function sortNotifications(notifications) { return notifications.slice().sort((a, b) => b.updated_at - a.updated_at) }
+
 async function processNotifications(notifications) {
   let processedNotification = [];
   const notificationArray = notifications.data;
   let index = 0;
   for ( const notification of notificationArray) {
-    const { subject: { title = '', url = '', type = '' } = {}, repository: { full_name = '' } = {}} = notification;
+    const { updated_at, subject: { title = '', url = '', type = '' } = {}, repository: { full_name = '' } = {}} = notification;
     const processedUrl = await getUrlBasedOnType(type, url, full_name);
     index++;
     const newNotification = {
       index,
+      updated_at,
       title,
       type,
       url: processedUrl
@@ -36,7 +39,7 @@ async function processNotifications(notifications) {
     console.log('newNotification: ', newNotification);
   }
   console.log('processedNotification: ', processedNotification);
-  return processedNotification;
+  return sortNotifications(processedNotification);
 }
 
 async function getUrlBasedOnType(type = '', url = '', full_name = '') {

@@ -23,7 +23,7 @@ class Notifications extends Component {
         <ul>
           {notifications.map((notification) => (
             <a href={notification.url} target='_blank' key={notification.index}>
-              <li>{notification.title}</li>
+              <li>{`${notification.title} - updated ${notification.updated_at}`}</li>
             </a>
           ))}
         </ul>
