@@ -29,7 +29,7 @@ export function notificationsFetchData() {
         dispatch(notificationsFetchDataSuccess(response))
       })
       .catch((error) => {
-        console.log(error);
+        dispatch(notificationsHaveError(true))
       })
 }
 }

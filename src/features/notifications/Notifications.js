@@ -4,8 +4,9 @@ import { connect } from 'react-redux';
 import { notificationsFetchData } from '../../actions/notifications';
 
 class Notifications extends Component {
-  componentDidMount() {
-    this.props.fetchData();
+  constructor(props) {
+    super(props);
+    props.fetchData();
   }
 
   testNotifications() {
@@ -39,10 +40,11 @@ Notifications.propTypes = {
 };
 
 const mapStateToProps = (state) => {
+  console.log(state);
   return {
     notifications: state.notifications.notifications,
-    hasError: state.hasError,
-    isLoading: state.isLoading
+    hasError: state.notifications.hasError,
+    isLoading: state.notifications.isLoading
   };
 };
 

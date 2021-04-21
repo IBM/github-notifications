@@ -11,7 +11,7 @@ const reducer = (state = initialState, action) => {
     case 'NOTIFICATIONS_HAVE_ERROR':
       return { ...state, error: action.hasError };
     case 'NOTIFICATIONS_FETCH_DATA_SUCCESS':
-      return { ...state, notifications: action.notifications };
+      return { ...state, notifications: action.notifications, isLoading: false };
     default:
       return { ...state };
   }

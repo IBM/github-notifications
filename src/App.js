@@ -15,7 +15,7 @@ class App extends Component {
       <Provider store={store}>
         <Router history={history}>
           <Switch>
-            <Route exact path="/" component={Notifications}/>
+            <Route exact path="/" component={Notifications} />
           </Switch>
         </Router>
       </Provider>
