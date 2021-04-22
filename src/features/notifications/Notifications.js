@@ -56,7 +56,8 @@ class Notifications extends Component {
                 <StructuredListRow key={notification.index}>
                   <StructuredListCell>
                     <Link href={notification.url} target='_blank' key={notification.index}>
-                      {notification.title}
+                      <h6>{notification.full_name}</h6>
+                      <h4>{notification.title}</h4>
                     </Link>
                   </StructuredListCell>
                   <StructuredListCell>
