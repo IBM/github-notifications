@@ -1,1 +1,9 @@
 @import '~carbon-components/scss/globals/scss/styles.scss';
+
+.notifications__main {
+  &__button {
+    min-width: 100%;
+    display: block;
+    text-align: center;
+  }
+}

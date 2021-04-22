@@ -25,11 +25,12 @@ async function processNotifications(notifications) {
   const notificationArray = notifications.data;
   let index = 0;
   for ( const notification of notificationArray) {
-    const { updated_at, subject: { title = '', url = '', type = '' } = {}, repository: { full_name = '' } = {}} = notification;
+    const { reason, updated_at, subject: { title = '', url = '', type = '' } = {}, repository: { full_name = '' } = {}} = notification;
     const processedUrl = await getUrlBasedOnType(type, url, full_name);
     index++;
     const newNotification = {
       index,
+      reason,
       updated_at,
       title,
       type,
