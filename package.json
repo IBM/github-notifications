@@ -6,12 +6,15 @@
   "dependencies": {
     "@octokit/rest": "^18.0.11",
     "@reduxjs/toolkit": "^1.5.0",
+    "carbon-components": "10.18.0",
+    "carbon-components-react": "7.18.0",
+    "carbon-icons": "7.0.7",
     "prop-types": "^15.7.2",
-    "react": "^16.3.0",
-    "react-dom": "^16.3.0",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
     "react-redux": "^7.2.2",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "1.1.1",
+    "react-scripts": "^3.4.1",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
     "request": "^2.88.2"
@@ -27,12 +30,25 @@
   },
   "devDependencies": {
     "async": "^3.2.0",
-    "axios": "^0.18.0",
-    "electron": "^1.8.4",
-    "electron-builder": "^20.8.1"
+    "axios": "^0.18.1",
+    "electron": "^1.8.8",
+    "electron-builder": "^20.44.4",
+    "node-sass": "^4.14.1"
   },
   "build": {
     "appId": "wecodetodos",
     "extends": null
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }
