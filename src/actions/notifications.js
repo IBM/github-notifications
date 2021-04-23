@@ -1,4 +1,4 @@
-const utils = require('../utils');
+const utils = require('../utils/notifications');
 
 export function notificationsHaveError(bool) {
   return {
