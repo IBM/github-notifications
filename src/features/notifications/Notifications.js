@@ -18,11 +18,11 @@ import { notificationsFetchData } from '../../actions/notifications';
 class Notifications extends Component {
   constructor(props) {
     super(props);
-    props.fetchNotifications();
+    props.fetchData();
   }
 
-  updateNotifications() {
-    this.props.fetchNotifications();
+  testNotifications() {
+    this.props.fetchData();
   }
 
   tagReason(reason) {
@@ -41,7 +41,7 @@ class Notifications extends Component {
 
     return (
       <div className="notifications__main">
-        <Button onClick={() => this.updateNotifications()} className="notifications__main__button">Update</Button>
+        <Button onClick={() => this.testNotifications()} className="notifications__main__button">Update</Button>
         <div className="notifications__main__list">
           <StructuredListWrapper selection>
             <StructuredListHead>
@@ -55,8 +55,7 @@ class Notifications extends Component {
               {notifications.map((notification) => (
                 <StructuredListRow key={notification.index}>
                   <StructuredListCell>
-                    <Link href={notification.html_url} target='_blank' key={notification.index}>
-                      <img alt="user avatar" src={`${notification.avatar_url}s=400`} />
+                    <Link href={notification.url} target='_blank' key={notification.index}>
                       <h6>{notification.full_name}</h6>
                       <h4>{notification.title}</h4>
                     </Link>
@@ -96,7 +95,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchNotifications: () => dispatch(notificationsFetchData())
+    fetchData: () => dispatch(notificationsFetchData())
   };
 };
 
