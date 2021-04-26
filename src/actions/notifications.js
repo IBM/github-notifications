@@ -31,5 +31,5 @@ export function notificationsFetchData() {
       .catch((error) => {
         dispatch(notificationsHaveError(true))
       })
-}
+  }
 }
