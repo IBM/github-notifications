@@ -1,16 +1,16 @@
-const utils = require('../utils');
+const utils = require('../utils/notifications');
 
 export function notificationsHaveError(bool) {
   return {
     type: 'NOTIFICATIONS_HAVE_ERROR',
-    hasError: bool
+    haveNotificationsError: bool
   };
 }
 
 export function notificationsAreLoading(bool) {
   return {
     type: 'NOTIFICATIONS_ARE_LOADING',
-    isLoading: bool
+    areNotificationsLoading: bool
   };
 }
 
@@ -21,7 +21,7 @@ export function notificationsFetchDataSuccess(notifications) {
   };
 }
 
-export function notificationsFetchData() {
+export function notificationsFetch() {
   return (dispatch) => {
     dispatch(notificationsAreLoading(true));
     utils.getNotifications()

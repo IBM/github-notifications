@@ -13,16 +13,20 @@ import {
   Loading,
   Tag
 } from 'carbon-components-react';
-import { notificationsFetchData } from '../../actions/notifications';
+import { Code24 } from '@carbon/icons-react';
+import { notificationsFetch } from '../../actions/notifications';
+import { commitsFetch } from '../../actions/commits';
 
 class Notifications extends Component {
   constructor(props) {
     super(props);
-    props.fetchData();
+    if (!props.notifications.length) {
+      props.fetchNotifications();
+    }
   }
 
-  testNotifications() {
-    this.props.fetchData();
+  getCommits(url) {
+    this.props.fetchCommits(url);
   }
 
   tagReason(reason) {
@@ -37,11 +41,11 @@ class Notifications extends Component {
   }
 
   render() {
-    const { notifications, hasError, isLoading } = this.props;
+    const { notifications, haveNotificationsError, areNotificationsLoading, fetchNotifications } = this.props;
 
     return (
       <div className="notifications__main">
-        <Button onClick={() => this.testNotifications()} className="notifications__main__button">Update</Button>
+        <Button onClick={() => fetchNotifications()} className="notifications__main__button">Update</Button>
         <div className="notifications__main__list">
           <StructuredListWrapper selection>
             <StructuredListHead>
@@ -49,13 +53,14 @@ class Notifications extends Component {
                 <StructuredListCell head>Title</StructuredListCell>
                 <StructuredListCell head>Last updated</StructuredListCell>
                 <StructuredListCell head>Reason</StructuredListCell>
+                <StructuredListCell head>{' '}</StructuredListCell>
               </StructuredListRow>
             </StructuredListHead>
             <StructuredListBody>
               {notifications.map((notification) => (
                 <StructuredListRow key={notification.index}>
                   <StructuredListCell>
-                    <Link href={notification.url} target='_blank' key={notification.index}>
+                    <Link href={notification.html_url} target='_blank' key={notification.index}>
                       <h6>{notification.full_name}</h6>
                       <h4>{notification.title}</h4>
                     </Link>
@@ -66,13 +71,22 @@ class Notifications extends Component {
                   <StructuredListCell>
                     {this.tagReason(notification.reason)}
                   </StructuredListCell>
+                  <StructuredListCell>
+                    <Button
+                      kind="tertiary"
+                      renderIcon={Code24}
+                      iconDescription="Commits"
+                      hasIconOnly
+                      onClick={() => {this.getCommits(notification.html_url)}}
+                    />
+                  </StructuredListCell>
                 </StructuredListRow>
               ))}
             </StructuredListBody>
           </StructuredListWrapper>
         </div>
-        {isLoading ? <Loading description="Active loading indicator" withOverlay /> : null}
-        {hasError ? <p>Sorry! There was an error loading the items</p> : null}
+        {areNotificationsLoading ? <Loading description="Active loading indicator" withOverlay /> : null}
+        {haveNotificationsError ? <p>Sorry! There was an error loading the items</p> : null}
       </div>
     );
   }
@@ -80,22 +94,23 @@ class Notifications extends Component {
 
 Notifications.propTypes = {
   notifications: PropTypes.array.isRequired,
-  hasError: PropTypes.bool.isRequired,
-  isLoading: PropTypes.bool.isRequired
+  haveNotificationsError: PropTypes.bool.isRequired,
+  areNotificationsLoading: PropTypes.bool.isRequired
 };
 
 const mapStateToProps = (state) => {
   console.log(state);
   return {
     notifications: state.notifications.notifications,
-    hasError: state.notifications.hasError,
-    isLoading: state.notifications.isLoading
+    haveNotificationsError: state.notifications.haveNotificationsError,
+    areNotificationsLoading: state.notifications.areNotificationsLoading
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchData: () => dispatch(notificationsFetchData())
+    fetchNotifications: () => dispatch(notificationsFetch()),
+    fetchCommits: (url) => dispatch(commitsFetch(url))
   };
 };
 
