@@ -21,7 +21,7 @@ export function notificationsFetchDataSuccess(notifications) {
   };
 }
 
-export function notificationsFetch() {
+export function fetchNotifications() {
   return (dispatch) => {
     dispatch(notificationsAreLoading(true));
     utils.getNotifications()
@@ -32,4 +32,11 @@ export function notificationsFetch() {
         dispatch(notificationsHaveError(true))
       })
   }
+}
+
+export function selectNotification(notification) {
+  return {
+    type: 'NOTIFICATION_SELECTION_SUCCESS',
+    selected: notification
+  };
 }

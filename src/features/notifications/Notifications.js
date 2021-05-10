@@ -13,9 +13,9 @@ import {
   Loading,
   Tag
 } from 'carbon-components-react';
-import { Code24 } from '@carbon/icons-react';
-import { notificationsFetch } from '../../actions/notifications';
-import { commitsFetch } from '../../actions/commits';
+import { ExpandAll32 } from '@carbon/icons-react';
+import { withRouter } from "react-router-dom";
+import { fetchNotifications, selectNotification } from '../../actions/notifications';
 
 class Notifications extends Component {
   constructor(props) {
@@ -25,8 +25,10 @@ class Notifications extends Component {
     }
   }
 
-  getCommits(url) {
-    this.props.fetchCommits(url);
+  selectNotification(notification) {
+    this.props.selectNotification(notification);
+    this.props.history.push('/details');
+
   }
 
   tagReason(reason) {
@@ -74,10 +76,10 @@ class Notifications extends Component {
                   <StructuredListCell>
                     <Button
                       kind="tertiary"
-                      renderIcon={Code24}
-                      iconDescription="Commits"
+                      renderIcon={ExpandAll32}
+                      iconDescription="Details"
                       hasIconOnly
-                      onClick={() => {this.getCommits(notification.html_url)}}
+                      onClick={() => {this.selectNotification(notification)}}
                     />
                   </StructuredListCell>
                 </StructuredListRow>
@@ -99,7 +101,6 @@ Notifications.propTypes = {
 };
 
 const mapStateToProps = (state) => {
-  console.log(state);
   return {
     notifications: state.notifications.notifications,
     haveNotificationsError: state.notifications.haveNotificationsError,
@@ -109,9 +110,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchNotifications: () => dispatch(notificationsFetch()),
-    fetchCommits: (url) => dispatch(commitsFetch(url))
+    fetchNotifications: () => dispatch(fetchNotifications()),
+    selectNotification: (notification) => dispatch(selectNotification(notification))
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Notifications);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Notifications));

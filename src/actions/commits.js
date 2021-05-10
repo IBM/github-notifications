@@ -1,4 +1,4 @@
-const utils = require('../utils/commits');
+const utils = require('../utils/details');
 
 export function commitsHaveError(bool) {
   return {
