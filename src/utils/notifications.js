@@ -34,7 +34,6 @@ async function processNotifications(notifications) {
       avatar_url
     };
     processedNotification.push(newNotification);
-    console.log('newNotification: ', newNotification);
   }
   console.log('processedNotification: ', processedNotification);
   return sortNotifications(processedNotification);

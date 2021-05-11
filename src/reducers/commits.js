@@ -11,7 +11,7 @@ const reducer = (state = initialState, action) => {
     case 'COMMITS_HAVE_ERROR':
       return { ...state, error: action.haveCommitsError };
     case 'COMMITS_FETCH_DATA_SUCCESS':
-      return { ...state, commits: action.commits, areCommitsLoading: false };
+      return { ...state, ...action.commits, areCommitsLoading: false };
     default:
       return { ...state };
   }

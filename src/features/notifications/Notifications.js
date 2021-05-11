@@ -28,7 +28,6 @@ class Notifications extends Component {
   selectNotification(notification) {
     this.props.selectNotification(notification);
     this.props.history.push('/details');
-
   }
 
   tagReason(reason) {
@@ -101,6 +100,7 @@ Notifications.propTypes = {
 };
 
 const mapStateToProps = (state) => {
+  console.log(state);
   return {
     notifications: state.notifications.notifications,
     haveNotificationsError: state.notifications.haveNotificationsError,
