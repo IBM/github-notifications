@@ -59,7 +59,11 @@ function Details() {
                   <StructuredListCell>{ com.message }</StructuredListCell>
                   <StructuredListCell>{ com.name }</StructuredListCell>
                   <StructuredListCell>{ com.date }</StructuredListCell>
-                  <StructuredListCell>{ com.jira.map(ticket => `${ticket} `) }</StructuredListCell>
+                  <StructuredListCell>{ com.jira.map(ticket => (
+                    <Link href={`https://jira.sec.***REMOVED***/browse/${ticket}`} target='_blank' key={com.index}>
+                      { ticket }
+                    </Link>
+                  )) }</StructuredListCell>
                 </StructuredListRow>
               ))
               : <Loading description="Active loading indicator" withOverlay={false} />}
