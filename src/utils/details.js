@@ -55,6 +55,5 @@ function getPrUrl(url) {
   const path = pathname.split('/');
   const repo = `${path[1]}/${path[2]}`;
   const number = path[4];
-  console.log(repo);
   return { repo, number };
 }
