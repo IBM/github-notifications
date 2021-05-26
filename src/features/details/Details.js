@@ -2,11 +2,15 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { commitsFetch } from '../../actions/commits';
 import {
-  Link, StructuredListBody,
+  Link,
+  StructuredListBody,
   StructuredListCell,
   StructuredListRow,
-  StructuredListWrapper, Tag,
-  Loading
+  StructuredListWrapper,
+  Tag,
+  Loading,
+  Tabs,
+  Tab
 } from "carbon-components-react";
 import moment from "moment";
 
@@ -14,8 +18,8 @@ function Details() {
   const dispatch = useDispatch();
   const notificationSelected = useSelector((state) => state.notifications.selected);
   const notificationCommits = useSelector((state) => state.commits.commits);
+  const jira = useSelector((state) => state.commits.jira);
   const notificationCommitsLoading = useSelector((state) => state.commits.areCommitsLoading);
-  console.log('notificationCommits: ', notificationCommits);
   const { index, html_url, full_name, title, updated_at, reason} = notificationSelected;
 
   useEffect(() => {
@@ -53,22 +57,35 @@ function Details() {
               </StructuredListCell>
             </StructuredListRow>
           </StructuredListBody>
-          <StructuredListBody>
-            {!notificationCommitsLoading ? notificationCommits.map(com => (
-                <StructuredListRow key={com.index}>
-                  <StructuredListCell>{ com.message }</StructuredListCell>
-                  <StructuredListCell>{ com.name }</StructuredListCell>
-                  <StructuredListCell>{ com.date }</StructuredListCell>
-                  <StructuredListCell>{ com.jira.map(ticket => (
-                    <Link href={`https://jira.sec.***REMOVED***/browse/${ticket}`} target='_blank' key={com.index}>
-                      { ticket }
-                    </Link>
-                  )) }</StructuredListCell>
-                </StructuredListRow>
-              ))
-              : <Loading description="Active loading indicator" withOverlay={false} />}
-          </StructuredListBody>
         </StructuredListWrapper>
+          {!notificationCommitsLoading && notificationCommits && jira ?
+            (
+          <Tabs type="container">
+            <Tab id="commits" label="Commits">
+              <StructuredListWrapper selection>
+              <StructuredListBody>
+                {notificationCommits.map(com => (
+                    <StructuredListRow key={com.index}>
+                      <StructuredListCell>{ com.message }</StructuredListCell>
+                      <StructuredListCell>{ com.name }</StructuredListCell>
+                      <StructuredListCell>{ com.date }</StructuredListCell>
+                    </StructuredListRow>
+                  ))}
+              </StructuredListBody>
+              </StructuredListWrapper>
+            </Tab>
+            <Tab id="jira" label="Jira tickets">
+              <div className="details__main__jira">
+                { jira.map(ticket => (
+                  <Link href={`https://jira.sec.***REMOVED***/browse/${ticket}`} target='_blank' className="details__main__jira__link">
+                    { ticket }
+                  </Link>
+                )) }
+              </div>
+            </Tab>
+          </Tabs>
+            )
+            : <Loading description="Active loading indicator" withOverlay={false} />}
       </div>
     </div>
   );

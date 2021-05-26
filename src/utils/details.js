@@ -1,3 +1,4 @@
+import { uniq } from 'lodash';
 import { githubCliEnterprise } from './index';
 
 export async function getCommits(url = '') {
@@ -5,35 +6,36 @@ export async function getCommits(url = '') {
     const pr = getPrUrl(url);
     const { repo, number } = pr;
     const results = await githubCliEnterprise.getData({path:`/repos/${repo}/pulls/${number}/commits`});
-    const commits = findJiraTickets(results);
-    console.log('commits: ', commits);
-    return { commits, pr: number };
+    const { commits, jira } = findJiraTickets(results);
+    return { commits, pr: number, jira };
   } catch (error) {
     console.log(error);
     return error;
   }
 }
 
-function findJiraTickets(commits) {
-  let processedCommits = [];
-  const commitsArray = commits.data;
+function findJiraTickets(input) {
+  let commits = [];
+  let tickets = [];
+  const commitsArray = input.data;
   let index = 0;
   for ( const commit of commitsArray) {
     index++;
-    console.log('commit: ', commit);
     const { commit: { message, author, committer: { name, date } } } = commit;
-    const jira = findByRegex(message);
+    const ticket = findByRegex(message);
+    tickets.push(ticket);
     const newCommit = {
       index,
       message,
       author: author.name,
       name,
-      date,
-      jira
+      date
     }
-    processedCommits.push(newCommit);
+    commits.push(newCommit);
   }
-  return processedCommits;
+  const cleanedJira = [].concat.apply([], tickets);
+  const jira = uniq(cleanedJira.flat());
+  return { commits, jira };
 }
 
 function findByRegex(message) {

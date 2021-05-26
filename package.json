@@ -10,6 +10,7 @@
     "carbon-components-react": "7.18.0",
     "carbon-icons": "7.0.7",
     "fibers": "^5.0.0",
+    "lodash": "^4.17.21",
     "moment": "^2.29.1",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
