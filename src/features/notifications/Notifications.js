@@ -13,6 +13,7 @@ import {
   Loading,
   Tag
 } from 'carbon-components-react';
+import NotificationsSideNav from '../common/NotificationsSideNav';
 import { ExpandAll32 } from '@carbon/icons-react';
 import { withRouter } from "react-router-dom";
 import { fetchNotifications, selectNotification } from '../../actions/notifications';
@@ -46,48 +47,51 @@ class Notifications extends Component {
 
     return (
       <div className="notifications__main">
-        <Button onClick={() => fetchNotifications()} className="notifications__main__button">Update</Button>
-        <div className="notifications__main__list">
-          <StructuredListWrapper selection>
-            <StructuredListHead>
-              <StructuredListRow head>
-                <StructuredListCell head>Title</StructuredListCell>
-                <StructuredListCell head>Last updated</StructuredListCell>
-                <StructuredListCell head>Reason</StructuredListCell>
-                <StructuredListCell head>{' '}</StructuredListCell>
-              </StructuredListRow>
-            </StructuredListHead>
-            <StructuredListBody>
-              {notifications.map((notification) => (
-                <StructuredListRow key={notification.index}>
-                  <StructuredListCell>
-                    <Link href={notification.html_url} target='_blank' key={notification.index}>
-                      <h6>{notification.full_name}</h6>
-                      <h4>{notification.title}</h4>
-                    </Link>
-                  </StructuredListCell>
-                  <StructuredListCell>
-                    <time>{moment(notification.updated_at).fromNow()}</time>
-                  </StructuredListCell>
-                  <StructuredListCell>
-                    {this.tagReason(notification.reason)}
-                  </StructuredListCell>
-                  <StructuredListCell>
-                    <Button
-                      kind="tertiary"
-                      renderIcon={ExpandAll32}
-                      iconDescription="Details"
-                      hasIconOnly
-                      onClick={() => {this.selectNotification(notification)}}
-                    />
-                  </StructuredListCell>
+        <div className="notifications__main__content">
+          <Button onClick={() => fetchNotifications()} className="notifications__main__button">Update</Button>
+          <div className="notifications__main__list">
+            <StructuredListWrapper selection>
+              <StructuredListHead>
+                <StructuredListRow head>
+                  <StructuredListCell head>Title</StructuredListCell>
+                  <StructuredListCell head>Last updated</StructuredListCell>
+                  <StructuredListCell head>Reason</StructuredListCell>
+                  <StructuredListCell head>{' '}</StructuredListCell>
                 </StructuredListRow>
-              ))}
-            </StructuredListBody>
-          </StructuredListWrapper>
+              </StructuredListHead>
+              <StructuredListBody>
+                {notifications.map((notification) => (
+                  <StructuredListRow key={notification.index}>
+                    <StructuredListCell>
+                      <Link href={notification.html_url} target='_blank' key={notification.index}>
+                        <h6>{notification.full_name}</h6>
+                        <h4>{notification.title}</h4>
+                      </Link>
+                    </StructuredListCell>
+                    <StructuredListCell>
+                      <time>{moment(notification.updated_at).fromNow()}</time>
+                    </StructuredListCell>
+                    <StructuredListCell>
+                      {this.tagReason(notification.reason)}
+                    </StructuredListCell>
+                    <StructuredListCell>
+                      <Button
+                        kind="tertiary"
+                        renderIcon={ExpandAll32}
+                        iconDescription="Details"
+                        hasIconOnly
+                        onClick={() => {this.selectNotification(notification)}}
+                      />
+                    </StructuredListCell>
+                  </StructuredListRow>
+                ))}
+              </StructuredListBody>
+            </StructuredListWrapper>
+          </div>
+          {areNotificationsLoading ? <Loading description="Active loading indicator" withOverlay /> : null}
+          {haveNotificationsError ? <p>Sorry! There was an error loading the items</p> : null}
         </div>
-        {areNotificationsLoading ? <Loading description="Active loading indicator" withOverlay /> : null}
-        {haveNotificationsError ? <p>Sorry! There was an error loading the items</p> : null}
+        <NotificationsSideNav />
       </div>
     );
   }

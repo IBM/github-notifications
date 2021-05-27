@@ -1,6 +1,14 @@
 @import '~carbon-components/scss/globals/scss/styles.scss';
 
 .notifications__main {
+  &__content {
+    margin-left: 16rem;
+  }
+
+  &__side-nav {
+    border-right: #e0e0e0 1px solid;
+  }
+
   &__button {
     min-width: 100%;
     display: block;
