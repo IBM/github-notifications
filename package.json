@@ -1,6 +1,7 @@
 {
   "name": "***REMOVED***",
-  "version": "0.1.0",
+  "version": "1.0.0",
+  "author": "Grzegorz Smolin",
   "private": true,
   "main": "./src/electron-entry.js",
   "dependencies": {
@@ -30,8 +31,8 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "electron": "electron .",
-    "pack": "build --dir",
-    "dist": "build"
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
   },
   "devDependencies": {
     "async": "^3.2.0",
@@ -41,7 +42,10 @@
     "node-sass": "^4.14.1"
   },
   "build": {
-    "appId": "wecodetodos",
+    "appId": "***REMOVED***",
+    "mac": {
+      "category": "public.app-category.productivity"
+    },
     "extends": null
   },
   "browserslist": {
