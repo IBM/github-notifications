@@ -1,5 +1,5 @@
 {
-  "name": "todos",
+  "name": "***REMOVED***",
   "version": "0.1.0",
   "private": true,
   "main": "./src/electron-entry.js",
@@ -22,7 +22,7 @@
     "redux-thunk": "^2.3.0",
     "request": "^2.88.2",
     "sass": "^1.32.11",
-    "typescript": "^4.2.4"
+    "typescript": "^4.3.2"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -36,8 +36,8 @@
   "devDependencies": {
     "async": "^3.2.0",
     "axios": "^0.18.1",
-    "electron": "^1.8.8",
-    "electron-builder": "^20.44.4",
+    "electron": "^13.0.1",
+    "electron-builder": "^22.10.5",
     "node-sass": "^4.14.1"
   },
   "build": {

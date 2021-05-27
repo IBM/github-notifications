@@ -5,7 +5,7 @@ const BrowserWindow = electron.BrowserWindow;
 let win;
 
 function createWindow() {
-    win = new BrowserWindow({width: 800, height: 600});
+    win = new BrowserWindow({ fullscreen: true });
 
     win.loadURL('http://localhost:3000');
 
