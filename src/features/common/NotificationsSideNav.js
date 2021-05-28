@@ -1,7 +1,20 @@
 import React from 'react';
 import { SideNav, SideNavItems, SideNavLink } from "carbon-components-react";
 
-const NotificationsSideNav = () => (
+const sideNavLinks = [
+  {
+    content: 'All Notifications',
+    id: 'notifications',
+    link: '/'
+  },
+  {
+    content: 'Mentions',
+    id: 'mentions',
+    link: '/mentions'
+  }
+];
+
+const NotificationsSideNav = ({ activeLink }) => (
   <>
     <SideNav
       isFixedNav
@@ -11,10 +24,15 @@ const NotificationsSideNav = () => (
       className="notifications__main__side-nav"
     >
       <SideNavItems>
-        <SideNavLink isActive>All Notifications</SideNavLink>
-        <SideNavLink>Mentioned</SideNavLink>
-        <SideNavLink>Review Requested</SideNavLink>
-        <SideNavLink>Subscribed</SideNavLink>
+        {sideNavLinks.map((sideNavLink) => (
+          <SideNavLink
+            isActive={activeLink === sideNavLink.id}
+            href={sideNavLink.link}
+            key={sideNavLink.id}
+          >
+            {sideNavLink.content}
+          </SideNavLink>
+        ))}
       </SideNavItems>
     </SideNav>
   </>
