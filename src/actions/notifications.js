@@ -25,8 +25,8 @@ export function fetchNotifications() {
   return (dispatch) => {
     dispatch(notificationsAreLoading(true));
     utils.getNotifications()
-      .then((response) => {
-        dispatch(notificationsFetchDataSuccess(response))
+      .then((notifications) => {
+        dispatch(notificationsFetchDataSuccess(notifications));
       })
       .catch((error) => {
         dispatch(notificationsHaveError(true))

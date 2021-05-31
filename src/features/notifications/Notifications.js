@@ -91,7 +91,7 @@ class Notifications extends Component {
           {areNotificationsLoading ? <Loading description="Active loading indicator" withOverlay /> : null}
           {haveNotificationsError ? <p>Sorry! There was an error loading the items</p> : null}
         </div>
-        <NotificationsSideNav />
+        <NotificationsSideNav activeLink="notifications" />
       </div>
     );
   }
