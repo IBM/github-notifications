@@ -10,19 +10,19 @@ import {
 } from 'carbon-components-react';
 import NotificationsSideNav from '../common/NotificationsSideNav';
 import { fetchNotifications } from "../../actions/notifications";
-import { fetchMentionedNotifications } from "../../actions/mentions";
+import { fetchReviewRequestedNotifications } from "../../actions/review-requested";
 
 function ReviewRequestedNotifications() {
   const dispatch = useDispatch();
   const notifications = useSelector((state) => state.notifications.notifications);
-  const mentions = useSelector((state) => state.mentions.mentions);
-  const areMentionedNotificationsLoading = useSelector((state) => state.mentions.areMentionedNotificationsLoading);
+  const reviewRequested = useSelector((state) => state.reviewRequested.reviewRequested);
+  const areReviewRequestedNotificationsLoading = useSelector((state) => state.reviewRequested.areReviewRequestedNotificationsLoading);
 
   useEffect(() => {
     if (!notifications.length) {
       dispatch(fetchNotifications());
     }
-    dispatch(fetchMentionedNotifications(notifications));
+    dispatch(fetchReviewRequestedNotifications(notifications));
   }, [dispatch, notifications])
 
   return (
@@ -38,7 +38,7 @@ function ReviewRequestedNotifications() {
               </StructuredListRow>
             </StructuredListHead>
             <StructuredListBody>
-              {notifications.length && mentions.length && !areMentionedNotificationsLoading ? mentions.map(mention => (
+              {notifications.length && reviewRequested.length && !areReviewRequestedNotificationsLoading ? reviewRequested.map(mention => (
                   <StructuredListRow key={mention.index}>
                     <StructuredListCell>{ mention.title }</StructuredListCell>
                     <StructuredListCell>{ mention.updated_at }</StructuredListCell>

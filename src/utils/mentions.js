@@ -1,10 +1,9 @@
-import { find } from 'lodash';
-
 export async function getMentionedNotifications(notifications) {
   try {
-    let mentions = []
-    const foundMentions = find(notifications, o => o.reason === 'mention');
-    if (foundMentions) { mentions.push(foundMentions) }
+    let mentions = [];
+    notifications.forEach((note) => {
+      if (note.reason === 'mention') { mentions.push(note) }
+    });
     return mentions;
   } catch (error) {
     console.log(error);
