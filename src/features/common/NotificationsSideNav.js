@@ -11,6 +11,11 @@ const sideNavLinks = [
     content: 'Mentions',
     id: 'mentions',
     link: '/mentions'
+  },
+  {
+    content: 'Review requested',
+    id: 'review-requested',
+    link: '/review-requested'
   }
 ];
 
