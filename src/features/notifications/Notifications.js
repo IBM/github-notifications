@@ -9,7 +9,7 @@ import {
   StructuredListRow,
   StructuredListCell,
   Link,
-  Loading,
+  StructuredListSkeleton,
   Tag
 } from 'carbon-components-react';
 import { useHistory } from "react-router-dom";
@@ -51,7 +51,7 @@ function Notifications() {
       <div className="notifications__main__content">
         <Button onClick={() => fetchNotifications()} className="notifications__main__button">Update</Button>
         <div className="notifications__main__list">
-          <StructuredListWrapper selection>
+          <StructuredListWrapper selection className="notifications__main__list__wrapper">
             <StructuredListHead>
               <StructuredListRow head>
                 <StructuredListCell head>Title</StructuredListCell>
@@ -89,7 +89,7 @@ function Notifications() {
             </StructuredListBody>
           </StructuredListWrapper>
         </div>
-        {areNotificationsLoading ? <Loading description="Active loading indicator" withOverlay /> : null}
+        {areNotificationsLoading ? <StructuredListSkeleton /> : null}
         {haveNotificationsError ? <p>Sorry! There was an error loading the items</p> : null}
       </div>
       <NotificationsSideNav activeLink="notifications" />

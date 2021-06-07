@@ -1,12 +1,12 @@
 import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {
-  Loading,
   StructuredListWrapper,
   StructuredListHead,
   StructuredListBody,
   StructuredListRow,
-  StructuredListCell
+  StructuredListCell,
+  StructuredListSkeleton
 } from 'carbon-components-react';
 import NotificationsSideNav from '../common/NotificationsSideNav';
 import { fetchNotifications } from "../../actions/notifications";
@@ -29,25 +29,27 @@ function ReviewRequestedNotifications() {
     <div className="review-requested__main">
       <div className="review-requested__main__content">
         <div className="review-requested__main__list">
-          <StructuredListWrapper selection>
-            <StructuredListHead>
-              <StructuredListRow head>
-                <StructuredListCell head>Title</StructuredListCell>
-                <StructuredListCell head>Last updated</StructuredListCell>
-                <StructuredListCell head>Type</StructuredListCell>
-              </StructuredListRow>
-            </StructuredListHead>
-            <StructuredListBody>
-              {notifications.length && reviewRequested.length && !areReviewRequestedNotificationsLoading ? reviewRequested.map(mention => (
+          {notifications.length && reviewRequested.length && !areReviewRequestedNotificationsLoading ? (
+            <StructuredListWrapper selection>
+              <StructuredListHead>
+                <StructuredListRow head>
+                  <StructuredListCell head>Title</StructuredListCell>
+                  <StructuredListCell head>Last updated</StructuredListCell>
+                  <StructuredListCell head>Type</StructuredListCell>
+                </StructuredListRow>
+              </StructuredListHead>
+              <StructuredListBody>
+                { reviewRequested.map(mention => (
                   <StructuredListRow key={mention.index}>
                     <StructuredListCell>{ mention.title }</StructuredListCell>
                     <StructuredListCell>{ mention.updated_at }</StructuredListCell>
                     <StructuredListCell>{ mention.type }</StructuredListCell>
                   </StructuredListRow>
-                ))
-                : <Loading description="Active loading indicator" withOverlay />}
-            </StructuredListBody>
-          </StructuredListWrapper>
+                ))}
+              </StructuredListBody>
+            </StructuredListWrapper>
+          )
+          : <StructuredListSkeleton />}
         </div>
       </div>
       <NotificationsSideNav activeLink="review-requested" />

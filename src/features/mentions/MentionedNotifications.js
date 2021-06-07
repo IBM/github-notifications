@@ -1,12 +1,12 @@
 import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {
-  Loading,
   StructuredListWrapper,
   StructuredListHead,
   StructuredListBody,
   StructuredListRow,
-  StructuredListCell
+  StructuredListCell,
+  StructuredListSkeleton
 } from 'carbon-components-react';
 import NotificationsSideNav from '../common/NotificationsSideNav';
 import { fetchNotifications } from "../../actions/notifications";
@@ -29,6 +29,7 @@ function MentionedNotifications() {
     <div className="mentions__main">
       <div className="mentions__main__content">
         <div className="mentions__main__list">
+          {notifications.length && mentions.length && !areMentionedNotificationsLoading ? (
           <StructuredListWrapper selection>
             <StructuredListHead>
               <StructuredListRow head>
@@ -38,16 +39,17 @@ function MentionedNotifications() {
               </StructuredListRow>
             </StructuredListHead>
             <StructuredListBody>
-              {notifications.length && mentions.length && !areMentionedNotificationsLoading ? mentions.map(mention => (
+              { mentions.map(mention => (
                 <StructuredListRow key={mention.index}>
                   <StructuredListCell>{ mention.title }</StructuredListCell>
                   <StructuredListCell>{ mention.updated_at }</StructuredListCell>
                   <StructuredListCell>{ mention.type }</StructuredListCell>
                 </StructuredListRow>
-              ))
-              : <Loading description="Active loading indicator" withOverlay />}
+              ))}
             </StructuredListBody>
           </StructuredListWrapper>
+            )
+            : <StructuredListSkeleton />}
         </div>
       </div>
       <NotificationsSideNav activeLink="mentions" />

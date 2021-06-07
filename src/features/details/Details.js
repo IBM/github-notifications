@@ -9,7 +9,7 @@ import {
   StructuredListRow,
   StructuredListWrapper,
   Tag,
-  Loading,
+  StructuredListSkeleton,
   Tabs,
   Tab
 } from "carbon-components-react";
@@ -71,10 +71,10 @@ function Details() {
             </StructuredListRow>
           </StructuredListBody>
         </StructuredListWrapper>
-          {!notificationCommitsLoading && notificationCommits && jira ?
+        <Tabs type="container">
+          <Tab id="commits" label="Commits">
+          {!notificationCommitsLoading && notificationCommits ?
             (
-          <Tabs type="container">
-            <Tab id="commits" label="Commits">
               <StructuredListWrapper selection>
               <StructuredListBody>
                 {notificationCommits.map(com => (
@@ -86,8 +86,13 @@ function Details() {
                   ))}
               </StructuredListBody>
               </StructuredListWrapper>
-            </Tab>
-            <Tab id="jira" label="Jira tickets">
+            )
+            :
+            <StructuredListSkeleton />}
+          </Tab>
+          <Tab id="jira" label="Jira tickets">
+          {!notificationCommitsLoading && jira ?
+            (
               <div className="details__main__jira">
                 { jira.map(ticket => (
                   <Link href={`https://jira.sec.***REMOVED***/browse/${ticket}`} target='_blank' className="details__main__jira__link">
@@ -95,10 +100,10 @@ function Details() {
                   </Link>
                 )) }
               </div>
-            </Tab>
-          </Tabs>
             )
-            : <Loading description="Active loading indicator" withOverlay={false} />}
+            : <StructuredListSkeleton />}
+          </Tab>
+        </Tabs>
       </div>
     </div>
   );
