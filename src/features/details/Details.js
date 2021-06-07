@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { commitsFetch } from '../../actions/commits';
 import {
+  Button,
   Link,
   StructuredListBody,
   StructuredListCell,
@@ -12,10 +13,13 @@ import {
   Tabs,
   Tab
 } from "carbon-components-react";
+import { ArrowLeft32 } from '@carbon/icons-react';
+import { useHistory } from "react-router-dom";
 import moment from "moment";
 
 function Details() {
   const dispatch = useDispatch();
+  const history = useHistory()
   const notificationSelected = useSelector((state) => state.notifications.selected);
   const notificationCommits = useSelector((state) => state.commits.commits);
   const jira = useSelector((state) => state.commits.jira);
@@ -43,6 +47,15 @@ function Details() {
         <StructuredListWrapper selection>
           <StructuredListBody>
             <StructuredListRow key={index}>
+              <StructuredListCell>
+                <Button
+                  kind="primary"
+                  renderIcon={ArrowLeft32}
+                  iconDescription="Back"
+                  hasIconOnly
+                  onClick={() => history.goBack()}
+                />
+              </StructuredListCell>
               <StructuredListCell>
                 <Link href={html_url} target='_blank' key={index}>
                   <h6>{full_name}</h6>
