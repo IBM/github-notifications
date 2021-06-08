@@ -1,4 +1,4 @@
-const utils = require('../api/mentions');
+const api = require('../api/mentions');
 
 export function mentionedNotificationsHaveError(bool) {
   return {
@@ -24,7 +24,7 @@ export function mentionedNotificationsFetchDataSuccess(mentions) {
 export function fetchMentionedNotifications(notifications) {
   return (dispatch) => {
     dispatch(mentionedNotificationsAreLoading(true));
-    utils.getMentionedNotifications(notifications)
+    api.getMentionedNotifications(notifications)
       .then((mentions) => {
         dispatch(mentionedNotificationsFetchDataSuccess(mentions));
       })
@@ -37,7 +37,7 @@ export function fetchMentionedNotifications(notifications) {
 export function fetchMentionedNotificationsByDate(since) {
   return (dispatch) => {
     dispatch(mentionedNotificationsAreLoading(true));
-    utils.getMentionedNotificationsByDate(since)
+    api.getMentionedNotificationsByDate(since)
       .then((mentions) => {
         dispatch(mentionedNotificationsFetchDataSuccess(mentions));
       })

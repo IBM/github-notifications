@@ -1,4 +1,4 @@
-const utils = require('../api/notifications');
+const api = require('../api/notifications');
 
 export function notificationsHaveError(bool) {
   return {
@@ -21,10 +21,17 @@ export function notificationsFetchDataSuccess(notifications) {
   };
 }
 
+export function selectNotification(notification) {
+  return {
+    type: 'NOTIFICATION_SELECTION_SUCCESS',
+    selected: notification
+  };
+}
+
 export function fetchNotifications() {
   return (dispatch) => {
     dispatch(notificationsAreLoading(true));
-    utils.getNotifications()
+    api.getNotifications()
       .then((notifications) => {
         dispatch(notificationsFetchDataSuccess(notifications));
       })
@@ -34,17 +41,10 @@ export function fetchNotifications() {
   }
 }
 
-export function selectNotification(notification) {
-  return {
-    type: 'NOTIFICATION_SELECTION_SUCCESS',
-    selected: notification
-  };
-}
-
 export function fetchNotificationsByDate(since) {
   return (dispatch) => {
     dispatch(notificationsAreLoading(true));
-    utils.getNotificationsByDate(since)
+    api.getNotificationsByDate(since)
       .then((notifications) => {
         dispatch(notificationsFetchDataSuccess(notifications));
       })

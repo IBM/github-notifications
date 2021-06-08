@@ -1,4 +1,4 @@
-const utils = require('../api/details');
+const api = require('../api/details');
 
 export function commitsHaveError(bool) {
   return {
@@ -24,7 +24,7 @@ export function commitsFetchSuccess(commits) {
 export function commitsFetch(url = '') {
   return (dispatch) => {
     dispatch(commitsAreLoading(true));
-    utils.getCommits(url)
+    api.getCommits(url)
       .then((response) => {
         dispatch(commitsFetchSuccess(response))
       })

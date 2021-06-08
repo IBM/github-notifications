@@ -10,7 +10,7 @@ import {
 } from 'carbon-components-react';
 import NotificationsSideNav from '../common/NotificationsSideNav';
 import { fetchNotifications } from "../../actions/notifications";
-import { fetchReviewRequestedNotifications } from "../../actions/review-requested";
+import { fetchReviewRequestedNotifications, fetchReviewRequestedNotificationsByDate } from "../../actions/review-requested";
 
 function ReviewRequestedNotifications() {
   const dispatch = useDispatch();
@@ -23,13 +23,18 @@ function ReviewRequestedNotifications() {
       dispatch(fetchNotifications());
     }
     dispatch(fetchReviewRequestedNotifications(notifications));
-  }, [dispatch, notifications])
+  }, [dispatch, notifications]);
+
+  const filterByDate  = (event, date) => {
+    event.preventDefault();
+    dispatch(fetchReviewRequestedNotificationsByDate(date));
+  }
 
   return (
     <div className="review-requested__main">
       <div className="review-requested__main__content">
         <div className="review-requested__main__list">
-          {notifications.length && reviewRequested.length && !areReviewRequestedNotificationsLoading ? (
+          {notifications.length && !areReviewRequestedNotificationsLoading ? (
             <StructuredListWrapper selection>
               <StructuredListHead>
                 <StructuredListRow head>
@@ -39,20 +44,22 @@ function ReviewRequestedNotifications() {
                 </StructuredListRow>
               </StructuredListHead>
               <StructuredListBody>
-                { reviewRequested.map(mention => (
+                { reviewRequested.length ? reviewRequested.map(mention => (
                   <StructuredListRow key={mention.index}>
                     <StructuredListCell>{ mention.title }</StructuredListCell>
                     <StructuredListCell>{ mention.updated_at }</StructuredListCell>
                     <StructuredListCell>{ mention.type }</StructuredListCell>
                   </StructuredListRow>
-                ))}
+                ))
+                  : <StructuredListRow><StructuredListCell>No notifications</StructuredListCell></StructuredListRow>
+                }
               </StructuredListBody>
             </StructuredListWrapper>
           )
           : <StructuredListSkeleton />}
         </div>
       </div>
-      <NotificationsSideNav activeLink="review-requested" />
+      <NotificationsSideNav activeLink="review-requested" onClick={(e, date) => filterByDate(e, date)} />
     </div>
   );
 }

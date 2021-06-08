@@ -1,4 +1,4 @@
-const utils = require('../api/review-requested');
+const api = require('../api/review-requested');
 
 export function reviewRequestedNotificationsHaveError(bool) {
   return {
@@ -24,7 +24,20 @@ export function reviewRequestedNotificationsFetchDataSuccess(reviewRequested) {
 export function fetchReviewRequestedNotifications(notifications) {
   return (dispatch) => {
     dispatch(reviewRequestedNotificationsAreLoading(true));
-    utils.getReviewRequestedNotifications(notifications)
+    api.getReviewRequestedNotifications(notifications)
+      .then((reviewRequested) => {
+        dispatch(reviewRequestedNotificationsFetchDataSuccess(reviewRequested));
+      })
+      .catch((error) => {
+        dispatch(reviewRequestedNotificationsHaveError(true))
+      })
+  }
+}
+
+export function fetchReviewRequestedNotificationsByDate(since) {
+  return (dispatch) => {
+    dispatch(reviewRequestedNotificationsAreLoading(true));
+    api.getReviewRequestedNotificationsByDate(since)
       .then((reviewRequested) => {
         dispatch(reviewRequestedNotificationsFetchDataSuccess(reviewRequested));
       })
