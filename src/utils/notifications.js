@@ -3,15 +3,21 @@ import {githubCliEnterprise} from './index';
 export async function getNotifications() {
   try {
     const notifications = await githubCliEnterprise.getData({path:'/notifications'});
-    return readNotifications(notifications);
+    return processNotifications(notifications);
   } catch (error) {
     console.log(error);
     return error;
   }
 }
 
-function readNotifications(notifications) {
-  return processNotifications(notifications);
+export async function getNotificationsByDate(since) {
+  try {
+    const notifications = await githubCliEnterprise.getData({path:`/notifications?since=${since}`});
+    return processNotifications(notifications);
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
 }
 
 async function processNotifications(notifications) {

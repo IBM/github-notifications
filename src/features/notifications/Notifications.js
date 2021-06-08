@@ -15,7 +15,7 @@ import {
 import { useHistory } from "react-router-dom";
 import NotificationsSideNav from '../common/NotificationsSideNav';
 import { ExpandAll32 } from '@carbon/icons-react';
-import { fetchNotifications, selectNotification } from '../../actions/notifications';
+import { fetchNotifications, fetchNotificationsByDate, selectNotification } from '../../actions/notifications';
 
 function Notifications() {
   const dispatch = useDispatch();
@@ -44,6 +44,11 @@ function Notifications() {
       default:
         return <Tag type="gray" title={reason}>{reason}</Tag>;
     }
+  }
+
+  const filterByDate  = (event, date) => {
+    event.preventDefault();
+    dispatch(fetchNotificationsByDate(date));
   }
 
   return (
@@ -92,7 +97,7 @@ function Notifications() {
         {areNotificationsLoading ? <StructuredListSkeleton /> : null}
         {haveNotificationsError ? <p>Sorry! There was an error loading the items</p> : null}
       </div>
-      <NotificationsSideNav activeLink="notifications" />
+      <NotificationsSideNav activeLink="notifications" onClick={(e, date) => filterByDate(e, date)} />
     </div>
   );
 }

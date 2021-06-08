@@ -1,5 +1,6 @@
 import React from 'react';
-import { SideNav, SideNavItems, SideNavLink } from "carbon-components-react";
+import { SideNav, SideNavItems, SideNavLink, SideNavMenu, SideNavMenuItem } from "carbon-components-react";
+import moment from 'moment';
 
 const sideNavLinks = [
   {
@@ -19,7 +20,31 @@ const sideNavLinks = [
   }
 ];
 
-const NotificationsSideNav = ({ activeLink }) => (
+const filterByDate = [
+  {
+    id: 'last24hrs',
+    content: 'Last 24hrs',
+    date: moment()
+      .subtract(1, 'days')
+      .format()
+  },
+  {
+    id: 'last48hrs',
+    content: 'Last 48hrs',
+    date: moment()
+      .subtract(2, 'days')
+      .format()
+  },
+  {
+    id: 'thisWeek',
+    content: 'This Week',
+    date: moment()
+      .subtract(1, 'week')
+      .format()
+  }
+]
+
+const NotificationsSideNav = ({ activeLink, onClick }) => (
   <>
     <SideNav
       isFixedNav
@@ -38,6 +63,11 @@ const NotificationsSideNav = ({ activeLink }) => (
             {sideNavLink.content}
           </SideNavLink>
         ))}
+        <SideNavMenu title="Filter by Date">
+          {filterByDate.map((filter) => (
+            <SideNavMenuItem key={filter.id} onClick={(e) => onClick(e, filter.date)}>{ filter.content }</SideNavMenuItem>
+          ))}
+        </SideNavMenu>
       </SideNavItems>
     </SideNav>
   </>

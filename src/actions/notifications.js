@@ -40,3 +40,16 @@ export function selectNotification(notification) {
     selected: notification
   };
 }
+
+export function fetchNotificationsByDate(since) {
+  return (dispatch) => {
+    dispatch(notificationsAreLoading(true));
+    utils.getNotificationsByDate(since)
+      .then((notifications) => {
+        dispatch(notificationsFetchDataSuccess(notifications));
+      })
+      .catch((error) => {
+        dispatch(notificationsHaveError(true))
+      })
+  }
+}
