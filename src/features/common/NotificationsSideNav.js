@@ -63,7 +63,7 @@ const NotificationsSideNav = ({ activeLink, onClick }) => (
             {sideNavLink.content}
           </SideNavLink>
         ))}
-        <SideNavMenu title="Filter by Date">
+        <SideNavMenu title="Filter by Date" className="notifications__main__side-nav__filters-menu">
           {filterByDate.map((filter) => (
             <SideNavMenuItem key={filter.id} onClick={(e) => onClick(e, filter.date)}>{ filter.content }</SideNavMenuItem>
           ))}

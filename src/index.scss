@@ -11,6 +11,9 @@
 
   &__side-nav {
     border-right: #e0e0e0 1px solid;
+    &__filters-menu {
+      border-top: #e0e0e0 1px solid;
+    }
   }
 
   &__button {

@@ -10,7 +10,7 @@ import {
 } from 'carbon-components-react';
 import NotificationsSideNav from '../common/NotificationsSideNav';
 import { fetchNotifications } from "../../actions/notifications";
-import { fetchMentionedNotifications } from "../../actions/mentions";
+import { fetchMentionedNotifications, fetchMentionedNotificationsByDate } from "../../actions/mentions";
 
 function MentionedNotifications() {
   const dispatch = useDispatch();
@@ -23,13 +23,18 @@ function MentionedNotifications() {
       dispatch(fetchNotifications());
     }
     dispatch(fetchMentionedNotifications(notifications));
-  }, [dispatch, notifications])
+  }, [dispatch, notifications]);
+
+  const filterByDate  = (event, date) => {
+    event.preventDefault();
+    dispatch(fetchMentionedNotificationsByDate(date));
+  }
 
   return (
     <div className="mentions__main">
       <div className="mentions__main__content">
         <div className="mentions__main__list">
-          {notifications.length && mentions.length && !areMentionedNotificationsLoading ? (
+          {notifications.length && !areMentionedNotificationsLoading ? (
           <StructuredListWrapper selection>
             <StructuredListHead>
               <StructuredListRow head>
@@ -39,20 +44,22 @@ function MentionedNotifications() {
               </StructuredListRow>
             </StructuredListHead>
             <StructuredListBody>
-              { mentions.map(mention => (
+              { mentions.length ? mentions.map(mention => (
                 <StructuredListRow key={mention.index}>
                   <StructuredListCell>{ mention.title }</StructuredListCell>
                   <StructuredListCell>{ mention.updated_at }</StructuredListCell>
                   <StructuredListCell>{ mention.type }</StructuredListCell>
                 </StructuredListRow>
-              ))}
+              ))
+                : <StructuredListRow><StructuredListCell>No notifications</StructuredListCell></StructuredListRow>
+              }
             </StructuredListBody>
           </StructuredListWrapper>
             )
             : <StructuredListSkeleton />}
         </div>
       </div>
-      <NotificationsSideNav activeLink="mentions" />
+      <NotificationsSideNav activeLink="mentions" onClick={(e, date) => filterByDate(e, date)} />
     </div>
   );
 }

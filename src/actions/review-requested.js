@@ -1,4 +1,4 @@
-const utils = require('../utils/review-requested');
+const utils = require('../api/review-requested');
 
 export function reviewRequestedNotificationsHaveError(bool) {
   return {

@@ -1,26 +1,6 @@
-import {githubCliEnterprise} from './index';
+import {githubCliEnterprise} from "../api/index";
 
-export async function getNotifications() {
-  try {
-    const notifications = await githubCliEnterprise.getData({path:'/notifications'});
-    return processNotifications(notifications);
-  } catch (error) {
-    console.log(error);
-    return error;
-  }
-}
-
-export async function getNotificationsByDate(since) {
-  try {
-    const notifications = await githubCliEnterprise.getData({path:`/notifications?since=${since}`});
-    return processNotifications(notifications);
-  } catch (error) {
-    console.log(error);
-    return error;
-  }
-}
-
-async function processNotifications(notifications) {
+export async function processNotifications(notifications) {
   let processedNotification = [];
   const notificationArray = notifications.data;
   let index = 0;
