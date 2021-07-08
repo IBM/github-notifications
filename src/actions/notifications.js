@@ -28,24 +28,13 @@ export function selectNotification(notification) {
   };
 }
 
-export function fetchNotifications() {
+export function fetchNotifications(since) {
   return (dispatch) => {
     dispatch(notificationsAreLoading(true));
-    api.getNotifications()
+    console.log(since);
+    api.getNotifications(since)
       .then((notifications) => {
-        dispatch(notificationsFetchDataSuccess(notifications));
-      })
-      .catch((error) => {
-        dispatch(notificationsHaveError(true))
-      })
-  }
-}
-
-export function fetchNotificationsByDate(since) {
-  return (dispatch) => {
-    dispatch(notificationsAreLoading(true));
-    api.getNotificationsByDate(since)
-      .then((notifications) => {
+        console.log(notifications);
         dispatch(notificationsFetchDataSuccess(notifications));
       })
       .catch((error) => {

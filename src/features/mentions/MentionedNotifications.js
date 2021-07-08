@@ -11,6 +11,7 @@ import {
 import NotificationsSideNav from '../common/NotificationsSideNav';
 import { fetchNotifications } from "../../actions/notifications";
 import { fetchMentionedNotifications, fetchMentionedNotificationsByDate } from "../../actions/mentions";
+import moment from "moment";
 
 function MentionedNotifications() {
   const dispatch = useDispatch();
@@ -20,7 +21,7 @@ function MentionedNotifications() {
 
   useEffect(() => {
     if (!notifications.length) {
-      dispatch(fetchNotifications());
+      dispatch(fetchNotifications(moment().subtract(4, 'week').toISOString()));
     }
     dispatch(fetchMentionedNotifications(notifications));
   }, [dispatch, notifications]);

@@ -11,6 +11,7 @@ import {
 import NotificationsSideNav from '../common/NotificationsSideNav';
 import { fetchNotifications } from "../../actions/notifications";
 import { fetchReviewRequestedNotifications, fetchReviewRequestedNotificationsByDate } from "../../actions/review-requested";
+import moment from "moment";
 
 function ReviewRequestedNotifications() {
   const dispatch = useDispatch();
@@ -20,7 +21,7 @@ function ReviewRequestedNotifications() {
 
   useEffect(() => {
     if (!notifications.length) {
-      dispatch(fetchNotifications());
+      dispatch(fetchNotifications(moment().subtract(4, 'week').toISOString()));
     }
     dispatch(fetchReviewRequestedNotifications(notifications));
   }, [dispatch, notifications]);

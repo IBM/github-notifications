@@ -15,7 +15,7 @@ import {
 import { useHistory } from "react-router-dom";
 import NotificationsSideNav from '../common/NotificationsSideNav';
 import { ExpandAll32 } from '@carbon/icons-react';
-import { fetchNotifications, fetchNotificationsByDate, selectNotification } from '../../actions/notifications';
+import { fetchNotifications, selectNotification } from '../../actions/notifications';
 
 function Notifications() {
   const dispatch = useDispatch();
@@ -26,7 +26,7 @@ function Notifications() {
 
   useEffect(() => {
     if (!notifications.length) {
-      dispatch(fetchNotifications());
+      dispatch(fetchNotifications(moment().subtract(4, 'week').toISOString()));
     }
   }, [notifications, dispatch])
 
@@ -48,7 +48,7 @@ function Notifications() {
 
   const filterByDate  = (event, date) => {
     event.preventDefault();
-    dispatch(fetchNotificationsByDate(date));
+    dispatch(fetchNotifications(date));
   }
 
   return (
