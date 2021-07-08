@@ -1,5 +1,3 @@
-import {githubCliEnterprise} from "../api/index";
-
 export async function processNotifications(notifications) {
   let processedNotification = [];
   const notificationArray = notifications.data;
@@ -7,8 +5,7 @@ export async function processNotifications(notifications) {
   for ( const notification of notificationArray) {
     index++;
     const { reason, updated_at, subject: { title = '', url = '', type = '' } = {}, repository: { full_name = '' } = {}} = notification;
-    const selectedPrData = await getPrDataBasedOnType(type, url, full_name);
-    const { prData: { html_url, avatar_url } } = selectedPrData;
+    const html_url = await getPrNumber(url);
     const newNotification = {
       index,
       reason,
@@ -16,8 +13,7 @@ export async function processNotifications(notifications) {
       title,
       type,
       html_url,
-      full_name,
-      avatar_url
+      full_name
     };
     processedNotification.push(newNotification);
   }
@@ -25,26 +21,11 @@ export async function processNotifications(notifications) {
   return sortNotifications(processedNotification);
 }
 
-async function getPrDataBasedOnType(type = '', url = '', full_name = '') {
-  let prData = {};
-  if (type === 'PullRequest') {
-    const number = getPrNumber(url, 7);
-    prData = await getPrData(full_name, number);
-  }
-  return { prData };
-}
-
-function getPrNumber(url, number) {
+function getPrNumber(url) {
   const parseUrl = new URL(url);
-  const pathname = parseUrl.pathname;
+  const { hostname, pathname, protocol } = parseUrl;
   const path = pathname.split('/');
-  return path[number];
-}
-
-async function getPrData(full_name = '', url = '') {
-  const pr = await githubCliEnterprise.getData({path:`/repos/${full_name}/pulls/${url}`});
-  const { data: { html_url = '', user: { avatar_url } = {} } = {} } = pr;
-  return { html_url, avatar_url };
+  return `${protocol}//${hostname}/${path[4]}/${path[5]}/pull/${path[7]}`;
 }
 
 function sortNotifications(notifications) { return notifications.slice().sort((a, b) => b.updated_at - a.updated_at) }
