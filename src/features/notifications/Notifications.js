@@ -69,8 +69,8 @@ function Notifications() {
               {notifications.map((notification) => (
                 <StructuredListRow key={notification.index}>
                   <StructuredListCell>
+                    <h6>{notification.full_name}</h6>
                     <Link href={notification.html_url} target='_blank' key={notification.index}>
-                      <h6>{notification.full_name}</h6>
                       <h4>{notification.title}</h4>
                     </Link>
                   </StructuredListCell>

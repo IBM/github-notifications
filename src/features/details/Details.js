@@ -57,8 +57,8 @@ function Details() {
                 />
               </StructuredListCell>
               <StructuredListCell>
+                <h6>{full_name}</h6>
                 <Link href={html_url} target='_blank' key={index}>
-                  <h6>{full_name}</h6>
                   <h4>{title}</h4>
                 </Link>
               </StructuredListCell>

@@ -7,8 +7,8 @@
   "dependencies": {
     "@octokit/rest": "^18.0.11",
     "@reduxjs/toolkit": "^1.5.0",
-    "carbon-components": "10.18.0",
-    "carbon-components-react": "7.36.0",
+    "carbon-components": "10.38.0",
+    "carbon-components-react": "7.38.0",
     "carbon-icons": "7.0.7",
     "fibers": "^5.0.0",
     "lodash": "^4.17.21",
