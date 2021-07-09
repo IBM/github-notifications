@@ -1,4 +1,4 @@
-const api = require('../api/notifications');
+const common = require('../api/common');
 
 export function notificationsHaveError(bool) {
   return {
@@ -32,7 +32,7 @@ export function fetchNotifications(since) {
   return (dispatch) => {
     dispatch(notificationsAreLoading(true));
     console.log(since);
-    api.getNotifications(since)
+    common.getNotificationsByDate(since)
       .then((notifications) => {
         console.log(notifications);
         dispatch(notificationsFetchDataSuccess(notifications));

@@ -23,7 +23,7 @@ function ReviewRequestedNotifications() {
     if (!notifications.length) {
       dispatch(fetchNotifications(moment().subtract(4, 'week').toISOString()));
     }
-    dispatch(fetchReviewRequestedNotifications(notifications));
+    dispatch(fetchReviewRequestedNotifications(notifications, 'review_requested'));
   }, [dispatch, notifications]);
 
   const filterByDate  = (event, date) => {
@@ -48,7 +48,10 @@ function ReviewRequestedNotifications() {
                 { reviewRequested.length ? reviewRequested.map(mention => (
                   <StructuredListRow key={mention.index}>
                     <StructuredListCell>{ mention.title }</StructuredListCell>
-                    <StructuredListCell>{ mention.updated_at }</StructuredListCell>
+                    <StructuredListCell>
+                      <h6>{moment(mention.updated_at).fromNow()}</h6>
+                      ({mention.updated_at})
+                    </StructuredListCell>
                     <StructuredListCell>{ mention.type }</StructuredListCell>
                   </StructuredListRow>
                 ))

@@ -1,4 +1,3 @@
-const api = require('../api/review-requested');
 const common = require('../api/common');
 
 export function reviewRequestedNotificationsHaveError(bool) {
@@ -22,10 +21,10 @@ export function reviewRequestedNotificationsFetchDataSuccess(reviewRequested) {
   };
 }
 
-export function fetchReviewRequestedNotifications(notifications) {
+export function fetchReviewRequestedNotifications(notifications, type) {
   return (dispatch) => {
     dispatch(reviewRequestedNotificationsAreLoading(true));
-    api.getReviewRequestedNotifications(notifications)
+    common.getNotificationsByType(notifications, type)
       .then((reviewRequested) => {
         dispatch(reviewRequestedNotificationsFetchDataSuccess(reviewRequested));
       })
