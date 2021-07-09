@@ -21,15 +21,17 @@ function findJiraTickets(input) {
   let index = 0;
   for ( const commit of commitsArray) {
     index++;
-    const { commit: { message, author, committer: { name, date } } } = commit;
+    const { commit: { url, message, author, committer: { name, date } } } = commit;
     const ticket = findByRegex(message);
     tickets.push(ticket);
+    const newUrl = getNewUrl(url);
     const newCommit = {
       index,
       message,
       author: author.name,
       name,
-      date
+      date,
+      url: newUrl
     }
     commits.push(newCommit);
   }
@@ -56,4 +58,12 @@ function getPrUrl(url) {
   const repo = `${path[1]}/${path[2]}`;
   const number = path[4];
   return { repo, number };
+}
+
+function getNewUrl(url) {
+  const parseUrl = new URL(url);
+  const { hostname, pathname, protocol } = parseUrl;
+  const path = pathname.split('/');
+  console.log(`${protocol}//${hostname}/${path[4]}/${path[5]}/commit/${path[8]}`);
+  return `${protocol}//${hostname}/${path[4]}/${path[5]}/commit/${path[8]}`;
 }

@@ -79,9 +79,16 @@ function Details() {
               <StructuredListBody>
                 {notificationCommits.map(com => (
                     <StructuredListRow key={com.index}>
-                      <StructuredListCell>{ com.message }</StructuredListCell>
+                      <StructuredListCell>
+                        <Link href={com.url} target='_blank' key={com.index}>
+                        { com.message }
+                        </Link>
+                      </StructuredListCell>
                       <StructuredListCell>{ com.name }</StructuredListCell>
-                      <StructuredListCell>{ com.date }</StructuredListCell>
+                      <StructuredListCell>
+                        <h6>{moment(com.date).fromNow()}</h6>
+                        ({com.date})
+                      </StructuredListCell>
                     </StructuredListRow>
                   ))}
               </StructuredListBody>
