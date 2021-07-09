@@ -28,7 +28,7 @@ function ReviewRequestedNotifications() {
 
   const filterByDate  = (event, date) => {
     event.preventDefault();
-    dispatch(fetchReviewRequestedNotificationsByDate(date));
+    dispatch(fetchReviewRequestedNotificationsByDate(date, 'review_requested'));
   }
 
   return (

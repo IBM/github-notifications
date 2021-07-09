@@ -1,4 +1,5 @@
 const api = require('../api/mentions');
+const common = require('../api/common');
 
 export function mentionedNotificationsHaveError(bool) {
   return {
@@ -34,10 +35,10 @@ export function fetchMentionedNotifications(notifications) {
   }
 }
 
-export function fetchMentionedNotificationsByDate(since) {
+export function fetchMentionedNotificationsByDate(since, type) {
   return (dispatch) => {
     dispatch(mentionedNotificationsAreLoading(true));
-    api.getMentionedNotificationsByDate(since)
+    common.getNotificationsByDate(since, type)
       .then((mentions) => {
         dispatch(mentionedNotificationsFetchDataSuccess(mentions));
       })

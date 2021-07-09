@@ -28,7 +28,7 @@ function MentionedNotifications() {
 
   const filterByDate  = (event, date) => {
     event.preventDefault();
-    dispatch(fetchMentionedNotificationsByDate(date));
+    dispatch(fetchMentionedNotificationsByDate(date, 'mention'));
   }
 
   return (
