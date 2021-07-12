@@ -6,7 +6,7 @@ import {
   StructuredListBody,
   StructuredListRow,
   StructuredListCell,
-  StructuredListSkeleton
+  StructuredListSkeleton, Link
 } from 'carbon-components-react';
 import NotificationsSideNav from '../common/NotificationsSideNav';
 import { fetchNotifications } from "../../actions/notifications";
@@ -47,7 +47,12 @@ function MentionedNotifications() {
             <StructuredListBody>
               { mentions.length ? mentions.map(mention => (
                 <StructuredListRow key={mention.index}>
-                  <StructuredListCell>{ mention.title }</StructuredListCell>
+                  <StructuredListCell>
+                    <h6>{mention.full_name}</h6>
+                    <Link href={mention.html_url} target='_blank' key={mention.index}>
+                      <h4>{mention.title}</h4>
+                    </Link>
+                  </StructuredListCell>
                   <StructuredListCell>
                     <h6>{moment(mention.updated_at).fromNow()}</h6>
                     ({mention.updated_at})

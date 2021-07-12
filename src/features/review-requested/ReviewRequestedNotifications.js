@@ -6,7 +6,7 @@ import {
   StructuredListBody,
   StructuredListRow,
   StructuredListCell,
-  StructuredListSkeleton
+  StructuredListSkeleton, Link
 } from 'carbon-components-react';
 import NotificationsSideNav from '../common/NotificationsSideNav';
 import { fetchNotifications } from "../../actions/notifications";
@@ -45,14 +45,19 @@ function ReviewRequestedNotifications() {
                 </StructuredListRow>
               </StructuredListHead>
               <StructuredListBody>
-                { reviewRequested.length ? reviewRequested.map(mention => (
-                  <StructuredListRow key={mention.index}>
-                    <StructuredListCell>{ mention.title }</StructuredListCell>
+                { reviewRequested.length ? reviewRequested.map(note => (
+                  <StructuredListRow key={note.index}>
                     <StructuredListCell>
-                      <h6>{moment(mention.updated_at).fromNow()}</h6>
-                      ({mention.updated_at})
+                      <h6>{note.full_name}</h6>
+                      <Link href={note.html_url} target='_blank' key={note.index}>
+                        <h4>{note.title}</h4>
+                      </Link>
                     </StructuredListCell>
-                    <StructuredListCell>{ mention.type }</StructuredListCell>
+                    <StructuredListCell>
+                      <h6>{moment(note.updated_at).fromNow()}</h6>
+                      ({note.updated_at})
+                    </StructuredListCell>
+                    <StructuredListCell>{ note.type }</StructuredListCell>
                   </StructuredListRow>
                 ))
                   : <StructuredListRow><StructuredListCell>No notifications</StructuredListCell></StructuredListRow>
