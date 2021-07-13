@@ -1,9 +1,10 @@
 const common = require('../api/common');
 
-export function notificationsHaveError(bool) {
+export function notificationsHaveError(response) {
   return {
     type: 'NOTIFICATIONS_HAVE_ERROR',
-    haveNotificationsError: bool
+    haveNotificationsError: true,
+    error: response
   };
 }
 
@@ -31,14 +32,13 @@ export function selectNotification(notification) {
 export function fetchNotifications(since) {
   return (dispatch) => {
     dispatch(notificationsAreLoading(true));
-    console.log(since);
     common.getNotificationsByDate(since)
-      .then((notifications) => {
-        console.log(notifications);
-        dispatch(notificationsFetchDataSuccess(notifications));
-      })
-      .catch((error) => {
-        dispatch(notificationsHaveError(true))
-      })
+      .then((response) => {
+        if (response instanceof Error) {
+          dispatch(notificationsHaveError(response.statusText))
+        } else {
+          dispatch(notificationsFetchDataSuccess(response));
+        }
+      });
   }
 }

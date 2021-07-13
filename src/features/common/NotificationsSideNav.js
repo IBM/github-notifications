@@ -6,7 +6,7 @@ const sideNavLinks = [
   {
     content: 'All Notifications',
     id: 'notifications',
-    link: '/'
+    link: '/notifications'
   },
   {
     content: 'Mentions',

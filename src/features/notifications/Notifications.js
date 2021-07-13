@@ -22,10 +22,11 @@ function Notifications() {
   const history = useHistory()
   const notifications = useSelector((state) => state.notifications.notifications);
   const haveNotificationsError = useSelector((state) => state.notifications.haveNotificationsError);
+  const error = useSelector((state) => state.notifications.error);
   const areNotificationsLoading = useSelector((state) => state.notifications.areNotificationsLoading);
 
   useEffect(() => {
-    if (!notifications.length) {
+    if (!notifications.length && !haveNotificationsError) {
       dispatch(fetchNotifications(moment().subtract(4, 'week').toISOString()));
     }
   }, [notifications, dispatch])
@@ -66,7 +67,7 @@ function Notifications() {
               </StructuredListRow>
             </StructuredListHead>
             <StructuredListBody>
-              {notifications.map((notification) => (
+              {notifications && !haveNotificationsError && notifications.map((notification) => (
                 <StructuredListRow key={notification.index}>
                   <StructuredListCell>
                     <h6>{notification.full_name}</h6>
@@ -91,11 +92,11 @@ function Notifications() {
                   </StructuredListCell>
                 </StructuredListRow>
               ))}
+              {haveNotificationsError ? <StructuredListRow><StructuredListCell>{ error }</StructuredListCell></StructuredListRow> : null}
             </StructuredListBody>
           </StructuredListWrapper>
         </div>
         {areNotificationsLoading ? <StructuredListSkeleton /> : null}
-        {haveNotificationsError ? <p>Sorry! There was an error loading the items</p> : null}
       </div>
       <NotificationsSideNav activeLink="notifications" onClick={(e, date) => filterByDate(e, date)} />
     </div>

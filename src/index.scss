@@ -1,5 +1,11 @@
 @import '~carbon-components/scss/globals/scss/styles.scss';
 
+.login {
+  padding: 20px;
+  &__input {
+    margin-bottom: 20px;
+  }
+}
 .notifications__main {
   &__content {
     margin-left: 16rem;

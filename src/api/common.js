@@ -14,15 +14,14 @@ export async function getNotificationsByDate(since, type = null) {
     }
     return processedNotifications;
   } catch (error) {
-    console.log(error);
     return error;
   }
 }
 
 export async function getNotificationsByType(notifications, type) {
-  let reviewRequested = []
+  let result = []
   notifications.forEach((note) => {
-    if (note.reason === type) { reviewRequested.push(note) }
+    if (note.reason === type) { result.push(note) }
   });
-  return reviewRequested;
+  return result;
 }
