@@ -1,5 +1,4 @@
 import { githubToken } from '../utils/authentication';
-require('dotenv').config();
 
 const GitHubClient = require('../libs/GitHubClient.js').GitHubClient;
 
