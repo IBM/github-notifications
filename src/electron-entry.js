@@ -4,26 +4,28 @@ const BrowserWindow = electron.BrowserWindow;
 
 let win;
 
-function createWindow() {
-    win = new BrowserWindow({ fullscreen: true });
+const createWindow = () => {
+  win = new BrowserWindow({fullscreen: true});
 
-    win.loadURL('http://localhost:3000');
+  win.loadURL('http://localhost:3000');
 
-    // win.webContents.openDevTools();
+  // win.webContents.openDevTools();
 
-    win.on('close', function() {
-        win = null;
-    })
+  win.on('close', () => {
+    win = null;
+  })
 }
 
-app.on('ready', createWindow);
+app.whenReady().then(() => {
+  createWindow();
 
-app.on('window-all-closed', function() {
-    app.quit();
+  app.on('activate',() => {
+    if(win == null) {
+      createWindow();
+    }
+  })
 });
 
-app.on('activate', function() {
-    if(win == null) {
-        createWindow();
-    }
-})
+app.on('window-all-closed', () => {
+    app.quit();
+});
