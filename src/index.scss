@@ -2,8 +2,22 @@
 
 .login {
   padding: 20px;
+
+  &__title {
+    font-size: 34px;
+    font-weight: lighter;
+    margin-bottom: 40px;
+  }
+
+  &__grid {
+    width: 800px;
+    margin-top: 10%;
+  }
+
   &__input {
-    margin-bottom: 20px;
+    &__token, &__url {
+      margin-bottom: 20px;
+    }
   }
 }
 .notifications__main {
