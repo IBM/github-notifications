@@ -1,4 +1,4 @@
-import { uniq } from "lodash";
+import {uniq} from "lodash";
 
 export function getPrUrl(url) {
   const parseUrl = new URL(url);
@@ -9,16 +9,13 @@ export function getPrUrl(url) {
   return { repo, number };
 }
 
-export function findJiraTickets(input) {
+export function formatCommits(input) {
   let commits = [];
-  let tickets = [];
   const commitsArray = input.data;
   let index = 0;
   for ( const commit of commitsArray) {
     index++;
     const { commit: { url, message, author, committer: { name, date } } } = commit;
-    const ticket = findByRegex(message);
-    tickets.push(ticket);
     const newUrl = getNewUrl(url);
     const newCommit = {
       index,
@@ -30,9 +27,26 @@ export function findJiraTickets(input) {
     }
     commits.push(newCommit);
   }
+  return commits;
+}
+
+export function findJiraTicketForCommits(input) {
+  let tickets = [];
+  const newArray = input.data;
+  let index = 0;
+  for ( const item of newArray) {
+    index++;
+    const ticket = findByRegex(item.commit.message);
+    tickets.push(ticket);
+  }
   const cleanedJira = [].concat.apply([], tickets);
-  const jira = uniq(cleanedJira.flat());
-  return { commits, jira };
+  return uniq(cleanedJira.flat());
+}
+
+export function findJiraTicketForNotifications(item) {
+  const ticket = findByRegex(item.subject.title);
+  const cleanedJira = [].concat.apply([], ticket);
+  return uniq(cleanedJira.flat());
 }
 
 function findByRegex(message) {

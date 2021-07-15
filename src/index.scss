@@ -27,6 +27,10 @@
 
   &__list__wrapper {
     margin-bottom: 0;
+
+    .bx--structured-list-td {
+      vertical-align: middle;
+    }
   }
 
   &__side-nav {
@@ -41,11 +45,21 @@
     display: block;
     text-align: center;
   }
+
+  &__toolbar {
+    button{
+      margin: 5px;
+    }
+  }
 }
 
 .details__main {
   &__jira__link {
     padding: 5px;
+  }
+
+  &__list .bx--structured-list-td {
+    vertical-align: middle;
   }
 }
 

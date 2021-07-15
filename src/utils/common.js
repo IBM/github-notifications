@@ -1,3 +1,5 @@
+import { findJiraTicketForNotifications } from "./details";
+
 export async function processNotifications(notifications) {
   let processedNotification = [];
   const notificationArray = notifications.data;
@@ -6,6 +8,7 @@ export async function processNotifications(notifications) {
     index++;
     const { reason, updated_at, subject: { title = '', url = '', type = '' } = {}, repository: { full_name = '' } = {}} = notification;
     const html_url = await getPrNumber(url);
+    const jira = findJiraTicketForNotifications(notification);
     const newNotification = {
       index,
       reason,
@@ -13,11 +16,11 @@ export async function processNotifications(notifications) {
       title,
       type,
       html_url,
-      full_name
+      full_name,
+      jira: jira[0] !== undefined ? jira[0] : ''
     };
     processedNotification.push(newNotification);
   }
-  console.log('processedNotification: ', processedNotification);
   return sortNotifications(processedNotification);
 }
 

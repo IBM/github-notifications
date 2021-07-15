@@ -14,7 +14,7 @@ import {
 } from 'carbon-components-react';
 import { useHistory } from "react-router-dom";
 import NotificationsSideNav from '../common/NotificationsSideNav';
-import { ExpandAll32 } from '@carbon/icons-react';
+import { ZoomIn32, Ticket32 } from '@carbon/icons-react';
 import { fetchNotifications, selectNotification } from '../../actions/notifications';
 
 function Notifications() {
@@ -24,6 +24,7 @@ function Notifications() {
   const haveNotificationsError = useSelector((state) => state.notifications.haveNotificationsError);
   const error = useSelector((state) => state.notifications.error);
   const areNotificationsLoading = useSelector((state) => state.notifications.areNotificationsLoading);
+  console.log(useSelector((state) => state));
 
   useEffect(() => {
     if (!notifications.length && !haveNotificationsError) {
@@ -82,13 +83,26 @@ function Notifications() {
                     {tagReason(notification.reason)}
                   </StructuredListCell>
                   <StructuredListCell>
-                    <Button
-                      kind="tertiary"
-                      renderIcon={ExpandAll32}
-                      iconDescription="Details"
-                      hasIconOnly
-                      onClick={() => {selectNotifications(notification)}}
-                    />
+                    <div className="notifications__main__toolbar">
+                      <Button
+                        kind="tertiary"
+                        renderIcon={ZoomIn32}
+                        iconDescription="Details"
+                        hasIconOnly
+                        onClick={() => {selectNotifications(notification)}}
+                      />
+                      {notification.jira && (
+                        <Link href={`https://jira.sec.***REMOVED***/browse/${notification.jira}`} target='_blank'>
+                          <Button
+                            kind="tertiary"
+                            renderIcon={Ticket32}
+                            iconDescription="Jira"
+                            hasIconOnly
+                          />
+                        </Link>
+                      )
+                      }
+                    </div>
                   </StructuredListCell>
                 </StructuredListRow>
               ))}
