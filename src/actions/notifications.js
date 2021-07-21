@@ -29,6 +29,13 @@ export function selectNotification(notification) {
   };
 }
 
+export function newNotificationsMove(notifications) {
+  return {
+    type: 'MOVE_NEW_NOTIFICATIONS',
+    notifications
+  };
+}
+
 export function fetchNotifications(since) {
   return (dispatch) => {
     dispatch(notificationsAreLoading(true));
@@ -41,4 +48,8 @@ export function fetchNotifications(since) {
         }
       });
   }
+}
+
+export function moveNewNotifications(notifications) {
+  return (dispatch) => dispatch(newNotificationsMove(notifications));
 }

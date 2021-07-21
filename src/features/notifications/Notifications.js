@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, {useEffect} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import {
@@ -12,30 +12,42 @@ import {
   StructuredListSkeleton,
   Tag
 } from 'carbon-components-react';
-import { useHistory } from "react-router-dom";
-import NotificationsSideNav from '../common/NotificationsSideNav';
 import { ZoomIn32, Ticket32 } from '@carbon/icons-react';
-import { fetchNotifications, selectNotification } from '../../actions/notifications';
+import { useHistory } from "react-router-dom";
+import cx from 'classnames';
+import NotificationsHeaderContainer from '../common/NotificationsHeaderContainer';
+import { fetchNotifications, selectNotification, moveNewNotifications } from '../../actions/notifications';
+import { fetchNewNotifications, clearNewNotifications } from '../../actions/newNotifications';
+import { setSince } from '../../actions/since';
+import { defaultFetchTime, automaticFetchInterval } from '../common/Common';
 
-function Notifications() {
+function Notifications({ useResponsiveOffset = true }) {
   const dispatch = useDispatch();
   const history = useHistory()
   const notifications = useSelector((state) => state.notifications.notifications);
   const haveNotificationsError = useSelector((state) => state.notifications.haveNotificationsError);
   const error = useSelector((state) => state.notifications.error);
   const areNotificationsLoading = useSelector((state) => state.notifications.areNotificationsLoading);
-  console.log(useSelector((state) => state));
+  const since = useSelector((state) => state.since.since);
+  const newNotifications = useSelector((state) => state.newNotifications.newNotifications);
+  const newNotificationsLoading = useSelector((state) => state.newNotifications.areNewNotificationsLoading);
+
+  console.log(notifications.length);
 
   useEffect(() => {
     if (!notifications.length && !haveNotificationsError) {
-      dispatch(fetchNotifications(moment().subtract(4, 'week').toISOString()));
+      dispatch(fetchNotifications(defaultFetchTime));
+      dispatch(setSince(moment().toISOString()));
+    } else {
+      const interval = setInterval(() => {
+        console.log(since);
+        dispatch(fetchNewNotifications(since));
+        dispatch(setSince(moment().toISOString()));
+      }, automaticFetchInterval);
+      return () => clearInterval(interval);
     }
-  }, [notifications, dispatch])
 
-  const selectNotifications = (notification) => {
-    dispatch(selectNotification(notification));
-    history.push('/details');
-  }
+  }, [notifications, dispatch, haveNotificationsError, since]);
 
   const tagReason = (reason) => {
     switch (reason) {
@@ -48,15 +60,33 @@ function Notifications() {
     }
   }
 
-  const filterByDate  = (event, date) => {
-    event.preventDefault();
+  const selectNotifications = (notification) => {
+    dispatch(selectNotification(notification));
+    history.push('/details');
+  }
+
+  const fetchMoreNotifications = (e) => {
+    e.preventDefault();
+    dispatch(setSince(moment().toISOString()));
+    dispatch(fetchNewNotifications(since));
+  }
+
+  const collectNewNotifications = (e) => {
+    e.preventDefault();
+    dispatch(moveNewNotifications(newNotifications));
+    dispatch(clearNewNotifications());
+  }
+
+  const filterByDate  = (e, date) => {
+    e.preventDefault();
     dispatch(fetchNotifications(date));
   }
 
+  const classNameFirstColumn = cx({ 'bx--offset-xlg-2': useResponsiveOffset });
+
   return (
-    <div className="notifications__main">
-      <div className="notifications__main__content">
-        <Button onClick={() => fetchNotifications()} className="notifications__main__button">Update</Button>
+    <div className="notifications__main bx--grid--full-width">
+      <div className={`notifications__main__content ${classNameFirstColumn}`}>
         <div className="notifications__main__list">
           <StructuredListWrapper selection className="notifications__main__list__wrapper">
             <StructuredListHead>
@@ -69,7 +99,7 @@ function Notifications() {
             </StructuredListHead>
             <StructuredListBody>
               {notifications && !haveNotificationsError && notifications.map((notification) => (
-                <StructuredListRow key={notification.index}>
+                <StructuredListRow key={notification.index} className={notification.new ? 'notifications__main__list__row--color': ''}>
                   <StructuredListCell>
                     <h6>{notification.full_name}</h6>
                     <Link href={notification.html_url} target='_blank' key={notification.index}>
@@ -110,9 +140,16 @@ function Notifications() {
             </StructuredListBody>
           </StructuredListWrapper>
         </div>
-        {areNotificationsLoading ? <StructuredListSkeleton /> : null}
+        { areNotificationsLoading ? <StructuredListSkeleton /> : null }
       </div>
-      <NotificationsSideNav activeLink="notifications" onClick={(e, date) => filterByDate(e, date)} />
+      <NotificationsHeaderContainer
+        activeLink="notifications"
+        dateFilter={(e, date) => filterByDate(e, date)}
+        autoRefreshView={(e) => fetchMoreNotifications(e)}
+        getItems={(e) => collectNewNotifications(e)}
+        notificationItems={newNotifications}
+        notificationsloading={newNotificationsLoading}
+      />
     </div>
   );
 }

@@ -2,7 +2,8 @@ export const initialState = {
   areNotificationsLoading: false,
   haveNotificationsError: false,
   notifications: [],
-  selected: {}
+  selected: {},
+  error: ''
 };
 
 const reducer = (state = initialState, action) => {
@@ -20,6 +21,15 @@ const reducer = (state = initialState, action) => {
       return { ...state, notifications: action.notifications, areNotificationsLoading: false };
     case 'NOTIFICATION_SELECTION_SUCCESS':
       return { ...state, selected: action.selected };
+    case 'MOVE_NEW_NOTIFICATIONS': {
+      let currentNotifications = state.notifications;
+      for ( const newNotification of action.notifications) {
+        newNotification.index = (currentNotifications.length + 1);
+        newNotification.new = true;
+        currentNotifications.unshift(newNotification);
+      }
+      return { ...state, notifications: currentNotifications }
+    }
     default:
       return { ...state };
   }

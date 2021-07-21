@@ -8,10 +8,10 @@ import {
   StructuredListCell,
   StructuredListSkeleton, Link
 } from 'carbon-components-react';
-import NotificationsSideNav from '../common/NotificationsSideNav';
 import { fetchNotifications } from "../../actions/notifications";
 import { fetchReviewRequestedNotifications, fetchReviewRequestedNotificationsByDate } from "../../actions/review-requested";
 import moment from "moment";
+import NotificationsHeaderContainer from "../common/NotificationsHeaderContainer";
 
 function ReviewRequestedNotifications() {
   const dispatch = useDispatch();
@@ -26,6 +26,11 @@ function ReviewRequestedNotifications() {
     dispatch(fetchReviewRequestedNotifications(notifications, 'review_requested'));
   }, [dispatch, notifications]);
 
+  const fetchMoreNotifications = (e) => {
+    e.preventDefault();
+    dispatch(fetchReviewRequestedNotifications(notifications, 'review_requested'));
+  }
+
   const filterByDate  = (event, date) => {
     event.preventDefault();
     dispatch(fetchReviewRequestedNotificationsByDate(date, 'review_requested'));
@@ -36,7 +41,7 @@ function ReviewRequestedNotifications() {
       <div className="review-requested__main__content">
         <div className="review-requested__main__list">
           {notifications.length && !areReviewRequestedNotificationsLoading ? (
-            <StructuredListWrapper selection>
+            <StructuredListWrapper selection className="review-requested__main__list__wrapper">
               <StructuredListHead>
                 <StructuredListRow head>
                   <StructuredListCell head>Title</StructuredListCell>
@@ -68,7 +73,11 @@ function ReviewRequestedNotifications() {
           : <StructuredListSkeleton />}
         </div>
       </div>
-      <NotificationsSideNav activeLink="review-requested" onClick={(e, date) => filterByDate(e, date)} />
+      <NotificationsHeaderContainer
+        activeLink="review-requested"
+        dateFilter={(e, date) => filterByDate(e, date)}
+        refreshView={(e) => fetchMoreNotifications(e)}
+      />
     </div>
   );
 }

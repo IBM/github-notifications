@@ -1,4 +1,4 @@
-import {uniq} from "lodash";
+import { uniq } from "lodash";
 
 export function getPrUrl(url) {
   const parseUrl = new URL(url);
@@ -33,9 +33,7 @@ export function formatCommits(input) {
 export function findJiraTicketForCommits(input) {
   let tickets = [];
   const newArray = input.data;
-  let index = 0;
   for ( const item of newArray) {
-    index++;
     const ticket = findByRegex(item.commit.message);
     tickets.push(ticket);
   }

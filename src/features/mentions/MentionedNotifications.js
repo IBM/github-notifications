@@ -8,10 +8,11 @@ import {
   StructuredListCell,
   StructuredListSkeleton, Link
 } from 'carbon-components-react';
-import NotificationsSideNav from '../common/NotificationsSideNav';
+import moment from "moment";
+import NotificationsHeaderContainer from "../common/NotificationsHeaderContainer";
 import { fetchNotifications } from "../../actions/notifications";
 import { fetchMentionedNotifications, fetchMentionedNotificationsByDate } from "../../actions/mentions";
-import moment from "moment";
+import { defaultFetchTime } from '../common/Common';
 
 function MentionedNotifications() {
   const dispatch = useDispatch();
@@ -21,7 +22,7 @@ function MentionedNotifications() {
 
   useEffect(() => {
     if (!notifications.length) {
-      dispatch(fetchNotifications(moment().subtract(4, 'week').toISOString()));
+      dispatch(fetchNotifications(defaultFetchTime));
     }
     dispatch(fetchMentionedNotifications(notifications, 'mention'));
   }, [dispatch, notifications]);
@@ -36,7 +37,7 @@ function MentionedNotifications() {
       <div className="mentions__main__content">
         <div className="mentions__main__list">
           {notifications.length && !areMentionedNotificationsLoading ? (
-          <StructuredListWrapper selection>
+          <StructuredListWrapper selection className="mentions__main__list__wrapper">
             <StructuredListHead>
               <StructuredListRow head>
                 <StructuredListCell head>Title</StructuredListCell>
@@ -68,7 +69,10 @@ function MentionedNotifications() {
             : <StructuredListSkeleton />}
         </div>
       </div>
-      <NotificationsSideNav activeLink="mentions" onClick={(e, date) => filterByDate(e, date)} />
+      <NotificationsHeaderContainer
+        activeLink="mentions"
+        dateFilter={(e, date) => filterByDate(e, date)}
+      />
     </div>
   );
 }

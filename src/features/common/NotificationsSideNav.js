@@ -44,12 +44,11 @@ const filterByDate = [
   }
 ]
 
-const NotificationsSideNav = ({ activeLink, onClick }) => (
+const NotificationsSideNav = ({ activeLink, dateFilter, isSideNavExpanded }) => (
   <>
     <SideNav
-      isFixedNav
-      expanded={true}
-      isChildOfHeader={false}
+      isPersistent={false}
+      expanded={isSideNavExpanded}
       aria-label="Side navigation"
       className="notifications__main__side-nav"
     >
@@ -65,7 +64,7 @@ const NotificationsSideNav = ({ activeLink, onClick }) => (
         ))}
         <SideNavMenu title="Filter by Date" className="notifications__main__side-nav__filters-menu">
           {filterByDate.map((filter) => (
-            <SideNavMenuItem key={filter.id} onClick={(e) => onClick(e, filter.date)}>{ filter.content }</SideNavMenuItem>
+            <SideNavMenuItem key={filter.id} onClick={(e) => dateFilter(e, filter.date)}>{ filter.content }</SideNavMenuItem>
           ))}
         </SideNavMenu>
       </SideNavItems>
