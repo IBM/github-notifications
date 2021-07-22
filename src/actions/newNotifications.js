@@ -1,4 +1,5 @@
 const common = require('../api/common');
+const { notify } = require('../utils/electronNotifications')
 
 export function newNotificationsAreLoading(bool) {
   return {
@@ -36,6 +37,7 @@ export function fetchNewNotifications(since) {
         if (response instanceof Error) {
           dispatch(newNotificationsHaveError())
         } else {
+          notify(response);
           dispatch(notificationsFetchNewDataSuccess(response));
         }
       });

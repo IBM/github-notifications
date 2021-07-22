@@ -32,8 +32,6 @@ function Notifications({ useResponsiveOffset = true }) {
   const newNotifications = useSelector((state) => state.newNotifications.newNotifications);
   const newNotificationsLoading = useSelector((state) => state.newNotifications.areNewNotificationsLoading);
 
-  console.log(notifications.length);
-
   useEffect(() => {
     if (!notifications.length && !haveNotificationsError) {
       dispatch(fetchNotifications(defaultFetchTime));
