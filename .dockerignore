@@ -1,4 +1,8 @@
+.idea
 .git
+.gitignore
+README.md
+Dockerfile
 .env
 node_modules
 npm-debug.log
