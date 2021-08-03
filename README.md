@@ -1,9 +1,7 @@
-## Video Chat Application Example
+## Github Notifications app
 
-#### [@WeCodeTutorials](https://twitter.com/WeCodeTutorials)
-[![Logo](https://cdn.pbrd.co/images/HdwCut8.png)](https://www.youtube.com/channel/UCj9VatwdukZjNOnIKcpWcsA)
-
-This project is made for my YouTube tutorial on "Create Electron Todos App with ReactJS and Laravel API"
+This project uses Github API notifications in a React app. Carbon-components were used to build the frontend. 
+The Electron app has built in MacOS notifications.
 
 ## get it up and running.
 
@@ -11,23 +9,17 @@ After you clone this project, do the following:
 
 ```bash
 # go into the project
-cd electron-react-app
+cd github-notifications
+
+# choose the right npm with nvm
+nvm use 12
 
 # install npm dependencies
 npm install
 
-# run create-react-app `webpack-dev-server`
+# run app in the browser
 npm start
 
-# open another tab and run electron
+# run electron desktop app
 npm run electron
 ```
-
-to create an executable DMG file
-```
-npm run dist
-
-# Then checkout your dist/ to see the .dmg file
-```
-
-Good Luck :)
