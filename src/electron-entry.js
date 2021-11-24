@@ -7,7 +7,7 @@ let win;
 const createWindow = () => {
   win = new BrowserWindow({fullscreen: true});
 
-  win.loadURL('http://localhost:3000');
+  win.loadURL('http://localhost:5000');
 
   // win.webContents.openDevTools();
 

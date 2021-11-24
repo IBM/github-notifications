@@ -27,7 +27,7 @@
     "typescript": "^4.3.2"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "PORT=5000 react-scripts start",
     "start:docker": "npm run build && npm start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
