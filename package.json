@@ -7,13 +7,17 @@
   "dependencies": {
     "@octokit/rest": "^18.0.11",
     "@reduxjs/toolkit": "^1.5.0",
+    "async": "^3.2.0",
+    "axios": "^0.21.1",
     "carbon-components": "10.38.0",
     "carbon-components-react": "7.38.0",
     "carbon-icons": "7.0.7",
     "classnames": "^2.3.1",
+    "concurrently": "^6.2.0",
     "fibers": "^5.0.0",
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
+    "node-sass": "^6.0.1",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
@@ -37,12 +41,8 @@
     "dist": "electron-builder"
   },
   "devDependencies": {
-    "async": "^3.2.0",
-    "axios": "^0.21.1",
-    "concurrently": "^6.2.0",
     "electron": "^13.0.1",
-    "electron-builder": "^22.10.5",
-    "node-sass": "^6.0.1"
+    "electron-builder": "^22.10.5"
   },
   "build": {
     "appId": "github-notifications",
