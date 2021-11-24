@@ -9,6 +9,11 @@ const sideNavLinks = [
     link: '/notifications'
   },
   {
+    content: 'Authored',
+    id: 'authored',
+    link: '/authored'
+  },
+  {
     content: 'Mentions',
     id: 'mentions',
     link: '/mentions'

@@ -5,6 +5,7 @@ import mentions from './mentions';
 import reviewRequested from './review-requested';
 import newNotifications from './newNotifications';
 import since from './since';
+import authored from './authored';
 
 export default combineReducers({
   notifications,
@@ -12,5 +13,6 @@ export default combineReducers({
   mentions,
   reviewRequested,
   newNotifications,
-  since
+  since,
+  authored
 });

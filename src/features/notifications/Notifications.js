@@ -53,6 +53,8 @@ function Notifications({ useResponsiveOffset = true }) {
         return <Tag type="red" title={reason}>{reason}</Tag>;
       case 'mention':
         return <Tag type="green" title={reason}>{reason}</Tag>;
+      case 'author':
+        return <Tag type="blue" title={reason}>{reason}</Tag>;
       default:
         return <Tag type="gray" title={reason}>{reason}</Tag>;
     }
