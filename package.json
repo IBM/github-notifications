@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "author": "Grzegorz Smolin",
   "private": true,
-  "main": "./src/electron-entry.js",
+  "main": "public/electron.js",
   "dependencies": {
     "@octokit/rest": "^18.0.11",
     "@reduxjs/toolkit": "^1.5.0",
@@ -13,7 +13,7 @@
     "carbon-components-react": "7.38.0",
     "carbon-icons": "7.0.7",
     "classnames": "^2.3.1",
-    "concurrently": "^6.2.0",
+    "electron-is-dev": "^2.0.0",
     "fibers": "^5.0.0",
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
@@ -30,19 +30,21 @@
     "sass": "^1.32.11",
     "typescript": "^4.3.2"
   },
+  "devDependencies": {
+    "concurrently": "^6.2.0",
+    "electron": "^13.0.1",
+    "electron-builder": "^22.10.5",
+    "wait-on": "^6.0.0"
+  },
   "scripts": {
     "start": "PORT=5000 react-scripts start",
     "start:docker": "npm run build && npm start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "electron": "concurrently \"npm start\" \"electron .\"",
+    "electron-dev": "concurrently \"BROWSER=none npm start\" \"wait-on http://localhost:5000 && electron .\"",
     "pack": "electron-builder --dir",
     "dist": "electron-builder"
-  },
-  "devDependencies": {
-    "electron": "^13.0.1",
-    "electron-builder": "^22.10.5"
   },
   "build": {
     "appId": "github-notifications",
