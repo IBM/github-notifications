@@ -8,7 +8,7 @@ let win;
 const createWindow = () => {
   win = new BrowserWindow({fullscreen: true});
 
-  win.loadURL(isDev ? 'http://localhost:5000' : `file://${path.join(__dirname, '../build/index.html')}`)
+  win.loadURL(isDev ? 'http://localhost:5555' : `file://${path.join(__dirname, '../build/index.html')}`)
 
   // win.webContents.openDevTools();
 
