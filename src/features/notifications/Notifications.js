@@ -33,7 +33,7 @@ function Notifications({ useResponsiveOffset = true }) {
   const newNotificationsLoading = useSelector((state) => state.newNotifications.areNewNotificationsLoading);
 
   useEffect(() => {
-    if (!notifications.length && !haveNotificationsError) {
+    if (!notifications.length && !areNotificationsLoading) {
       dispatch(fetchNotifications(defaultFetchTime));
       dispatch(setSince(moment().toISOString()));
     } else {

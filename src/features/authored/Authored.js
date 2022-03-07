@@ -21,7 +21,7 @@ function AuthoredNotifications() {
   const areAuthoredNotificationsLoading = useSelector((state) => state.authored.areAuthoredNotificationsLoading);
 
   useEffect(() => {
-    if (!notifications.length) {
+    if (!notifications.length && !areAuthoredNotificationsLoading) {
       dispatch(fetchNotifications(defaultFetchTime));
     }
     dispatch(fetchAuthoredNotifications(notifications, 'author'));

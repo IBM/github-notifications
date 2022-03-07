@@ -20,7 +20,7 @@ function ReviewRequestedNotifications() {
   const areReviewRequestedNotificationsLoading = useSelector((state) => state.reviewRequested.areReviewRequestedNotificationsLoading);
 
   useEffect(() => {
-    if (!notifications.length) {
+    if (!notifications.length && !areReviewRequestedNotificationsLoading) {
       dispatch(fetchNotifications(moment().subtract(4, 'week').toISOString()));
     }
     dispatch(fetchReviewRequestedNotifications(notifications, 'review_requested'));

@@ -21,7 +21,7 @@ function MentionedNotifications() {
   const areMentionedNotificationsLoading = useSelector((state) => state.mentions.areMentionedNotificationsLoading);
 
   useEffect(() => {
-    if (!notifications.length) {
+    if (!notifications.length && !areMentionedNotificationsLoading) {
       dispatch(fetchNotifications(defaultFetchTime));
     }
     dispatch(fetchMentionedNotifications(notifications, 'mention'));
