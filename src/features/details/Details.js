@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { CircleFillGlyph } from '@carbon/icons-react';
 import { commitsFetch } from '../../actions/commits';
+import { fetchNotificationDetails } from "../../actions/details";
 import {
   Button,
   Link,
@@ -11,7 +13,8 @@ import {
   Tag,
   StructuredListSkeleton,
   Tabs,
-  Tab
+  Tab,
+  StructuredListHead
 } from "carbon-components-react";
 import { ArrowLeft32 } from '@carbon/icons-react';
 import { useHistory } from "react-router-dom";
@@ -24,9 +27,11 @@ function Details() {
   const notificationCommits = useSelector((state) => state.commits.commits);
   const jira = useSelector((state) => state.commits.jira);
   const notificationCommitsLoading = useSelector((state) => state.commits.areCommitsLoading);
-  const { index, html_url, full_name, title, updated_at, reason} = notificationSelected;
+  const details = useSelector((state) => state.details);
+  const { index, html_url, full_name, title, updated_at, reason } = notificationSelected;
 
   useEffect(() => {
+    dispatch(fetchNotificationDetails(html_url));
     dispatch(commitsFetch(html_url));
   }, [dispatch, html_url])
 
@@ -41,10 +46,32 @@ function Details() {
     }
   }
 
+  const stateColor = (state) => {
+    switch (state) {
+      case 'closed':
+        return <CircleFillGlyph className="details__main__list__status--red" title={state} />;
+      case 'open':
+        return <CircleFillGlyph className="details__main__list__status--green" title={state} />;
+      case 'merged':
+        return <CircleFillGlyph className="details__main__list__status--purple" title={state} />;
+      default:
+        return <CircleFillGlyph title={state} />;
+    }
+  }
+
   return (
     <div className="details__main">
       <div className="details__main__list">
         <StructuredListWrapper selection>
+          <StructuredListHead>
+            <StructuredListRow head>
+              <StructuredListCell head>{' '}</StructuredListCell>
+              <StructuredListCell head>State</StructuredListCell>
+              <StructuredListCell head>Title</StructuredListCell>
+              <StructuredListCell head>Last updated</StructuredListCell>
+              <StructuredListCell head>Reason</StructuredListCell>
+            </StructuredListRow>
+          </StructuredListHead>
           <StructuredListBody>
             <StructuredListRow key={index}>
               <StructuredListCell>
@@ -55,6 +82,9 @@ function Details() {
                   hasIconOnly
                   onClick={() => history.goBack()}
                 />
+              </StructuredListCell>
+              <StructuredListCell>
+                {stateColor(details.details)}
               </StructuredListCell>
               <StructuredListCell>
                 <h6>{full_name}</h6>

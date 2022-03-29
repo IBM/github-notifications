@@ -69,8 +69,21 @@
     padding: 5px;
   }
 
-  &__list .bx--structured-list-td {
-    vertical-align: middle;
+  &__list {
+    &__status {
+      &--green {
+        fill: green;
+      }
+      &--red {
+        fill: red;
+      }
+      &--purple {
+        fill: purple;
+      }
+    }
+    .bx--structured-list-td {
+      vertical-align: middle;
+    }
   }
 }
 

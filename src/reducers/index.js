@@ -6,6 +6,7 @@ import reviewRequested from './review-requested';
 import newNotifications from './newNotifications';
 import since from './since';
 import authored from './authored';
+import details from './details';
 
 export default combineReducers({
   notifications,
@@ -14,5 +15,6 @@ export default combineReducers({
   reviewRequested,
   newNotifications,
   since,
-  authored
+  authored,
+  details
 });
