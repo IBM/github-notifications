@@ -4,7 +4,7 @@ import { processNotifications } from "../utils/common";
 export async function getNotificationsByDate(since, type = null) {
   try {
     const notifications = await githubCliEnterprise.getData({path:`/notifications?since=${since}`});
-    const processedNotifications = await processNotifications(notifications);
+    const processedNotifications = processNotifications(notifications);
     if (type) {
       let specifiedNotificationsByType = [];
       processedNotifications.forEach((note) => {
