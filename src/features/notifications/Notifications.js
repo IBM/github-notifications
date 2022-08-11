@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
+import { sortBy } from "lodash";
 import {
   Button,
   StructuredListWrapper,
@@ -32,13 +33,14 @@ function Notifications({ useResponsiveOffset = true }) {
   const newNotifications = useSelector((state) => state.newNotifications.newNotifications);
   const newNotificationsLoading = useSelector((state) => state.newNotifications.areNewNotificationsLoading);
 
+  const newNotificationsSorted = sortBy(newNotifications, ['updated_at']);
+
   useEffect(() => {
     if (!notifications.length && !areNotificationsLoading) {
       dispatch(fetchNotifications(defaultFetchTime));
       dispatch(setSince(moment().toISOString()));
     } else {
       const interval = setInterval(() => {
-        console.log(since);
         dispatch(fetchNewNotifications(since));
         dispatch(setSince(moment().toISOString()));
       }, automaticFetchInterval);
@@ -73,7 +75,7 @@ function Notifications({ useResponsiveOffset = true }) {
 
   const collectNewNotifications = (e) => {
     e.preventDefault();
-    dispatch(moveNewNotifications(newNotifications));
+    dispatch(moveNewNotifications(newNotificationsSorted));
     dispatch(clearNewNotifications());
   }
 
@@ -147,7 +149,7 @@ function Notifications({ useResponsiveOffset = true }) {
         dateFilter={(e, date) => filterByDate(e, date)}
         autoRefreshView={(e) => fetchMoreNotifications(e)}
         getItems={(e) => collectNewNotifications(e)}
-        notificationItems={newNotifications}
+        notificationItems={newNotificationsSorted}
         notificationsloading={newNotificationsLoading}
       />
     </div>
