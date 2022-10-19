@@ -1,3 +1,7 @@
+@import '~@carbon/themes/scss/themes';
+
+$carbon--theme: $carbon--theme--g90;
+@include carbon--theme();
 @import '~carbon-components/scss/globals/scss/styles.scss';
 
 .login {
