@@ -1,16 +1,17 @@
+import React from "react";
 import { findJiraTicketForNotifications } from "./details";
 
 export function processNotifications(notifications) {
   let processedNotification = [];
   const notificationArray = notifications.data;
-  let index = 0;
+  let id = 0;
   for ( const notification of notificationArray) {
-    index++;
+    id++;
     const { reason, updated_at, subject: { title = '', url = '', type = '' } = {}, repository: { full_name = '' } = {}} = notification;
     const html_url = getPrNumber(url);
     const jira = findJiraTicketForNotifications(notification);
     const newNotification = {
-      index,
+      id: `${id}`,
       reason,
       updated_at,
       title,

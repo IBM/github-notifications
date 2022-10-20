@@ -77,27 +77,15 @@ $carbon--theme: $carbon--theme--g90;
   margin-left: 16rem;
 }
 
-.notifications {
-  &__main {
-    &__content {
-      margin-top: 48px;
-    }
+.notifications__table {
+  margin-top: 48px;
 
-    &__list {
-      &__wrapper {
-        margin-bottom: 0;
+  &__body tr td {
+    padding: 1rem;
+  }
 
-        .bx--structured-list-td {
-          vertical-align: middle;
-        }
-      }
-    }
-
-    &__toolbar {
-      button{
-        margin: 5px;
-      }
-    }
+  &__actions button {
+    margin-left: 5px;
   }
 }
 
