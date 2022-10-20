@@ -9,10 +9,10 @@ import {
   StructuredListSkeleton, Link
 } from 'carbon-components-react';
 import moment from "moment";
-import NotificationsHeaderContainer from "../common/NotificationsHeaderContainer";
+import GlobalHeaderContainer from "../common/GlobalHeaderContainer";
 import { fetchNotifications } from "../../actions/notifications";
 import { fetchMentionedNotifications, fetchMentionedNotificationsByDate } from "../../actions/mentions";
-import { defaultFetchTime } from '../common/Common';
+import { defaultFetchTime } from '../common/constants';
 
 function MentionedNotifications() {
   const dispatch = useDispatch();
@@ -69,7 +69,7 @@ function MentionedNotifications() {
             : <StructuredListSkeleton />}
         </div>
       </div>
-      <NotificationsHeaderContainer
+      <GlobalHeaderContainer
         activeLink="mentions"
         dateFilter={(e, date) => filterByDate(e, date)}
       />

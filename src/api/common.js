@@ -1,7 +1,7 @@
 import { githubCliEnterprise } from "./index";
 import { processNotifications } from "../utils/common";
 
-export async function getNotificationsByDate(since, type = null) {
+export async function getNotifications(since, type = null) {
   try {
     const notifications = await githubCliEnterprise.getData({path:`/notifications?since=${since}`});
     const processedNotifications = processNotifications(notifications);
@@ -16,12 +16,4 @@ export async function getNotificationsByDate(since, type = null) {
   } catch (error) {
     return error;
   }
-}
-
-export async function getNotificationsByType(notifications, type) {
-  let result = []
-  notifications.forEach((note) => {
-    if (note.reason === type) { result.push(note) }
-  });
-  return result;
 }

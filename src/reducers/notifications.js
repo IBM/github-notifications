@@ -2,6 +2,7 @@ export const initialState = {
   areNotificationsLoading: false,
   haveNotificationsError: false,
   notifications: [],
+  newNotifications: [],
   selected: {},
   error: ''
 };
@@ -21,6 +22,10 @@ const reducer = (state = initialState, action) => {
       return { ...state, notifications: action.notifications, areNotificationsLoading: false };
     case 'NOTIFICATION_SELECTION_SUCCESS':
       return { ...state, selected: action.selected };
+    case 'NOTIFICATIONS_FETCH_NEW_DATA_SUCCESS':
+      return { ...state, newNotifications: action.notifications.concat(state.newNotifications), areNotificationsLoading: false };
+    case 'NEW_NOTIFICATIONS_CLEAR':
+      return { ...state, newNotifications: [] };
     case 'MOVE_NEW_NOTIFICATIONS': {
       let currentNotifications = state.notifications;
       for ( const newNotification of action.notifications) {

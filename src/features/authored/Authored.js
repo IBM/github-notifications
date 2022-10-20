@@ -9,31 +9,45 @@ import {
   StructuredListSkeleton, Link
 } from 'carbon-components-react';
 import moment from "moment";
-import NotificationsHeaderContainer from "../common/NotificationsHeaderContainer";
+import GlobalHeaderContainer from "../common/GlobalHeaderContainer";
 import { fetchNotifications } from "../../actions/notifications";
-import { fetchAuthoredNotifications, fetchAuthoredNotificationsByDate } from "../../actions/authored";
-import { defaultFetchTime } from '../common/Common';
+import {automaticFetchInterval, defaultFetchTime} from '../common/constants';
+import { fetchMoreNotifications, collectNewNotifications, filterByDate } from '../common/actions';
+import {sortBy} from "lodash";
+import {setSince} from "../../actions/since";
 
 function AuthoredNotifications() {
   const dispatch = useDispatch();
-  const notifications = useSelector((state) => state.notifications.notifications);
-  const authored = useSelector((state) => state.authored.authored);
-  const areAuthoredNotificationsLoading = useSelector((state) => state.authored.areAuthoredNotificationsLoading);
+  const authored = useSelector((state) => state.notifications.authored);
+  const haveNotificationsError = useSelector((state) => state.notifications.haveNotificationsError);
+  const areNotificationsLoading = useSelector((state) => state.notifications.areNotificationsLoading);
+  const since = useSelector((state) => state.since.since);
+
+  const newNotificationsSorted = sortBy(authored, ['updated_at']);
 
   useEffect(() => {
-    if (!notifications.length && !areAuthoredNotificationsLoading) {
-      dispatch(fetchNotifications(defaultFetchTime));
+    if (!authored.length && !areNotificationsLoading) {
+      dispatch(fetchNotifications(defaultFetchTime, 'author'));
+      dispatch(setSince(moment().toISOString()));
+    } else {
+      const interval = setInterval(() => {
+        dispatch(fetchNotifications(since, null, true));
+        dispatch(setSince(moment().toISOString()));
+      }, automaticFetchInterval);
+      return () => clearInterval(interval);
     }
-    dispatch(fetchAuthoredNotifications(notifications, 'author'));
-  }, [dispatch, notifications]);
-
-  const filterByDate  = (event, date) => {
-    event.preventDefault();
-    dispatch(fetchAuthoredNotificationsByDate(date, 'author'));
-  }
+  }, [notifications, areNotificationsLoading, dispatch, haveNotificationsError, since]);
 
   return (
-    <div className="authored__main">
+    <GlobalHeaderContainer
+      activeLink="notifications"
+      dateFilter={(date) => filterByDate(date, null, dispatch)}
+      autoRefreshView={() => fetchMoreNotifications(since, null, dispatch)}
+      getItems={() => collectNewNotifications(newNotificationsSorted, dispatch)}
+      newItemsNumber={newNotificationsSorted.length}
+      itemsLoading={areNotificationsLoading}
+    >
+      <div className="authored__main">
       <div className="authored__main__content">
         <div className="authored__main__list">
           {notifications.length && !areAuthoredNotificationsLoading ? (
@@ -69,11 +83,12 @@ function AuthoredNotifications() {
             : <StructuredListSkeleton />}
         </div>
       </div>
-      <NotificationsHeaderContainer
+      <GlobalHeaderContainer
         activeLink="authored"
         dateFilter={(e, date) => filterByDate(e, date)}
       />
     </div>
+    </GlobalHeaderContainer>
   );
 }
 

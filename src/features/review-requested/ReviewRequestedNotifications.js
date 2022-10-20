@@ -11,7 +11,7 @@ import {
 import { fetchNotifications } from "../../actions/notifications";
 import { fetchReviewRequestedNotifications, fetchReviewRequestedNotificationsByDate } from "../../actions/review-requested";
 import moment from "moment";
-import NotificationsHeaderContainer from "../common/NotificationsHeaderContainer";
+import GlobalHeaderContainer from "../common/GlobalHeaderContainer";
 
 function ReviewRequestedNotifications() {
   const dispatch = useDispatch();
@@ -73,7 +73,7 @@ function ReviewRequestedNotifications() {
           : <StructuredListSkeleton />}
         </div>
       </div>
-      <NotificationsHeaderContainer
+      <GlobalHeaderContainer
         activeLink="review-requested"
         dateFilter={(e, date) => filterByDate(e, date)}
         refreshView={(e) => fetchMoreNotifications(e)}

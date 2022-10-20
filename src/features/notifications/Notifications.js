@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
-import { sortBy } from "lodash";
 import {
   Button,
   StructuredListWrapper,
@@ -15,14 +14,14 @@ import {
 } from 'carbon-components-react';
 import { ZoomIn32, Ticket32 } from '@carbon/icons-react';
 import { useHistory } from "react-router-dom";
-import cx from 'classnames';
-import NotificationsHeaderContainer from '../common/NotificationsHeaderContainer';
-import { fetchNotifications, selectNotification, moveNewNotifications } from '../../actions/notifications';
-import { fetchNewNotifications, clearNewNotifications } from '../../actions/newNotifications';
+import { sortBy } from "lodash";
+import GlobalHeaderContainer from '../common/GlobalHeaderContainer';
+import { fetchNotifications, selectNotification } from '../../actions/notifications';
 import { setSince } from '../../actions/since';
-import { defaultFetchTime, automaticFetchInterval } from '../common/Common';
+import { defaultFetchTime, automaticFetchInterval } from '../common/constants';
+import { collectNewNotifications, fetchMoreNotifications, filterByDate } from "../common/actions";
 
-function Notifications({ useResponsiveOffset = true }) {
+const Notifications = () => {
   const dispatch = useDispatch();
   const history = useHistory()
   const notifications = useSelector((state) => state.notifications.notifications);
@@ -30,24 +29,23 @@ function Notifications({ useResponsiveOffset = true }) {
   const error = useSelector((state) => state.notifications.error);
   const areNotificationsLoading = useSelector((state) => state.notifications.areNotificationsLoading);
   const since = useSelector((state) => state.since.since);
-  const newNotifications = useSelector((state) => state.newNotifications.newNotifications);
-  const newNotificationsLoading = useSelector((state) => state.newNotifications.areNewNotificationsLoading);
+  const newNotifications = useSelector((state) => state.notifications.newNotifications);
 
   const newNotificationsSorted = sortBy(newNotifications, ['updated_at']);
 
   useEffect(() => {
     if (!notifications.length && !areNotificationsLoading) {
-      dispatch(fetchNotifications(defaultFetchTime));
+      dispatch(fetchNotifications(defaultFetchTime, null));
       dispatch(setSince(moment().toISOString()));
     } else {
       const interval = setInterval(() => {
-        dispatch(fetchNewNotifications(since));
+        dispatch(fetchNotifications(since, null, true));
         dispatch(setSince(moment().toISOString()));
       }, automaticFetchInterval);
       return () => clearInterval(interval);
     }
 
-  }, [notifications, dispatch, haveNotificationsError, since]);
+  }, [notifications, areNotificationsLoading, dispatch, haveNotificationsError, since]);
 
   const tagReason = (reason) => {
     switch (reason) {
@@ -67,28 +65,16 @@ function Notifications({ useResponsiveOffset = true }) {
     history.push('/details');
   }
 
-  const fetchMoreNotifications = (e) => {
-    e.preventDefault();
-    dispatch(setSince(moment().toISOString()));
-    dispatch(fetchNewNotifications(since));
-  }
-
-  const collectNewNotifications = (e) => {
-    e.preventDefault();
-    dispatch(moveNewNotifications(newNotificationsSorted));
-    dispatch(clearNewNotifications());
-  }
-
-  const filterByDate  = (e, date) => {
-    e.preventDefault();
-    dispatch(fetchNotifications(date));
-  }
-
-  const classNameFirstColumn = cx({ 'bx--offset-xlg-2': useResponsiveOffset });
-
   return (
-    <div className="notifications__main bx--grid--full-width">
-      <div className={`notifications__main__content ${classNameFirstColumn}`}>
+    <GlobalHeaderContainer
+      activeLink="notifications"
+      dateFilter={(date) => filterByDate(date, null, dispatch)}
+      autoRefreshView={() => fetchMoreNotifications(since, null, dispatch)}
+      getItems={() => collectNewNotifications(newNotificationsSorted, dispatch)}
+      newItemsNumber={newNotificationsSorted.length}
+      itemsLoading={areNotificationsLoading}
+    >
+      <div className="notifications__main__content">
         <div className="notifications__main__list">
           <StructuredListWrapper selection className="notifications__main__list__wrapper">
             <StructuredListHead>
@@ -144,15 +130,7 @@ function Notifications({ useResponsiveOffset = true }) {
         </div>
         { areNotificationsLoading ? <StructuredListSkeleton /> : null }
       </div>
-      <NotificationsHeaderContainer
-        activeLink="notifications"
-        dateFilter={(e, date) => filterByDate(e, date)}
-        autoRefreshView={(e) => fetchMoreNotifications(e)}
-        getItems={(e) => collectNewNotifications(e)}
-        notificationItems={newNotificationsSorted}
-        notificationsloading={newNotificationsLoading}
-      />
-    </div>
+    </GlobalHeaderContainer>
   );
 }
 

@@ -1,5 +1,5 @@
+@use '@carbon/themes';
 @import '~@carbon/themes/scss/themes';
-
 $carbon--theme: $carbon--theme--g90;
 @include carbon--theme();
 @import '~carbon-components/scss/globals/scss/styles.scss';
@@ -24,6 +24,59 @@ $carbon--theme: $carbon--theme--g90;
     }
   }
 }
+
+.global-header {
+  background-color: lighten($background, 5%);
+  border-bottom: 1px solid #525252;
+
+  &__new-notifications-icon {
+    background-color: red;
+    padding: 5px 10px;
+    border-radius: 13px;
+    font-weight: bolder;
+  }
+
+  &__refresh-icon--spin {
+    animation-name: spin;
+    animation-duration: 500ms;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+  }
+}
+
+.side-nav {
+  background-color: darken($background, 2%);
+  border-right: 1px solid $border-subtle;
+
+  &__filters-menu {
+    border-top: 1px solid $border-subtle;
+  }
+
+  ul li {
+    .bx--side-nav__link {
+      span {
+        color: $text-primary !important;
+      }
+
+      &--current span, &:hover span {
+        color: $text-inverse !important;
+      }
+    }
+
+    button {
+      color: $text-primary !important;
+
+      &:hover {
+        color: $text-inverse !important;
+      }
+    }
+  }
+}
+
+.main-content--offset {
+  margin-left: 16rem;
+}
+
 .notifications {
   &__main {
     &__content {
@@ -38,32 +91,12 @@ $carbon--theme: $carbon--theme--g90;
           vertical-align: middle;
         }
       }
-
-      &__row--color {
-        background-color: #eaf1ff;
-      }
-    }
-
-    &__side-nav {
-      border-right: #e0e0e0 1px solid;
-      &__filters-menu {
-        border-top: #e0e0e0 1px solid;
-      }
     }
 
     &__toolbar {
       button{
         margin: 5px;
       }
-    }
-  }
-  &__header__side-menu-toggle {
-    color: white;
-    border-color: transparent;
-    &:hover, &:focus, &:active {
-      background-color: white;
-      color: black;
-      border-color: black !important;
     }
   }
 }
@@ -103,22 +136,6 @@ $carbon--theme: $carbon--theme--g90;
     .bx--structured-list-td {
       vertical-align: middle;
     }
-  }
-}
-
-.notifications__header {
-  &__new-notifications-icon {
-    background-color: red;
-    padding: 5px 10px;
-    border-radius: 13px;
-    font-weight: bolder;
-  }
-
-  &__refresh-icon--spin {
-    animation-name: spin;
-    animation-duration: 500ms;
-    animation-iteration-count: infinite;
-    animation-timing-function: linear;
   }
 }
 

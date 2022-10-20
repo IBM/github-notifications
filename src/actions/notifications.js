@@ -22,11 +22,24 @@ export function notificationsFetchDataSuccess(notifications) {
   };
 }
 
+export function notificationsFetchNewDataSuccess(notifications) {
+  return {
+    type: 'NOTIFICATIONS_FETCH_NEW_DATA_SUCCESS',
+    notifications
+  };
+}
+
 export function selectNotification(notification) {
   return {
     type: 'NOTIFICATION_SELECTION_SUCCESS',
     selected: notification
   };
+}
+
+export function newNotificationsClear() {
+  return {
+    type: 'NEW_NOTIFICATIONS_CLEAR'
+  }
 }
 
 export function newNotificationsMove(notifications) {
@@ -36,15 +49,19 @@ export function newNotificationsMove(notifications) {
   };
 }
 
-export function fetchNotifications(since) {
+export function fetchNotifications(since, type, refresh= false) {
   return (dispatch) => {
     dispatch(notificationsAreLoading(true));
-    common.getNotificationsByDate(since)
+    common.getNotifications(since, type)
       .then((response) => {
         if (response instanceof Error) {
           dispatch(notificationsHaveError(response.statusText))
         } else {
-          dispatch(notificationsFetchDataSuccess(response));
+          if (refresh) {
+            dispatch(notificationsFetchNewDataSuccess(response));
+          } else {
+            dispatch(notificationsFetchDataSuccess(response));
+          }
         }
       });
   }
@@ -52,4 +69,8 @@ export function fetchNotifications(since) {
 
 export function moveNewNotifications(notifications) {
   return (dispatch) => dispatch(newNotificationsMove(notifications));
+}
+
+export function clearNewNotifications() {
+  return (dispatch) => dispatch(newNotificationsClear());
 }

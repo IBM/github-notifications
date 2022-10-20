@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, compose } from 'redux';
 import { Provider } from 'react-redux';
 import { Route, Router, Switch } from 'react-router-dom';
 import thunk from 'redux-thunk';
@@ -9,7 +9,10 @@ import Login from "./features/login/Login";
 import history from './history';
 import AuthenticatedApp from "./AuthenticatedApp";
 
-const store = createStore(rootReducer, applyMiddleware(thunk));
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const store = createStore(rootReducer, composeEnhancers(
+  applyMiddleware(thunk)
+));
 
 class App extends Component {
   render() {
