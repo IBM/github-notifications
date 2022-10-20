@@ -1,6 +1,6 @@
-import {Button, Link, Tag} from "carbon-components-react";
 import React from "react";
 import moment from "moment";
+import { Button, Link, Tag } from "carbon-components-react";
 import { Ticket16, ZoomIn16 } from "@carbon/icons-react";
 
 const linkComponent = (id, full_name, html_url, title) => (

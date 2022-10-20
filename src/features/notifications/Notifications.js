@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
+import { useHistory } from "react-router-dom";
+import { sortBy } from "lodash";
 import {
   DataTable,
   Table,
@@ -9,9 +11,9 @@ import {
   TableHeader,
   TableBody,
   TableCell,
+  TableContainer
 } from 'carbon-components-react';
-import { useHistory } from "react-router-dom";
-import { sortBy } from "lodash";
+import DataTableToolbar from './DataTableToolbar';
 import GlobalHeaderContainer from '../common/GlobalHeaderContainer';
 import { fetchNotifications, selectNotification } from '../../actions/notifications';
 import { setSince } from '../../actions/since';
@@ -68,7 +70,7 @@ const Notifications = () => {
     }
   ];
 
-  const rows = dataTableRowMapping(selectNotifications, notifications);
+  const initialRows = dataTableRowMapping(selectNotifications, notifications);
 
   return (
     <GlobalHeaderContainer
@@ -79,30 +81,42 @@ const Notifications = () => {
       newItemsNumber={newNotificationsSorted.length}
       itemsLoading={areNotificationsLoading}
     >
-      <DataTable rows={rows} headers={notificationsHeaders}>
-        {({ rows, headers, getTableProps, getHeaderProps, getRowProps }) => (
-          <Table {...getTableProps()} className="notifications__table">
-            <TableHead className="notifications__table__header">
-              <TableRow>
-                {headers.map((header) => (
-                  <TableHeader {...getHeaderProps({ header })}>
-                    {header.header}
-                  </TableHeader>
-                ))}
-              </TableRow>
-            </TableHead>
-            <TableBody className="notifications__table__body">
-              {notifications && !haveNotificationsError && rows.map((row) => (
-                <TableRow {...getRowProps({ row })}>
-                  {row.cells.map((cell) => (
-                      <TableCell key={cell.id}>{cell.value}</TableCell>
+      <DataTable
+        rows={initialRows}
+        headers={notificationsHeaders}
+        render={({
+          rows,
+          headers,
+          getHeaderProps,
+          getRowProps,
+          getTableProps,
+          onInputChange
+         }) => (
+          <TableContainer className="notifications__table">
+            <DataTableToolbar onInputChange={onInputChange} />
+            <Table {...getTableProps()}>
+              <TableHead className="notifications__table__header">
+                <TableRow>
+                  {headers.map((header) => (
+                    <TableHeader {...getHeaderProps({header})}>
+                      {header.header}
+                    </TableHeader>
                   ))}
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHead>
+              <TableBody className="notifications__table__body">
+                {notifications && !haveNotificationsError && rows.map((row) => (
+                  <TableRow {...getRowProps({row})}>
+                    {row.cells.map((cell) => (
+                      <TableCell key={cell.id}>{cell.value}</TableCell>
+                    ))}
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
         )}
-      </DataTable>
+      />
     </GlobalHeaderContainer>
   );
 }
