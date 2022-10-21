@@ -87,6 +87,20 @@ $carbon--theme: $carbon--theme--g90;
   &__actions button {
     margin-left: 5px;
   }
+
+  &__toolbar__button {
+    &--all, &--all:hover {
+      background-color: purple;
+    }
+
+    &--mention, &--mention:hover {
+      background-color: green;
+    }
+
+    &--subscribed, &--subscribed:hover {
+      background-color: $background-active;
+    }
+  }
 }
 
 .details__main {

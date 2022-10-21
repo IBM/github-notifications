@@ -7,21 +7,6 @@ const sideNavLinks = [
     content: 'All Notifications',
     id: 'notifications',
     link: '/notifications'
-  },
-  {
-    content: 'Authored',
-    id: 'authored',
-    link: '/authored'
-  },
-  {
-    content: 'Mentions',
-    id: 'mentions',
-    link: '/mentions'
-  },
-  {
-    content: 'Review requested',
-    id: 'review-requested',
-    link: '/review-requested'
   }
 ];
 

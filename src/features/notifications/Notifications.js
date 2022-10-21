@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import { useHistory } from "react-router-dom";
@@ -24,7 +24,10 @@ import { dataTableRowMapping } from './dataToComponentMapping';
 const Notifications = () => {
   const dispatch = useDispatch();
   const history = useHistory()
-  const notifications = useSelector((state) => state.notifications.notifications);
+
+  const [notifications, setNotifications] = useState([]);
+
+  const stateNotifications = useSelector((state) => state.notifications.notifications);
   const haveNotificationsError = useSelector((state) => state.notifications.haveNotificationsError);
   const areNotificationsLoading = useSelector((state) => state.notifications.areNotificationsLoading);
   const since = useSelector((state) => state.since.since);
@@ -33,18 +36,20 @@ const Notifications = () => {
   const newNotificationsSorted = sortBy(newNotifications, ['updated_at']);
 
   useEffect(() => {
-    if (!notifications.length && !areNotificationsLoading) {
-      dispatch(fetchNotifications(defaultFetchTime, null));
+    if (!stateNotifications.length && !areNotificationsLoading) {
+      dispatch(fetchNotifications(defaultFetchTime));
       dispatch(setSince(moment().toISOString()));
     } else {
       const interval = setInterval(() => {
-        dispatch(fetchNotifications(since, null, true));
+        dispatch(fetchNotifications(since, true));
         dispatch(setSince(moment().toISOString()));
       }, automaticFetchInterval);
       return () => clearInterval(interval);
     }
 
-  }, [notifications, areNotificationsLoading, dispatch, haveNotificationsError, since]);
+  }, [stateNotifications, areNotificationsLoading, dispatch, haveNotificationsError, since]);
+
+  useEffect(() => { setNotifications(stateNotifications); }, [stateNotifications]);
 
   const selectNotifications = (notification) => {
     dispatch(selectNotification(notification));
@@ -72,11 +77,24 @@ const Notifications = () => {
 
   const initialRows = dataTableRowMapping(selectNotifications, notifications);
 
+  const filterByType = (event, type) => {
+    event.preventDefault();
+    let specifiedNotificationsByType = [];
+    if (type !== 'all') {
+      stateNotifications.forEach((note) => {
+        if (note.reason === type) specifiedNotificationsByType.push(note);
+      });
+      setNotifications(specifiedNotificationsByType);
+    } else {
+      setNotifications(stateNotifications);
+    }
+  }
+
   return (
     <GlobalHeaderContainer
       activeLink="notifications"
-      dateFilter={(date) => filterByDate(date, null, dispatch)}
-      autoRefreshView={() => fetchMoreNotifications(since, null, dispatch)}
+      dateFilter={(date) => filterByDate(date, dispatch)}
+      autoRefreshView={() => fetchMoreNotifications(since, dispatch)}
       getItems={() => collectNewNotifications(newNotificationsSorted, dispatch)}
       newItemsNumber={newNotificationsSorted.length}
       itemsLoading={areNotificationsLoading}
@@ -93,7 +111,7 @@ const Notifications = () => {
           onInputChange
          }) => (
           <TableContainer className="notifications__table">
-            <DataTableToolbar onInputChange={onInputChange} />
+            <DataTableToolbar onInputChange={onInputChange} filter={(e, type) => filterByType(e, type)} />
             <Table {...getTableProps()}>
               <TableHead className="notifications__table__header">
                 <TableRow>
@@ -105,7 +123,7 @@ const Notifications = () => {
                 </TableRow>
               </TableHead>
               <TableBody className="notifications__table__body">
-                {notifications && !haveNotificationsError && rows.map((row) => (
+                {rows.map((row) => (
                   <TableRow {...getRowProps({row})}>
                     {row.cells.map((cell) => (
                       <TableCell key={cell.id}>{cell.value}</TableCell>

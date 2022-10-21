@@ -49,10 +49,10 @@ export function newNotificationsMove(notifications) {
   };
 }
 
-export function fetchNotifications(since, type, refresh= false) {
+export function fetchNotifications(since, refresh= false) {
   return (dispatch) => {
     dispatch(notificationsAreLoading(true));
-    common.getNotifications(since, type)
+    common.getNotifications(since)
       .then((response) => {
         if (response instanceof Error) {
           dispatch(notificationsHaveError(response.statusText))

@@ -1,18 +1,10 @@
-import { githubCliEnterprise } from "./index";
-import { processNotifications } from "../utils/common";
+import {githubCliEnterprise} from "./index";
+import {processNotifications} from "../utils/common";
 
-export async function getNotifications(since, type = null) {
+export async function getNotifications(since) {
   try {
     const notifications = await githubCliEnterprise.getData({path:`/notifications?since=${since}`});
-    const processedNotifications = processNotifications(notifications);
-    if (type) {
-      let specifiedNotificationsByType = [];
-      processedNotifications.forEach((note) => {
-        if (note.reason === type) { specifiedNotificationsByType.push(note) }
-      });
-      return specifiedNotificationsByType;
-    }
-    return processedNotifications;
+    return processNotifications(notifications);
   } catch (error) {
     return error;
   }
