@@ -1,5 +1,5 @@
-import {githubCliEnterprise} from "./index";
-import {processNotifications} from "../utils/common";
+import { githubCliEnterprise } from "./index";
+import { processNotifications } from "../utils/common";
 
 export async function getNotifications(since) {
   try {

@@ -1,6 +1,5 @@
 import React from 'react';
-import { SideNav, SideNavItems, SideNavLink, SideNavMenu, SideNavMenuItem } from "carbon-components-react";
-import moment from 'moment';
+import { SideNav, SideNavItems, SideNavLink } from "carbon-components-react";
 
 const sideNavLinks = [
   {
@@ -10,31 +9,7 @@ const sideNavLinks = [
   }
 ];
 
-const filterByDate = [
-  {
-    id: 'last24hrs',
-    content: 'Last 24hrs',
-    date: moment()
-      .subtract(1, 'days')
-      .format()
-  },
-  {
-    id: 'last48hrs',
-    content: 'Last 48hrs',
-    date: moment()
-      .subtract(2, 'days')
-      .format()
-  },
-  {
-    id: 'thisWeek',
-    content: 'This Week',
-    date: moment()
-      .subtract(1, 'week')
-      .format()
-  }
-]
-
-const GlobalSideNav = ({ activeLink, dateFilter, isSideNavExpanded }) => (
+const GlobalSideNav = ({ activeLink, isSideNavExpanded }) => (
   <SideNav
     isPersistent={false}
     expanded={isSideNavExpanded}
@@ -51,12 +26,6 @@ const GlobalSideNav = ({ activeLink, dateFilter, isSideNavExpanded }) => (
           {sideNavLink.content}
         </SideNavLink>
       ))}
-      <SideNavMenu title="Filter by Date" className="side-nav__filters-menu">
-        {filterByDate.map((filter) => (
-          <SideNavMenuItem key={filter.id}
-                           onClick={(e) => dateFilter(e, filter.date)}>{filter.content}</SideNavMenuItem>
-        ))}
-      </SideNavMenu>
     </SideNavItems>
   </SideNav>
 );

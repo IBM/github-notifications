@@ -15,10 +15,14 @@ import {
 } from 'carbon-components-react';
 import DataTableToolbar from './DataTableToolbar';
 import GlobalHeaderContainer from '../common/GlobalHeaderContainer';
-import { fetchNotifications, selectNotification } from '../../actions/notifications';
+import {
+  clearNewNotifications,
+  fetchNotifications,
+  moveNewNotifications,
+  selectNotification
+} from '../../actions/notifications';
 import { setSince } from '../../actions/since';
 import { defaultFetchTime, automaticFetchInterval } from '../common/constants';
-import { collectNewNotifications, fetchMoreNotifications, filterByDate } from "../common/actions";
 import { dataTableRowMapping } from './dataToComponentMapping';
 
 const Notifications = () => {
@@ -77,14 +81,24 @@ const Notifications = () => {
 
   const initialRows = dataTableRowMapping(selectNotifications, notifications);
 
+  const fetchMoreNotifications = () => {
+    dispatch(setSince(moment().toISOString()));
+    dispatch(fetchNotifications(since, true));
+  }
+
+  const collectNewNotifications = (items) => {
+    dispatch(moveNewNotifications(items));
+    dispatch(clearNewNotifications());
+  }
+
   const filterByType = (event, type) => {
     event.preventDefault();
-    let specifiedNotificationsByType = [];
+    let notificationsByType = [];
     if (type !== 'all') {
       stateNotifications.forEach((note) => {
-        if (note.reason === type) specifiedNotificationsByType.push(note);
+        if (note.reason === type) notificationsByType.push(note);
       });
-      setNotifications(specifiedNotificationsByType);
+      setNotifications(notificationsByType);
     } else {
       setNotifications(stateNotifications);
     }
@@ -93,9 +107,8 @@ const Notifications = () => {
   return (
     <GlobalHeaderContainer
       activeLink="notifications"
-      dateFilter={(date) => filterByDate(date, dispatch)}
-      autoRefreshView={() => fetchMoreNotifications(since, dispatch)}
-      getItems={() => collectNewNotifications(newNotificationsSorted, dispatch)}
+      autoRefreshView={() => fetchMoreNotifications()}
+      getItems={() => collectNewNotifications(newNotificationsSorted)}
       newItemsNumber={newNotificationsSorted.length}
       itemsLoading={areNotificationsLoading}
     >
@@ -111,7 +124,11 @@ const Notifications = () => {
           onInputChange
          }) => (
           <TableContainer className="notifications__table">
-            <DataTableToolbar onInputChange={onInputChange} filter={(e, type) => filterByType(e, type)} />
+            <DataTableToolbar
+              onInputChange={onInputChange}
+              filter={(e, type) => filterByType(e, type)}
+              dateFilter={(e, date) => filterByDate(e, date)}
+            />
             <Table {...getTableProps()}>
               <TableHead className="notifications__table__header">
                 <TableRow>

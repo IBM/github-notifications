@@ -3,7 +3,7 @@ import cx from 'classnames';
 import GlobalHeader from './GlobalHeader';
 import GlobalSideNav from "./GlobalSideNav";
 
-const GlobalHeaderContainer = ({ children, activeLink, dateFilter, autoRefreshView, getItems, newItemsNumber, itemsLoading }) => {
+const GlobalHeaderContainer = ({ children, activeLink, autoRefreshView, getItems, newItemsNumber, itemsLoading }) => {
   const [isToggled, setIsToggled] = useState(true);
   const toggle = useCallback(
     () => setIsToggled(!isToggled),
@@ -21,7 +21,7 @@ const GlobalHeaderContainer = ({ children, activeLink, dateFilter, autoRefreshVi
         toggle={toggle}
         isToggled={isToggled}
       />
-      <GlobalSideNav activeLink={activeLink} dateFilter={dateFilter} isSideNavExpanded={isToggled} />
+      <GlobalSideNav activeLink={activeLink} isSideNavExpanded={isToggled} />
       <div className={cx({ 'main-content--offset': isToggled })}>{children}</div>
     </>
   );
