@@ -1,7 +1,7 @@
 import React from "react";
-import moment from "moment";
+// import moment from "moment";
 import { Button, Link, Tag } from "carbon-components-react";
-import { Ticket16, ZoomIn16 } from "@carbon/icons-react";
+import { Launch16, Ticket16, ZoomIn16 } from "@carbon/icons-react";
 
 const linkComponent = (id, full_name, html_url, title) => (
   <>
@@ -25,10 +25,19 @@ const tagReason = (reason) => {
   }
 }
 
-const actions = (selectNotifications, notification) => (
+const actions = (html_url, selectNotifications, notification) => (
   <div className="notifications__table__actions">
+    <Link href={html_url} target='_blank'>
+      <Button
+        kind="secondary"
+        renderIcon={Launch16}
+        iconDescription="Show"
+        hasIconOnly
+        size="sm"
+      />
+    </Link>
     <Button
-      kind="tertiary"
+      kind="secondary"
       renderIcon={ZoomIn16}
       iconDescription="Details"
       hasIconOnly
@@ -38,7 +47,7 @@ const actions = (selectNotifications, notification) => (
     {notification.jira && (
       <Link href={`https://jira.sec.***REMOVED***/browse/${notification.jira}`} target='_blank'>
         <Button
-          kind="tertiary"
+          kind="secondary"
           renderIcon={Ticket16}
           iconDescription="Jira"
           hasIconOnly
@@ -57,9 +66,12 @@ export const dataTableRowMapping = (selectNotifications, notifications) => {
     mappedNotifications.push({
       id: `${id}`,
       reason: tagReason(reason),
-      updated_at: moment(updated_at).fromNow(),
-      title: linkComponent(id, full_name, html_url, title),
-      actions: actions(selectNotifications, notification)
+      repo: full_name,
+      // updated_at: moment(updated_at).fromNow(),
+      updated_at,
+      // title: linkComponent(id, full_name, html_url, title),
+      title,
+      actions: actions(html_url, selectNotifications, notification)
     })
   });
   return mappedNotifications;

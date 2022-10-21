@@ -4,6 +4,7 @@ $carbon--theme: $carbon--theme--g90;
 @include carbon--theme();
 @import '~carbon-components/scss/globals/scss/styles.scss';
 
+
 .login {
   padding: 20px;
 
@@ -90,11 +91,11 @@ $carbon--theme: $carbon--theme--g90;
 
   &__toolbar__button {
     &--all, &--all:hover {
-      background-color: purple;
+      background-color: $carbon--purple-50;
     }
 
     &--mention, &--mention:hover {
-      background-color: green;
+      background-color: $carbon--green-50;
     }
 
     &--subscribed, &--subscribed:hover {
@@ -111,13 +112,13 @@ $carbon--theme: $carbon--theme--g90;
   &__list {
     &__status {
       &--green {
-        fill: green;
+        fill: $carbon--green-50;
       }
       &--red {
-        fill: red;
+        fill: $carbon--red-50;
       }
       &--purple {
-        fill: purple;
+        fill: $carbon--purple-50;
       }
     }
     .bx--structured-list-td {

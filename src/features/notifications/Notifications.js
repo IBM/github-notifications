@@ -62,8 +62,12 @@ const Notifications = () => {
 
   const notificationsHeaders = [
     {
+      key: 'repo',
+      header: 'Repo',
+    },
+    {
       key: 'title',
-      header: 'Title',
+      header: 'PR title',
     },
     {
       key: 'updated_at',
@@ -113,6 +117,7 @@ const Notifications = () => {
       itemsLoading={areNotificationsLoading}
     >
       <DataTable
+        isSortable
         rows={initialRows}
         headers={notificationsHeaders}
         render={({
