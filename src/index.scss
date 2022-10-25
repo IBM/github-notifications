@@ -78,29 +78,38 @@ $carbon--theme: $carbon--theme--g90;
   margin-left: 16rem;
 }
 
-.notifications__table {
-  margin-top: 48px;
+.notifications {
+  &__table {
+    margin-top: 48px;
 
-  &__body tr td {
-    padding: 1rem;
+    &__body tr td {
+      padding: 1rem;
+    }
+
+    &__actions button {
+      margin-left: 5px;
+    }
+
+    &__toolbar__button {
+      &--all, &--all:hover {
+        background-color: $carbon--purple-50;
+      }
+
+      &--mention, &--mention:hover {
+        background-color: $carbon--green-50;
+      }
+
+      &--subscribed, &--subscribed:hover {
+        background-color: $background-active;
+      }
+    }
   }
 
-  &__actions button {
-    margin-left: 5px;
-  }
-
-  &__toolbar__button {
-    &--all, &--all:hover {
-      background-color: $carbon--purple-50;
-    }
-
-    &--mention, &--mention:hover {
-      background-color: $carbon--green-50;
-    }
-
-    &--subscribed, &--subscribed:hover {
-      background-color: $background-active;
-    }
+  &__toast {
+    position: fixed;
+    top: 48px;
+    right: 0;
+    z-index: 1000;
   }
 }
 

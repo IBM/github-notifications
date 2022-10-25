@@ -1,13 +1,11 @@
 import React from "react";
 import { findJiraTicketForNotifications } from "./details";
 
-export function processNotifications(notifications) {
+export function processNotifications(notificationArray) {
   let processedNotification = [];
-  const notificationArray = notifications.data;
-  let id = 0;
   for ( const notification of notificationArray) {
-    id++;
-    const { reason, updated_at, subject: { title = '', url = '', type = '' } = {}, repository: { full_name = '' } = {}} = notification;
+    const { id, reason, updated_at, subject: { title = '', url = '', type = '' } = {}, repository: { full_name = '' } = {}} = notification;
+    // const matchingSubscriptions = subscriptions.find(sub => sub.id === id);
     const html_url = getPrNumber(url);
     const jira = findJiraTicketForNotifications(notification);
     const newNotification = {
@@ -18,7 +16,11 @@ export function processNotifications(notifications) {
       type,
       html_url,
       full_name,
-      jira: jira[0] !== undefined ? jira[0] : ''
+      jira: jira[0] !== undefined ? jira[0] : '',
+      // subscribed: matchingSubscriptions !== undefined ? matchingSubscriptions.data.subscribed : null,
+      subscribed: null,
+      // ignored: matchingSubscriptions !== undefined ? matchingSubscriptions.data.ignored : null
+      ignored: null
     };
     processedNotification.push(newNotification);
   }

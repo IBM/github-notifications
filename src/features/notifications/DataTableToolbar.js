@@ -1,6 +1,14 @@
 import React from "react";
-import { Button, TableToolbar, TableToolbarContent, TableToolbarSearch } from "carbon-components-react";
-import { Rss16, Sight16, VoiceActivate16, Recommend16, List16 } from "@carbon/icons-react";
+import { useDispatch } from "react-redux";
+import {
+  Button, TableBatchAction,
+  TableBatchActions,
+  TableToolbar,
+  TableToolbarContent,
+  TableToolbarSearch
+} from "carbon-components-react";
+import { CheckmarkOutline16, NotificationOff16, Rss16, Sight16, VoiceActivate16, Recommend16, List16 } from "@carbon/icons-react";
+import { muteNotification } from "../../actions/notifications";
 
 const buttons = [
   {
@@ -40,7 +48,9 @@ const buttons = [
   }
 ];
 
-const DataTableToolbar = ({ onInputChange, filter }) => {
+const DataTableToolbar = ({ onInputChange, filter, getBatchActionProps, selectedRows, notifications }) => {
+  const dispatch = useDispatch();
+
   const buttonComponent = ({ id, type, description, icon, kind }) => (
     <Button
       key={id}
@@ -54,10 +64,34 @@ const DataTableToolbar = ({ onInputChange, filter }) => {
     />
   );
 
+  const muteSelectedNotifications = (notificationsToBeMuted, ignored) => {
+    notificationsToBeMuted.forEach(({ id }) => {
+      dispatch(muteNotification(id, { thread_id: id, ignored }));
+    })
+  }
+
   return (
     <TableToolbar aria-label="data table toolbar" className="notifications__table__toolbar">
+      <TableBatchActions {...getBatchActionProps()}>
+        <TableBatchAction
+          key="mute"
+          tabIndex={getBatchActionProps().shouldShowBatchActions ? 0 : -1}
+          renderIcon={NotificationOff16}
+          onClick={() => muteSelectedNotifications(selectedRows, true)}
+        >
+          Mute
+        </TableBatchAction>
+        <TableBatchAction
+          key="read"
+          tabIndex={getBatchActionProps().shouldShowBatchActions ? 0 : -1}
+          renderIcon={CheckmarkOutline16}
+          onClick={() => {}}
+        >
+          Mark as read
+        </TableBatchAction>
+      </TableBatchActions>
       <TableToolbarContent>
-        <TableToolbarSearch onChange={onInputChange} />
+        <TableToolbarSearch onChange={onInputChange} persistent />
         { buttons.map((button) => buttonComponent(button)) }
       </TableToolbarContent>
     </TableToolbar>

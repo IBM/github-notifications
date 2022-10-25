@@ -1,16 +1,8 @@
 import React from "react";
-// import moment from "moment";
+import moment from "moment";
 import { Button, Link, Tag } from "carbon-components-react";
-import { Launch16, Ticket16, ZoomIn16 } from "@carbon/icons-react";
-
-const linkComponent = (id, full_name, html_url, title) => (
-  <>
-    <h6>{full_name}</h6>
-    <Link href={html_url} target='_blank' key={id}>
-      <div>{title}</div>
-    </Link>
-  </>
-);
+import { Launch16, Ticket16 } from "@carbon/icons-react";
+import { NotificationOffFilled } from "@carbon/icons-react/next";
 
 const tagReason = (reason) => {
   switch (reason) {
@@ -25,7 +17,7 @@ const tagReason = (reason) => {
   }
 }
 
-const actions = (html_url, selectNotifications, notification) => (
+const actions = (html_url, notification) => (
   <div className="notifications__table__actions">
     <Link href={html_url} target='_blank'>
       <Button
@@ -36,14 +28,6 @@ const actions = (html_url, selectNotifications, notification) => (
         size="sm"
       />
     </Link>
-    <Button
-      kind="secondary"
-      renderIcon={ZoomIn16}
-      iconDescription="Details"
-      hasIconOnly
-      onClick={() => {selectNotifications(notification)}}
-      size="sm"
-    />
     {notification.jira && (
       <Link href={`https://jira.sec.***REMOVED***/browse/${notification.jira}`} target='_blank'>
         <Button
@@ -57,21 +41,47 @@ const actions = (html_url, selectNotifications, notification) => (
     )
     }
   </div>
-)
+);
 
-export const dataTableRowMapping = (selectNotifications, notifications) => {
+export const dataTableHeaders = [
+  {
+    key: 'muted',
+    header: 'Muted',
+  },
+  {
+    key: 'repo',
+    header: 'Repo',
+  },
+  {
+    key: 'title',
+    header: 'PR title',
+  },
+  {
+    key: 'updated_at',
+    header: 'Last updated',
+  },
+  {
+    key: 'reason',
+    header: 'Reason',
+  },
+  {
+    key: 'actions',
+    header: 'Actions',
+  }
+];
+
+export const dataTableRows = (notifications) => {
   let mappedNotifications = [];
   notifications.forEach((notification) => {
-    const { id, reason, updated_at, title, html_url, full_name } = notification;
+    const { id, reason, updated_at, title, html_url, full_name, ignored } = notification;
     mappedNotifications.push({
       id: `${id}`,
       reason: tagReason(reason),
       repo: full_name,
-      // updated_at: moment(updated_at).fromNow(),
-      updated_at,
-      // title: linkComponent(id, full_name, html_url, title),
+      updated_at: moment(moment.utc(updated_at).toDate()).local().format('YYYY-MM-DD HH:mm:ss'),
       title,
-      actions: actions(html_url, selectNotifications, notification)
+      actions: actions(html_url, notification),
+      muted: ignored ? <NotificationOffFilled /> : null
     })
   });
   return mappedNotifications;

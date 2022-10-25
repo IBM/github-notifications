@@ -1,5 +1,5 @@
 const common = require('../api/common');
-const { notify } = require('../utils/electronNotifications')
+const { notify } = require('../utils/electronNotifications');
 
 export function notificationsHaveError(response) {
   return {
@@ -30,13 +30,6 @@ export function notificationsFetchNewDataSuccess(notifications) {
   };
 }
 
-export function selectNotification(notification) {
-  return {
-    type: 'NOTIFICATION_SELECTION_SUCCESS',
-    selected: notification
-  };
-}
-
 export function newNotificationsClear() {
   return {
     type: 'NEW_NOTIFICATIONS_CLEAR'
@@ -47,6 +40,28 @@ export function newNotificationsMove(notifications) {
   return {
     type: 'MOVE_NEW_NOTIFICATIONS',
     notifications
+  };
+}
+
+export function mutedHasError(response) {
+  return {
+    type: 'MUTED_HAS_ERROR',
+    hasMutedError: true,
+    error: response
+  };
+}
+
+export function mutedIsLoading(bool) {
+  return {
+    type: 'MUTED_IS_LOADING',
+    isMutedLoading: bool
+  };
+}
+
+export function mutedSuccess(id) {
+  return {
+    type: 'MUTED_SUCCESS',
+    id
   };
 }
 
@@ -75,4 +90,18 @@ export function moveNewNotifications(notifications) {
 
 export function clearNewNotifications() {
   return (dispatch) => dispatch(newNotificationsClear());
+}
+
+export function muteNotification(id, data) {
+  return (dispatch) => {
+    dispatch(mutedIsLoading(true));
+    common.setThreadSubscription(id, data)
+      .then((response) => {
+        if (response instanceof Error) {
+          dispatch(mutedHasError(response.statusText));
+        } else {
+          dispatch(mutedSuccess(id));
+        }
+      });
+  }
 }
