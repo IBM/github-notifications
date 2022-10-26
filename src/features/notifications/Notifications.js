@@ -25,19 +25,23 @@ import {
 import { setSince } from '../../actions/since';
 import { defaultFetchTime, automaticFetchInterval } from '../common/constants';
 import { dataTableHeaders, dataTableRows } from './DataTableData';
+import { getThreadSubscription } from "../../actions/subscriptions";
+import {processNotifications} from "../../utils/common";
+import {notify} from "../../utils/electronNotifications";
 
 const Notifications = () => {
   const dispatch = useDispatch();
 
   const [notifications, setNotifications] = useState([]);
+  const [newNotifications, setNewNotifications] = useState([]);
 
   const allNotifications = useSelector((state) => state.notifications.notifications);
   const haveNotificationsError = useSelector((state) => state.notifications.haveNotificationsError);
   const areNotificationsLoading = useSelector((state) => state.notifications.areNotificationsLoading);
   const since = useSelector((state) => state.since.since);
-  const newNotifications = useSelector((state) => state.notifications.newNotifications);
-
-  const newNotificationsSorted = sortBy(newNotifications, ['updated_at']);
+  const allNewNotifications = useSelector((state) => state.notifications.newNotifications);
+  const subscriptions = useSelector((state) => state.subscriptions.subscriptions);
+  const erroredSubscriptions = useSelector((state) => state.subscriptions.erroredSubscriptions);
 
   useEffect(() => {
     if (!allNotifications.length && !areNotificationsLoading) {
@@ -50,11 +54,31 @@ const Notifications = () => {
       }, automaticFetchInterval);
       return () => clearInterval(interval);
     }
-  }, [allNotifications, areNotificationsLoading, dispatch, haveNotificationsError, since]);
+  }, [allNotifications, areNotificationsLoading]);
 
   useEffect(() => {
-    setNotifications(allNotifications)
-  }, [allNotifications])
+    if (allNotifications.length && !areNotificationsLoading && !haveNotificationsError) {
+      allNotifications.forEach(({ id }) => {
+        dispatch(getThreadSubscription(id));
+      });
+    }
+  }, [allNotifications, areNotificationsLoading, haveNotificationsError]);
+
+  useEffect(() => {
+    if (subscriptions.length + erroredSubscriptions.length === allNotifications.length) {
+      const processedNotifications = processNotifications(allNotifications, subscriptions);
+      setNotifications(processedNotifications);
+    }
+  }, [subscriptions, erroredSubscriptions]);
+
+  useEffect(() => {
+    if (allNewNotifications.length && !areNotificationsLoading && !haveNotificationsError) {
+      const processedNotifications = processNotifications(allNewNotifications, subscriptions);
+      notify(processedNotifications);
+      const newNotificationsSorted = sortBy(processedNotifications, ['updated_at']);
+      setNewNotifications(newNotificationsSorted);
+    }
+  }, [allNewNotifications, areNotificationsLoading, haveNotificationsError])
 
   const fetchMoreNotifications = () => {
     dispatch(setSince(moment().toISOString()));
@@ -84,8 +108,8 @@ const Notifications = () => {
       <GlobalHeaderContainer
         activeLink="notifications"
         autoRefreshView={() => fetchMoreNotifications()}
-        getItems={() => collectNewNotifications(newNotificationsSorted)}
-        newItemsNumber={newNotificationsSorted.length}
+        getItems={() => collectNewNotifications(newNotifications)}
+        newItemsNumber={newNotifications.length}
         itemsLoading={areNotificationsLoading}
         className="notifications"
       >

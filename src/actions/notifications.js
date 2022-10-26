@@ -74,10 +74,9 @@ export function fetchNotifications(since, refresh= false) {
           dispatch(notificationsHaveError(response.statusText))
         } else {
           if (refresh) {
-            notify(response);
-            dispatch(notificationsFetchNewDataSuccess(response));
+            dispatch(notificationsFetchNewDataSuccess(response.data));
           } else {
-            dispatch(notificationsFetchDataSuccess(response));
+            dispatch(notificationsFetchDataSuccess(response.data));
           }
         }
       });

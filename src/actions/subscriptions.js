@@ -7,11 +7,11 @@ export function threadIsLoading(bool) {
   };
 }
 
-export function threadHasError(error) {
+export function threadHasErrorData(data) {
   return {
     type: 'THREAD_HAS_ERROR',
     hasThreadError: true,
-    error
+    data
   };
 }
 
@@ -23,11 +23,10 @@ export function threadClearError() {
   };
 }
 
-export function threadFetchDataSuccess(response, bulkFetching) {
+export function threadFetchDataSuccess(response) {
   return {
     type: 'THREAD_FETCH_DATA_SUCCESS',
-    response,
-    bulkFetching
+    response
   };
 }
 
@@ -37,7 +36,7 @@ export function getThreadSubscription(id) {
     common.getThreadSubscription(id)
       .then((response) => {
         if (response instanceof Error) {
-          dispatch(threadHasError(response.statusText));
+          dispatch(threadHasErrorData({ id, message: response.statusText }));
           dispatch(threadClearError());
         } else {
           dispatch(threadFetchDataSuccess({ id, data: response.data }));

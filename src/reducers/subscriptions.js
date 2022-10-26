@@ -1,8 +1,8 @@
 export const initialState = {
   isThreadLoading: false,
   hasThreadError: false,
-  threads: [],
-  error: ''
+  subscriptions: [],
+  erroredSubscriptions: ''
 };
 
 const reducer = (state = initialState, action) => {
@@ -13,7 +13,7 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         hasThreadError: action.hasThreadError,
-        error: action.error,
+        erroredSubscriptions: [...state.erroredSubscriptions, action.data],
         isThreadLoading: false
       };
     case 'THREAD_CLEAR_ERROR':
@@ -25,7 +25,7 @@ const reducer = (state = initialState, action) => {
     case 'THREAD_FETCH_DATA_SUCCESS': {
       return {
         ...state,
-        threads: [...state.threads, action.response],
+        subscriptions: [...state.subscriptions, action.response],
         isThreadLoading: false
       }
     }

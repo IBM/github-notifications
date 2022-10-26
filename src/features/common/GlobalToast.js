@@ -11,8 +11,8 @@ const GlobalToast = ({ selectedRows }) => {
   const isMutedLoading = useSelector((state) => state.notifications.isMutedLoading);
   const mutedError = useSelector((state) => state.notifications.mutedError);
 
-  const hasThreadError = useSelector((state) => state.threads.hasThreadError);
-  const threadError = useSelector((state) => state.threads.error);
+  const hasThreadError = useSelector((state) => state.subscriptions.hasThreadError);
+  const erroredSubscriptions = useSelector((state) => state.subscriptions.erroredSubscriptions);
 
   useEffect(() => {
     if (
@@ -43,17 +43,21 @@ const GlobalToast = ({ selectedRows }) => {
   }, [mutedNotifications, hasMutedError, isMutedLoading, mutedError]);
 
   useEffect(() => {
-    if (hasThreadError && threadError) {
+    if (hasThreadError && erroredSubscriptions.length) {
+      let erroredIds = [];
+      erroredSubscriptions.forEach(({ id }) => {
+        erroredIds.push(id);
+      })
       const toastData = {
         kind: 'warning',
         title: 'Thread Selection',
         subtitle: 'Warning',
-        caption: 'Some of the thread subscriptions you selected weren\'t found. ' +
-          'The subscription information is not available.'
+        caption: 'Some of the thread subscriptions weren\'t found. ' +
+        `${erroredIds.toString()}`
       }
       setToast(toastData);
     }
-  }, [hasThreadError, threadError])
+  }, [hasThreadError, erroredSubscriptions])
 
   useEffect(() => setShowToast(true), [toast]);
 
