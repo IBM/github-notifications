@@ -39,17 +39,3 @@ function getPrNumber(url) {
 }
 
 function sortNotifications(notifications) { return notifications.slice().sort((a, b) => b.updated_at - a.updated_at) }
-
-export const findElementIndexById = (array, id) => array.findIndex((element) => element.id === id);
-
-export const findMatchingElementById = (array, id) => array.find(element => element.id === id);
-
-export const removeObjectFromArrayById = (array, id) => array.filter((object) => object.id !== id);
-
-export const insertObjectIntoArray = (array, object, index) => {
-  // let newArray = array.slice();
-  // console.log('newArrayBefore', newArray);
-  array.splice(index, 1, object);
-  console.log('newArrayAfter', array);
-  return array;
-}

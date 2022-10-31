@@ -11,11 +11,11 @@ export const initialState = {
   mutedError: ''
 };
 
-const findElementIndexById = (array, id) => array.findIndex((element) => element.thread_id === id);
+const findElementIndexById = (array, id) => array.findIndex((element) => element.id === id);
 
-const findMatchingElementById = (array, id) => array.find(element => element.thread_id === id);
+const findMatchingElementById = (array, id) => array.find(element => element.id === id);
 
-const removeObjectFromArrayById = (array, id) => array.filter((object) => object.thread_id !== id);
+const removeObjectFromArrayById = (array, id) => array.filter((object) => object.id !== id);
 
 function insertObjectIntoArray(array, object, index) {
   let newArray = array.slice();
@@ -59,20 +59,14 @@ const reducer = (state = initialState, action) => {
         isMutedLoading: false
       };
     case 'MUTED_SUCCESS': {
-      let updatedNotifications = [];
-      action.data.forEach(({ thread_id, ignored }) => {
-        const findObjectToReplace = findMatchingElementById(state.mutedNotifications, thread_id);
-        if (findObjectToReplace) {
-          findObjectToReplace.ignored = ignored;
-          const notificationIndex = findElementIndexById(state.mutedNotifications, thread_id);
-          const newArrayWithoutOldObject = removeObjectFromArrayById(updatedNotifications.length ? updatedNotifications : state.mutedNotifications, thread_id);
-          updatedNotifications = insertObjectIntoArray(newArrayWithoutOldObject, findObjectToReplace, notificationIndex);
-        }
-      })
-
+      const notificationIndex = findElementIndexById(state.notifications, action.id);
+      const newArrayWithoutOldObject = removeObjectFromArrayById(state.notifications, action.id);
+      const findObjectToReplace = findMatchingElementById(state.notifications, action.id);
+      findObjectToReplace.ignored = true;
+      const updatedNotifications = insertObjectIntoArray(newArrayWithoutOldObject, findObjectToReplace, notificationIndex);
       return {
         ...state,
-        mutedNotifications: updatedNotifications.length ? updatedNotifications : [...state.mutedNotifications, ...action.data],
+        notifications: updatedNotifications,
         isMutedLoading: false
       };
     }

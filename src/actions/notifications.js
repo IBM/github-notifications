@@ -58,10 +58,10 @@ export function mutedIsLoading(bool) {
   };
 }
 
-export function mutedSuccess(data) {
+export function mutedSuccess(id) {
   return {
     type: 'MUTED_SUCCESS',
-    data
+    id
   };
 }
 
@@ -91,27 +91,16 @@ export function clearNewNotifications() {
   return (dispatch) => dispatch(newNotificationsClear());
 }
 
-export function muteNotification(selectedNotifications, ignored) {
+export function muteNotification(id, data) {
   return (dispatch) => {
     dispatch(mutedIsLoading(true));
-    let results = [];
-    selectedNotifications.forEach(({ id }) => {
-      results.push(
-        new Promise((resolve, reject) => {
-          common.setThreadSubscription(id, { thread_id: id, ignored })
-            .then((response) => {
-              if (response instanceof Error) {
-                // TODO - handle message in data
-                reject({ thread_id: id, message: response.statusText });
-              } else {
-                resolve({ thread_id: id, ignored });
-              }
-            });
-        })
-      );
-    });
-    Promise.all(results).then((result ) => {
-      dispatch(mutedSuccess(result));
-    });
+    common.setThreadSubscription(id, data)
+      .then((response) => {
+        if (response instanceof Error) {
+          dispatch(mutedHasError(response.statusText));
+        } else {
+          dispatch(mutedSuccess(id));
+        }
+      });
   }
 }
