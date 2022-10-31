@@ -43,28 +43,6 @@ export function newNotificationsMove(notifications) {
   };
 }
 
-export function mutedHasError(response) {
-  return {
-    type: 'MUTED_HAS_ERROR',
-    hasMutedError: true,
-    error: response
-  };
-}
-
-export function mutedIsLoading(bool) {
-  return {
-    type: 'MUTED_IS_LOADING',
-    isMutedLoading: bool
-  };
-}
-
-export function mutedSuccess(id) {
-  return {
-    type: 'MUTED_SUCCESS',
-    id
-  };
-}
-
 export function fetchNotifications(since, refresh= false) {
   return (dispatch) => {
     dispatch(notificationsAreLoading(true));
@@ -89,18 +67,4 @@ export function moveNewNotifications(notifications) {
 
 export function clearNewNotifications() {
   return (dispatch) => dispatch(newNotificationsClear());
-}
-
-export function muteNotification(id, data) {
-  return (dispatch) => {
-    dispatch(mutedIsLoading(true));
-    common.setThreadSubscription(id, data)
-      .then((response) => {
-        if (response instanceof Error) {
-          dispatch(mutedHasError(response.statusText));
-        } else {
-          dispatch(mutedSuccess(id));
-        }
-      });
-  }
 }

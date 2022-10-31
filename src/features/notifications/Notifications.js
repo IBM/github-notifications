@@ -26,8 +26,14 @@ import { setSince } from '../../actions/since';
 import { defaultFetchTime, automaticFetchInterval } from '../common/constants';
 import { dataTableHeaders, dataTableRows } from './DataTableData';
 import { getThreadSubscription } from "../../actions/subscriptions";
-import {processNotifications} from "../../utils/common";
-import {notify} from "../../utils/electronNotifications";
+import {
+  findMatchingElementById,
+  insertObjectIntoArray,
+  removeObjectFromArrayById,
+  findElementIndexById,
+  processNotifications
+} from "../../utils/common";
+import { notify } from "../../utils/electronNotifications";
 
 const Notifications = () => {
   const dispatch = useDispatch();
@@ -38,10 +44,16 @@ const Notifications = () => {
   const allNotifications = useSelector((state) => state.notifications.notifications);
   const haveNotificationsError = useSelector((state) => state.notifications.haveNotificationsError);
   const areNotificationsLoading = useSelector((state) => state.notifications.areNotificationsLoading);
+
   const since = useSelector((state) => state.since.since);
+
   const allNewNotifications = useSelector((state) => state.notifications.newNotifications);
   const subscriptions = useSelector((state) => state.subscriptions.subscriptions);
   const erroredSubscriptions = useSelector((state) => state.subscriptions.erroredSubscriptions);
+
+  const setSubscription = useSelector((state) => state.subscriptions.setSubscription);
+  const isSettingSubscriptionLoading = useSelector((state) => state.subscriptions.isSettingSubscriptionLoading);
+  const hasSettingSubscriptionError = useSelector((state) => state.subscriptions.hasSettingSubscriptionError);
 
   useEffect(() => {
     if (!allNotifications.length && !areNotificationsLoading) {
@@ -79,6 +91,18 @@ const Notifications = () => {
       setNewNotifications(newNotificationsSorted);
     }
   }, [allNewNotifications, areNotificationsLoading, haveNotificationsError])
+
+  useEffect(() => {
+    if (setSubscription && !isSettingSubscriptionLoading && !hasSettingSubscriptionError) {
+      const { thread_id, ignored } = setSubscription;
+      const findObjectToReplace = findMatchingElementById(notifications, thread_id);
+      findObjectToReplace.ignored = ignored;
+      const notificationIndex = findElementIndexById(notifications, thread_id);
+      const newArrayWithoutOldObject = removeObjectFromArrayById(notifications, notificationIndex);
+      const updatedNotifications = insertObjectIntoArray(newArrayWithoutOldObject, findObjectToReplace, notificationIndex);
+      setNotifications(updatedNotifications);
+    }
+  }, [setSubscription, isSettingSubscriptionLoading, hasSettingSubscriptionError])
 
   const fetchMoreNotifications = () => {
     dispatch(setSince(moment().toISOString()));

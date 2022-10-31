@@ -44,3 +44,39 @@ export function getThreadSubscription(id) {
       });
   }
 }
+
+export function setSubscriptionHasError(response) {
+  return {
+    type: 'SET_SUBSCRIPTION_HAS_ERROR',
+    hasSettingSubscriptionError: true,
+    settingSubscriptionError: response
+  };
+}
+
+export function setSubscriptionIsLoading(bool) {
+  return {
+    type: 'SET_SUBSCRIPTION_IS_LOADING',
+    isSettingSubscriptionLoading: bool
+  };
+}
+
+export function setSubscriptionSuccess(data) {
+  return {
+    type: 'SET_SUBSCRIPTION_SUCCESS',
+    data
+  };
+}
+
+export function setSubscription(id, data) {
+  return (dispatch) => {
+    dispatch(setSubscriptionIsLoading(true));
+    common.setThreadSubscription(id, data)
+      .then((response) => {
+        if (response instanceof Error) {
+          dispatch(setSubscriptionHasError(response.statusText));
+        } else {
+          dispatch(setSubscriptionSuccess(data));
+        }
+      });
+  }
+}

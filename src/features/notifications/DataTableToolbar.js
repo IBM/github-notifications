@@ -7,8 +7,8 @@ import {
   TableToolbarContent,
   TableToolbarSearch
 } from "carbon-components-react";
-import { CheckmarkOutline16, NotificationOff16, Rss16, Sight16, VoiceActivate16, Recommend16, List16 } from "@carbon/icons-react";
-import { muteNotification } from "../../actions/notifications";
+import { CheckmarkOutline16, Notification16, NotificationOff16, Rss16, Sight16, VoiceActivate16, Recommend16, List16 } from "@carbon/icons-react";
+import { setSubscription } from "../../actions/subscriptions";
 
 const buttons = [
   {
@@ -64,9 +64,9 @@ const DataTableToolbar = ({ onInputChange, filter, getBatchActionProps, selected
     />
   );
 
-  const muteSelectedNotifications = (notificationsToBeMuted, ignored) => {
-    notificationsToBeMuted.forEach(({ id }) => {
-      dispatch(muteNotification(id, { thread_id: id, ignored }));
+  const setSubscriptions = (subscriptions, ignored) => {
+    subscriptions.forEach(({ id }) => {
+      dispatch(setSubscription(id, { thread_id: id, ignored }));
     })
   }
 
@@ -77,9 +77,17 @@ const DataTableToolbar = ({ onInputChange, filter, getBatchActionProps, selected
           key="mute"
           tabIndex={getBatchActionProps().shouldShowBatchActions ? 0 : -1}
           renderIcon={NotificationOff16}
-          onClick={() => muteSelectedNotifications(selectedRows, true)}
+          onClick={() => setSubscriptions(selectedRows, true)}
         >
           Mute
+        </TableBatchAction>
+        <TableBatchAction
+          key="unmute"
+          tabIndex={getBatchActionProps().shouldShowBatchActions ? 0 : -1}
+          renderIcon={Notification16}
+          onClick={() => setSubscriptions(selectedRows, false)}
+        >
+          Unmute
         </TableBatchAction>
         <TableBatchAction
           key="read"

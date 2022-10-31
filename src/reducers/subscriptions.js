@@ -1,8 +1,12 @@
 export const initialState = {
   isThreadLoading: false,
+  isSettingSubscriptionLoading: false,
   hasThreadError: false,
+  hasSettingSubscriptionError: false,
   subscriptions: [],
-  erroredSubscriptions: ''
+  setSubscription: '',
+  erroredSubscriptions: '',
+  settingSubscriptionError: ''
 };
 
 const reducer = (state = initialState, action) => {
@@ -29,6 +33,21 @@ const reducer = (state = initialState, action) => {
         isThreadLoading: false
       }
     }
+    case 'SET_SUBSCRIPTION_IS_LOADING':
+      return { ...state, isSettingSubscriptionLoading: action.isSettingSubscriptionLoading };
+    case 'SET_SUBSCRIPTION_HAS_ERROR':
+      return {
+        ...state,
+        hasSettingSubscriptionError: action.hasSettingSubscriptionError,
+        settingSubscriptionError: action.error,
+        isSettingSubscriptionLoading: false
+      };
+    case 'SET_SUBSCRIPTION_SUCCESS':
+      return {
+        ...state,
+        setSubscription: action.data,
+        isSettingSubscriptionLoading: false
+      };
     default:
       return { ...state };
   }
