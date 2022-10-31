@@ -26,8 +26,8 @@ import { setSince } from '../../actions/since';
 import { defaultFetchTime, automaticFetchInterval } from '../common/constants';
 import { dataTableHeaders, dataTableRows } from './DataTableData';
 import { getThreadSubscription } from "../../actions/subscriptions";
-import {processNotifications} from "../../utils/common";
-import {notify} from "../../utils/electronNotifications";
+import { findMatchingElementById, findElementIndexById, insertObjectIntoArray, removeObjectFromArrayById, processNotifications } from "../../utils/common";
+import { notify } from "../../utils/electronNotifications";
 
 const Notifications = () => {
   const dispatch = useDispatch();
@@ -42,6 +42,7 @@ const Notifications = () => {
   const allNewNotifications = useSelector((state) => state.notifications.newNotifications);
   const subscriptions = useSelector((state) => state.subscriptions.subscriptions);
   const erroredSubscriptions = useSelector((state) => state.subscriptions.erroredSubscriptions);
+  const mutedNotifications = useSelector((state) => state.notifications.mutedNotifications);
 
   useEffect(() => {
     if (!allNotifications.length && !areNotificationsLoading) {
@@ -79,6 +80,27 @@ const Notifications = () => {
       setNewNotifications(newNotificationsSorted);
     }
   }, [allNewNotifications, areNotificationsLoading, haveNotificationsError])
+
+  useEffect(() => {
+    console.log('mutedNotifications', mutedNotifications);
+    if (mutedNotifications.length) {
+      let updatedNotifications = [];
+      mutedNotifications.forEach(({ thread_id, ignored }) => {
+        const findObjectToReplace = findMatchingElementById(notifications, thread_id);
+        console.log('findObjectToReplace', findObjectToReplace);
+        if (findObjectToReplace) {
+          findObjectToReplace.ignored = ignored;
+          const notificationIndex = findElementIndexById(notifications, thread_id);
+          console.log('notificationIndex', notificationIndex);
+          console.log('notifications', notifications);
+          const newArrayWithoutOldObject = removeObjectFromArrayById(notifications, notificationIndex);
+          console.log('newArrayWithoutOldObject', newArrayWithoutOldObject);
+          updatedNotifications = insertObjectIntoArray(newArrayWithoutOldObject, findObjectToReplace, notificationIndex);
+        }
+      })
+      setNotifications(updatedNotifications);
+    }
+  }, [mutedNotifications])
 
   const fetchMoreNotifications = () => {
     dispatch(setSince(moment().toISOString()));
