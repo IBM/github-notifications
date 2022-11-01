@@ -4,7 +4,14 @@ import { findJiraTicketForNotifications } from "./details";
 export function processNotifications(notificationArray, subscriptions) {
   let processedNotification = [];
   for ( const notification of notificationArray) {
-    const { id, reason, updated_at, subject: { title = '', url = '', type = '' } = {}, repository: { full_name = '' } = {}} = notification;
+    const {
+      id,
+      reason,
+      updated_at,
+      subject: { title = '', url = '', type = '' } = {},
+      repository: { full_name = '' } = {},
+      unread
+    } = notification;
 
     const matchingSubscriptions = subscriptions.find(sub => sub.id === id);
     const subscribed = matchingSubscriptions !== undefined ? matchingSubscriptions.data.subscribed : null;
@@ -24,7 +31,8 @@ export function processNotifications(notificationArray, subscriptions) {
       full_name,
       jira,
       subscribed,
-      ignored
+      ignored,
+      unread
     };
     processedNotification.push(newNotification);
   }

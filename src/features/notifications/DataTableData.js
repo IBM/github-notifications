@@ -2,7 +2,7 @@ import React from "react";
 import moment from "moment";
 import { Button, Link, Tag } from "carbon-components-react";
 import { Launch16, Ticket16 } from "@carbon/icons-react";
-import { NotificationOffFilled } from "@carbon/icons-react/next";
+import { NotificationOffFilled, FlagFilled } from "@carbon/icons-react/next";
 
 const tagReason = (reason) => {
   switch (reason) {
@@ -45,6 +45,10 @@ const actions = (html_url, notification) => (
 
 export const dataTableHeaders = [
   {
+    key: 'unread',
+    header: 'Unread',
+  },
+  {
     key: 'muted',
     header: 'Muted',
   },
@@ -73,7 +77,7 @@ export const dataTableHeaders = [
 export const dataTableRows = (notifications) => {
   let mappedNotifications = [];
   notifications.forEach((notification) => {
-    const { id, reason, updated_at, title, html_url, full_name, ignored } = notification;
+    const { id, reason, updated_at, title, html_url, full_name, ignored, unread } = notification;
     mappedNotifications.push({
       id: `${id}`,
       reason: tagReason(reason),
@@ -81,7 +85,8 @@ export const dataTableRows = (notifications) => {
       updated_at: moment(moment.utc(updated_at).toDate()).local().format('YYYY-MM-DD HH:mm:ss'),
       title,
       actions: actions(html_url, notification),
-      muted: ignored ? <NotificationOffFilled /> : null
+      muted: ignored ? <NotificationOffFilled /> : null,
+      unread: unread ? <FlagFilled /> : null
     })
   });
   return mappedNotifications;

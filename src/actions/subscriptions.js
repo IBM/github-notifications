@@ -1,45 +1,44 @@
 const common = require('../api/common');
 
-export function threadIsLoading(bool) {
+export function getSubscriptionIsLoading(bool) {
   return {
-    type: 'THREAD_IS_LOADING',
-    isThreadLoading: bool
+    type: 'GET_THREAD_SUBSCRIPTION_IS_LOADING',
+    isGetThreadSubscriptionLoading: bool
   };
 }
 
-export function threadHasErrorData(data) {
+export function getSubscriptionHasError(data) {
   return {
-    type: 'THREAD_HAS_ERROR',
-    hasThreadError: true,
+    type: 'GET_THREAD_SUBSCRIPTION_HAS_ERROR',
+    getThreadSubscriptionHasError: true,
     data
   };
 }
 
-export function threadClearError() {
+export function getSubscriptionClearError() {
   return {
-    type: 'THREAD_CLEAR_ERROR',
-    hasThreadError: false,
-    error: ''
+    type: 'GET_THREAD_SUBSCRIPTION_CLEAR_ERROR',
+    getThreadSubscriptionHasError: false
   };
 }
 
-export function threadFetchDataSuccess(response) {
+export function getSubscriptionSuccess(response) {
   return {
-    type: 'THREAD_FETCH_DATA_SUCCESS',
+    type: 'GET_THREAD_SUBSCRIPTION_SUCCESS',
     response
   };
 }
 
 export function getThreadSubscription(id) {
   return (dispatch) => {
-    dispatch(threadIsLoading(true));
+    dispatch(getSubscriptionIsLoading(true));
     common.getThreadSubscription(id)
       .then((response) => {
         if (response instanceof Error) {
-          dispatch(threadHasErrorData({ id, message: response.statusText }));
-          dispatch(threadClearError());
+          dispatch(getSubscriptionHasError({ id, message: response.statusText }));
+          dispatch(getSubscriptionClearError());
         } else {
-          dispatch(threadFetchDataSuccess({ id, data: response.data }));
+          dispatch(getSubscriptionSuccess({ id, data: response.data }));
         }
       });
   }

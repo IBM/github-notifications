@@ -48,7 +48,7 @@ const buttons = [
   }
 ];
 
-const DataTableToolbar = ({ onInputChange, filter, getBatchActionProps, selectedRows, notifications }) => {
+const DataTableToolbar = ({ onInputChange, filter, getBatchActionProps, selectedRows }) => {
   const dispatch = useDispatch();
 
   const buttonComponent = ({ id, type, description, icon, kind }) => (
@@ -58,7 +58,7 @@ const DataTableToolbar = ({ onInputChange, filter, getBatchActionProps, selected
       hasIconOnly
       renderIcon={icon}
       iconDescription={description}
-      tooltipPosition="bottom"
+      tooltipPosition="left"
       onClick={(e) => filter(e, type)}
       className={`notifications__table__toolbar__button--${type}`}
     />

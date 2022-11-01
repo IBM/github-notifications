@@ -4,7 +4,7 @@ import GlobalHeader from './GlobalHeader';
 import GlobalSideNav from "./GlobalSideNav";
 
 const GlobalHeaderContainer = ({ children, activeLink, autoRefreshView, getItems, newItemsNumber, itemsLoading }) => {
-  const [isToggled, setIsToggled] = useState(true);
+  const [isToggled, setIsToggled] = useState(false);
   const toggle = useCallback(
     () => setIsToggled(!isToggled),
     [isToggled, setIsToggled],

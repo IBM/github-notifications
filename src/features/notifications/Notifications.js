@@ -12,8 +12,10 @@ import {
   TableCell,
   TableContainer,
   TableSelectAll,
-  TableSelectRow
+  TableSelectRow,
+  DataTableSkeleton
 } from 'carbon-components-react';
+import classNames from 'classnames';
 import DataTableToolbar from './DataTableToolbar';
 import GlobalHeaderContainer from '../common/GlobalHeaderContainer';
 import GlobalToast from '../common/GlobalToast';
@@ -50,10 +52,13 @@ const Notifications = () => {
   const allNewNotifications = useSelector((state) => state.notifications.newNotifications);
   const subscriptions = useSelector((state) => state.subscriptions.subscriptions);
   const erroredSubscriptions = useSelector((state) => state.subscriptions.erroredSubscriptions);
+  const getThreadSubscriptionHasError = useSelector((state) => state.subscriptions.getThreadSubscriptionHasError);
+  const isGetThreadSubscriptionLoading = useSelector((state) => state.subscriptions.isGetThreadSubscriptionLoading);
 
   const setSubscription = useSelector((state) => state.subscriptions.setSubscription);
   const isSettingSubscriptionLoading = useSelector((state) => state.subscriptions.isSettingSubscriptionLoading);
   const hasSettingSubscriptionError = useSelector((state) => state.subscriptions.hasSettingSubscriptionError);
+  const settingSubscriptionError = useSelector((state) => state.subscriptions.settingSubscriptionError);
 
   useEffect(() => {
     if (!allNotifications.length && !areNotificationsLoading) {
@@ -77,11 +82,15 @@ const Notifications = () => {
   }, [allNotifications, areNotificationsLoading, haveNotificationsError]);
 
   useEffect(() => {
-    if (subscriptions.length + erroredSubscriptions.length === allNotifications.length) {
+    if (
+      subscriptions.length + erroredSubscriptions.length === allNotifications.length &&
+      !getThreadSubscriptionHasError &&
+      !isGetThreadSubscriptionLoading
+    ) {
       const processedNotifications = processNotifications(allNotifications, subscriptions);
       setNotifications(processedNotifications);
     }
-  }, [subscriptions, erroredSubscriptions]);
+  }, [subscriptions, erroredSubscriptions, getThreadSubscriptionHasError, isGetThreadSubscriptionLoading]);
 
   useEffect(() => {
     if (allNewNotifications.length && !areNotificationsLoading && !haveNotificationsError) {
@@ -121,47 +130,68 @@ const Notifications = () => {
       allNotifications.forEach((note) => {
         if (note.reason === type) notificationsByType.push(note);
       });
-      setNotifications(notificationsByType);
+      const processedNotifications = processNotifications(notificationsByType, subscriptions);
+      setNotifications(processedNotifications);
     } else {
-      setNotifications(allNotifications);
+      const processedNotifications = processNotifications(allNotifications, subscriptions);
+      setNotifications(processedNotifications);
     }
   }
 
   return (
-    <>
-      <GlobalHeaderContainer
-        activeLink="notifications"
-        autoRefreshView={() => fetchMoreNotifications()}
-        getItems={() => collectNewNotifications(newNotifications)}
-        newItemsNumber={newNotifications.length}
-        itemsLoading={areNotificationsLoading}
-        className="notifications"
-      >
-        <DataTable
-          isSortable
-          rows={dataTableRows(notifications)}
+    <GlobalHeaderContainer
+      activeLink="notifications"
+      autoRefreshView={() => fetchMoreNotifications()}
+      getItems={() => collectNewNotifications(newNotifications)}
+      newItemsNumber={newNotifications.length}
+      itemsLoading={areNotificationsLoading}
+      className="notifications"
+    >
+      { !notifications.length
+        ? <DataTableSkeleton
+          showHeader={false}
+          showToolbar={false}
           headers={dataTableHeaders}
-          render={({
-            rows,
-            headers,
-            getHeaderProps,
-            getSelectionProps,
-            getBatchActionProps,
-            getRowProps,
-            getTableProps,
-            onInputChange,
-            selectedRows
+          rowCount={5}
+          columnCount={7}
+          className="notifications__table"
+        />
+        : (
+          <DataTable
+            isSortable
+            rows={dataTableRows(notifications)}
+            headers={dataTableHeaders}
+            render={({
+              rows,
+              headers,
+              getHeaderProps,
+              getSelectionProps,
+              getBatchActionProps,
+              getRowProps,
+              getTableProps,
+              onInputChange,
+              selectedRows
            }) => (
+          <>
+            <GlobalToast
+              selectedRows={selectedRows}
+              erroredSubscriptions={erroredSubscriptions}
+              isGetThreadSubscriptionLoading={isGetThreadSubscriptionLoading}
+              getThreadSubscriptionHasError={getThreadSubscriptionHasError}
+              settingSubscriptionError={settingSubscriptionError}
+              isSettingSubscriptionLoading={isSettingSubscriptionLoading}
+              hasSettingSubscriptionError={hasSettingSubscriptionError}
+              setSubscription={setSubscription}
+            />
             <TableContainer className="notifications__table">
               <DataTableToolbar
                 onInputChange={onInputChange}
                 filter={(e, type) => filterByType(e, type)}
                 getBatchActionProps={getBatchActionProps}
                 selectedRows={selectedRows}
-                notifications={notifications}
               />
               <Table {...getTableProps()}>
-                <TableHead className="notifications__table__header">
+                <TableHead>
                   <TableRow>
                     <TableSelectAll {...getSelectionProps()} />
                     {headers.map((header) => (
@@ -173,8 +203,14 @@ const Notifications = () => {
                 </TableHead>
                 <TableBody className="notifications__table__body">
                   {rows.map((row) => (
-                    <TableRow {...getRowProps({row})}>
-                      <TableSelectRow {...getSelectionProps({ row })} />
+                    <TableRow
+                      {...getRowProps({row})}
+                      className={classNames({
+                        'notifications__table__body__row--unread':
+                          row.cells[0].info.header === 'unread' && row.cells[0].value
+                      })}
+                    >
+                      <TableSelectRow {...getSelectionProps({row})} />
                       {row.cells.map((cell) => (
                         <TableCell key={cell.id}>{cell.value}</TableCell>
                       ))}
@@ -183,11 +219,11 @@ const Notifications = () => {
                 </TableBody>
               </Table>
             </TableContainer>
-          )}
-        />
-      </GlobalHeaderContainer>
-      <GlobalToast />
-    </>
+          </>
+        )}
+      />
+        )}
+    </GlobalHeaderContainer>
   );
 }
 

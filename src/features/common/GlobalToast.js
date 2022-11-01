@@ -1,49 +1,50 @@
 import React, { useEffect, useState } from 'react';
 import { ToastNotification } from "carbon-components-react";
-import {useSelector} from "react-redux";
 
-const GlobalToast = ({ selectedRows }) => {
+const GlobalToast = (
+  {
+    selectedRows,
+    erroredSubscriptions,
+    isGetThreadSubscriptionLoading,
+    getThreadSubscriptionHasError,
+    settingSubscriptionError,
+    isSettingSubscriptionLoading,
+    hasSettingSubscriptionError,
+    setSubscription
+  }) => {
   const [toast, setToast] = useState(null);
   const [showToast, setShowToast] = useState(false);
-
-  const mutedNotifications = useSelector((state) => state.notifications.mutedNotifications);
-  const hasMutedError = useSelector((state) => state.notifications.hasMutedError);
-  const isMutedLoading = useSelector((state) => state.notifications.isMutedLoading);
-  const mutedError = useSelector((state) => state.notifications.mutedError);
-
-  const hasThreadError = useSelector((state) => state.subscriptions.hasThreadError);
-  const erroredSubscriptions = useSelector((state) => state.subscriptions.erroredSubscriptions);
 
   useEffect(() => {
     if (
       selectedRows &&
-      (!mutedError || !hasMutedError) &&
-      !isMutedLoading
+      (!settingSubscriptionError || !hasSettingSubscriptionError) &&
+      !isSettingSubscriptionLoading
     ) {
       const toastData = {
         kind: 'success',
         title: 'Mute Notifications',
         subtitle: 'Success!',
-        caption: `You have muted the following notifications ${mutedNotifications.toString()}.`
+        caption: `You have changed subscriptions of the following notifications ${setSubscription.thread_id}.`
       }
       setToast(toastData);
     } else if (
       selectedRows &&
-      (mutedError || hasMutedError) &&
-      !isMutedLoading
+      (settingSubscriptionError || hasSettingSubscriptionError) &&
+      !isSettingSubscriptionLoading
     ) {
       const toastData = {
         kind: 'error',
         title: 'Mute Notifications',
         subtitle: 'Error',
-        caption: 'You have not muted requested notifications.'
+        caption: 'You have not changed subscriptions of the requested notifications.'
       }
       setToast(toastData);
     }
-  }, [mutedNotifications, hasMutedError, isMutedLoading, mutedError]);
+  }, [setSubscription, hasSettingSubscriptionError, isSettingSubscriptionLoading, settingSubscriptionError]);
 
   useEffect(() => {
-    if (hasThreadError && erroredSubscriptions.length) {
+    if (getThreadSubscriptionHasError && erroredSubscriptions.length && !isGetThreadSubscriptionLoading) {
       let erroredIds = [];
       erroredSubscriptions.forEach(({ id }) => {
         erroredIds.push(id);
@@ -57,7 +58,7 @@ const GlobalToast = ({ selectedRows }) => {
       }
       setToast(toastData);
     }
-  }, [hasThreadError, erroredSubscriptions])
+  }, [getThreadSubscriptionHasError, erroredSubscriptions, isGetThreadSubscriptionLoading])
 
   useEffect(() => setShowToast(true), [toast]);
 

@@ -82,8 +82,14 @@ $carbon--theme: $carbon--theme--g90;
   &__table {
     margin-top: 48px;
 
-    &__body tr td {
-      padding: 1rem;
+    &__body {
+      tr td {
+        padding: 1rem;
+      }
+
+      &__row--unread td {
+        background-color: lighten($background, 10%);
+      }
     }
 
     &__actions button {
