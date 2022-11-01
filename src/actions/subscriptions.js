@@ -15,13 +15,6 @@ export function getSubscriptionHasError(data) {
   };
 }
 
-export function getSubscriptionClearError() {
-  return {
-    type: 'GET_THREAD_SUBSCRIPTION_CLEAR_ERROR',
-    getThreadSubscriptionHasError: false
-  };
-}
-
 export function getSubscriptionSuccess(response) {
   return {
     type: 'GET_THREAD_SUBSCRIPTION_SUCCESS',
@@ -36,7 +29,6 @@ export function getThreadSubscription(id) {
       .then((response) => {
         if (response instanceof Error) {
           dispatch(getSubscriptionHasError({ id, message: response.statusText }));
-          dispatch(getSubscriptionClearError());
         } else {
           dispatch(getSubscriptionSuccess({ id, data: response.data }));
         }

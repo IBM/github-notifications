@@ -79,9 +79,9 @@ $carbon--theme: $carbon--theme--g90;
 }
 
 .notifications {
-  &__table {
-    margin-top: 48px;
+  margin-top: 48px;
 
+  &__table {
     &__body {
       tr td {
         padding: 1rem;
@@ -111,11 +111,13 @@ $carbon--theme: $carbon--theme--g90;
     }
   }
 
-  &__toast {
-    position: fixed;
-    top: 48px;
-    right: 0;
-    z-index: 1000;
+  &__inline {
+    margin: 0;
+    max-width: none;
+
+    &:nth-child(odd) {
+      margin-bottom: 5px;
+    }
   }
 }
 

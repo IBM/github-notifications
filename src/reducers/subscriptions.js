@@ -20,11 +20,6 @@ const reducer = (state = initialState, action) => {
         erroredSubscriptions: [...state.erroredSubscriptions, action.data],
         isGetThreadSubscriptionLoading: false
       };
-    case 'GET_THREAD_SUBSCRIPTION_CLEAR_ERROR':
-      return {
-        ...state,
-        getThreadSubscriptionHasError: action.getThreadSubscriptionHasError
-      };
     case 'GET_THREAD_SUBSCRIPTION_SUCCESS': {
       return {
         ...state,
