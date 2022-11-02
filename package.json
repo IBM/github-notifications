@@ -5,7 +5,7 @@
   "private": true,
   "main": "public/electron.js",
   "dependencies": {
-    "@carbon/icons-react": "^10.49.0",
+    "@carbon/icons-react": "^11.10.0",
     "@carbon/themes": "10.53.1",
     "@carbon/type": "10.43.1",
     "@octokit/rest": "^18.0.11",

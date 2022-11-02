@@ -1,7 +1,7 @@
 import React from "react";
 import { findJiraTicketForNotifications } from "./details";
 
-export function processNotifications(notificationArray, subscriptions) {
+export const processNotifications = (notificationArray, subscriptions) => {
   let processedNotification = [];
   for ( const notification of notificationArray) {
     const {
@@ -16,7 +16,7 @@ export function processNotifications(notificationArray, subscriptions) {
     const matchingSubscriptions = subscriptions.find(sub => sub.id === id);
     const subscribed = matchingSubscriptions !== undefined ? matchingSubscriptions.data.subscribed : null;
     const ignored = matchingSubscriptions !== undefined ? matchingSubscriptions.data.ignored : null;
-    const html_url = getPrNumber(url);
+    const html_url = processPrUrl(url);
 
     const jiraTicket = findJiraTicketForNotifications(notification);
     const jira = jiraTicket[0] !== undefined ? jiraTicket[0] : '';
@@ -39,14 +39,14 @@ export function processNotifications(notificationArray, subscriptions) {
   return sortNotifications(processedNotification);
 }
 
-function getPrNumber(url) {
+export const processPrUrl = (url) => {
   const parseUrl = new URL(url);
   const { hostname, pathname, protocol } = parseUrl;
   const path = pathname.split('/');
   return `${protocol}//${hostname}/${path[4]}/${path[5]}/pull/${path[7]}`;
 }
 
-function sortNotifications(notifications) { return notifications.slice().sort((a, b) => b.updated_at - a.updated_at) }
+const sortNotifications = (notifications) => notifications.slice().sort((a, b) => b.updated_at - a.updated_at);
 
 export const findElementIndexById = (array, id) => array.findIndex((element) => element.id === id);
 

@@ -1,3 +1,10 @@
+import {
+  findElementIndexById,
+  findMatchingElementById,
+  insertObjectIntoArray,
+  removeObjectFromArrayById
+} from "../utils/common";
+
 export const initialState = {
   isGetThreadSubscriptionLoading: false,
   getThreadSubscriptionHasError: false,
@@ -9,21 +16,36 @@ export const initialState = {
   settingSubscriptionError: ''
 };
 
+const avoidDuplications = (array, action) => {
+  const { id } = action.data;
+  let updatedArray = [];
+  const findObjectToReplace = findMatchingElementById(array, id);
+  if (findObjectToReplace) {
+    const index = findElementIndexById(array, id);
+    const newArrayWithoutOldObject = removeObjectFromArrayById(array, index);
+    updatedArray = insertObjectIntoArray(newArrayWithoutOldObject, findObjectToReplace, index);
+  }
+  return updatedArray;
+}
+
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case 'GET_THREAD_SUBSCRIPTION_IS_LOADING':
       return { ...state, isGetThreadSubscriptionLoading: action.isGetThreadSubscriptionLoading };
-    case 'GET_THREAD_SUBSCRIPTION_HAS_ERROR':
+    case 'GET_THREAD_SUBSCRIPTION_HAS_ERROR': {
+      const arrayWithoutDuplicates = avoidDuplications(state.erroredSubscriptions, action);
       return {
         ...state,
         getThreadSubscriptionHasError: action.getThreadSubscriptionHasError,
-        erroredSubscriptions: [...state.erroredSubscriptions, action.data],
+        erroredSubscriptions: arrayWithoutDuplicates.length ? arrayWithoutDuplicates : [...state.erroredSubscriptions, action.data],
         isGetThreadSubscriptionLoading: false
       };
+    }
     case 'GET_THREAD_SUBSCRIPTION_SUCCESS': {
+      const arrayWithoutDuplicates = avoidDuplications(state.subscriptions, action);
       return {
         ...state,
-        subscriptions: [...state.subscriptions, action.response],
+        subscriptions: arrayWithoutDuplicates.length ? arrayWithoutDuplicates : [...state.subscriptions, action.data],
         isGetThreadSubscriptionLoading: false
       }
     }

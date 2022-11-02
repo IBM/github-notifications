@@ -35,7 +35,6 @@ import {
   findElementIndexById,
   processNotifications
 } from "../../utils/common";
-import { notify } from "../../utils/electronNotifications";
 
 const Notifications = () => {
   const dispatch = useDispatch();
@@ -73,12 +72,12 @@ const Notifications = () => {
   }, [allNotifications, areNotificationsLoading]);
 
   useEffect(() => {
-    if (allNotifications.length && !areNotificationsLoading && !haveNotificationsError) {
+    if (allNotifications.length && !areNotificationsLoading && !haveNotificationsError && !notifications.length) {
       allNotifications.forEach(({ id }) => {
         dispatch(getThreadSubscription(id));
       });
     }
-  }, [allNotifications, areNotificationsLoading, haveNotificationsError]);
+  }, [allNotifications, areNotificationsLoading, haveNotificationsError, notifications]);
 
   useEffect(() => {
     if (
@@ -92,12 +91,14 @@ const Notifications = () => {
 
   useEffect(() => {
     if (allNewNotifications.length && !areNotificationsLoading && !haveNotificationsError) {
+      allNewNotifications.forEach(({ id }) => {
+        dispatch(getThreadSubscription(id));
+      });
       const processedNotifications = processNotifications(allNewNotifications, subscriptions);
-      notify(processedNotifications);
       const newNotificationsSorted = sortBy(processedNotifications, ['updated_at']);
       setNewNotifications(newNotificationsSorted);
     }
-  }, [allNewNotifications, areNotificationsLoading, haveNotificationsError])
+  }, [allNewNotifications, areNotificationsLoading, haveNotificationsError]);
 
   useEffect(() => {
     if (setSubscription && !isSettingSubscriptionLoading && !hasSettingSubscriptionError) {
@@ -109,7 +110,9 @@ const Notifications = () => {
       const updatedNotifications = insertObjectIntoArray(newArrayWithoutOldObject, findObjectToReplace, notificationIndex);
       setNotifications(updatedNotifications);
     }
-  }, [setSubscription, isSettingSubscriptionLoading, hasSettingSubscriptionError])
+  }, [setSubscription, isSettingSubscriptionLoading, hasSettingSubscriptionError]);
+
+  useEffect(() => {}, [allNotifications])
 
   const fetchMoreNotifications = () => {
     dispatch(setSince(moment().toISOString()));
@@ -121,17 +124,25 @@ const Notifications = () => {
     dispatch(clearNewNotifications());
   }
 
-  const filterByType = (event, type) => {
-    event.preventDefault();
+  const countNotifications = (type) => {
     let notificationsByType = [];
     if (type !== 'all') {
-      allNotifications.forEach((note) => {
-        if (note.reason === type) notificationsByType.push(note);
+      allNotifications.forEach((notification) => {
+        if (notification.reason === type) notificationsByType.push(notification);
       });
-      const processedNotifications = processNotifications(notificationsByType, subscriptions);
-      setNotifications(processedNotifications);
     } else {
-      const processedNotifications = processNotifications(allNotifications, subscriptions);
+      notificationsByType = allNotifications;
+    }
+    return notificationsByType;
+  }
+
+  const filterByType = (event, type) => {
+    event.preventDefault();
+    const notificationsByType = countNotifications(type);
+    if (!notificationsByType.length) {
+      setNotifications(notifications);
+    } else {
+      const processedNotifications = processNotifications(notificationsByType, subscriptions);
       setNotifications(processedNotifications);
     }
   }
@@ -182,6 +193,7 @@ const Notifications = () => {
                 <DataTableToolbar
                   onInputChange={onInputChange}
                   filter={(e, type) => filterByType(e, type)}
+                  countNotifications={(type) => countNotifications(type)}
                   getBatchActionProps={getBatchActionProps}
                   selectedRows={selectedRows}
                 />

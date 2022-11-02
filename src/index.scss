@@ -28,7 +28,7 @@ $carbon--theme: $carbon--theme--g90;
 
 .global-header {
   background-color: lighten($background, 5%);
-  border-bottom: 1px solid #525252;
+  border-bottom: 1px solid $border-subtle;
 
   &__new-notifications-icon {
     background-color: red;
@@ -79,7 +79,8 @@ $carbon--theme: $carbon--theme--g90;
 }
 
 .notifications {
-  margin-top: 48px;
+  margin-top: 47px;
+  border-top: 1px solid black;
 
   &__table {
     &__body {
@@ -97,6 +98,12 @@ $carbon--theme: $carbon--theme--g90;
     }
 
     &__toolbar__button {
+      &--all, &--mention, &--subscribed, &--author, &--review_requested {
+        svg {
+          margin-left: 5px;
+        }
+      }
+
       &--all, &--all:hover {
         background-color: $carbon--purple-50;
       }
@@ -112,12 +119,8 @@ $carbon--theme: $carbon--theme--g90;
   }
 
   &__inline {
-    margin: 0;
+    margin: 2px 0;
     max-width: none;
-
-    &:nth-child(odd) {
-      margin-bottom: 5px;
-    }
   }
 }
 

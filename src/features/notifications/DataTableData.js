@@ -1,8 +1,7 @@
 import React from "react";
 import moment from "moment";
 import { Button, Link, Tag } from "carbon-components-react";
-import { Launch16, Ticket16 } from "@carbon/icons-react";
-import { NotificationOffFilled, FlagFilled } from "@carbon/icons-react/next";
+import { Launch, Ticket, NotificationOffFilled, FlagFilled } from "@carbon/icons-react";
 
 const tagReason = (reason) => {
   switch (reason) {
@@ -22,7 +21,7 @@ const actions = (html_url, notification) => (
     <Link href={html_url} target='_blank'>
       <Button
         kind="secondary"
-        renderIcon={Launch16}
+        renderIcon={Launch}
         iconDescription="Show"
         hasIconOnly
         size="sm"
@@ -32,7 +31,7 @@ const actions = (html_url, notification) => (
       <Link href={`https://jira.sec.***REMOVED***/browse/${notification.jira}`} target='_blank'>
         <Button
           kind="secondary"
-          renderIcon={Ticket16}
+          renderIcon={Ticket}
           iconDescription="Jira"
           hasIconOnly
           size="sm"

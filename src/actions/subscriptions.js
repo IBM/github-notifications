@@ -15,10 +15,10 @@ export function getSubscriptionHasError(data) {
   };
 }
 
-export function getSubscriptionSuccess(response) {
+export function getSubscriptionSuccess(data) {
   return {
     type: 'GET_THREAD_SUBSCRIPTION_SUCCESS',
-    response
+    data
   };
 }
 

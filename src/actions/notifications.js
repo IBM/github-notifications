@@ -52,6 +52,7 @@ export function fetchNotifications(since, refresh= false) {
           dispatch(notificationsHaveError(response.statusText))
         } else {
           if (refresh) {
+            if (response.data.length) notify(response.data);
             dispatch(notificationsFetchNewDataSuccess(response.data));
           } else {
             dispatch(notificationsFetchDataSuccess(response.data));

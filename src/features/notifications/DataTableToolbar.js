@@ -7,7 +7,7 @@ import {
   TableToolbarContent,
   TableToolbarSearch
 } from "carbon-components-react";
-import { CheckmarkOutline16, Notification16, NotificationOff16, Rss16, Sight16, VoiceActivate16, Recommend16, List16 } from "@carbon/icons-react";
+import { CheckmarkOutline, Notification, NotificationOff, Rss, Sight, VoiceActivate, Recommend, List } from "@carbon/icons-react";
 import { setSubscription } from "../../actions/subscriptions";
 
 const buttons = [
@@ -15,40 +15,40 @@ const buttons = [
     id: 'subscribed',
     type: 'subscribed',
     description: 'Subscribed',
-    icon: Rss16,
+    icon: Rss,
     kind: 'secondary'
   },
   {
     id: 'review_requested',
     type: 'review_requested',
     description: 'Review requested',
-    icon: Sight16,
+    icon: Sight,
     kind: 'danger'
   },
   {
     id: 'mention',
     type: 'mention',
     description: 'Mentioned',
-    icon: VoiceActivate16,
+    icon: VoiceActivate,
     kind: 'primary'
   },
   {
     id: 'author',
     type: 'author',
     description: 'Authored',
-    icon: Recommend16,
+    icon: Recommend,
     kind: 'primary'
   },
   {
     id: 'all',
     type: 'all',
     description: 'All',
-    icon: List16,
+    icon: List,
     kind: 'primary'
   }
 ];
 
-const DataTableToolbar = ({ onInputChange, filter, getBatchActionProps, selectedRows }) => {
+const DataTableToolbar = ({ onInputChange, filter, countNotifications, getBatchActionProps, selectedRows }) => {
   const dispatch = useDispatch();
 
   const buttonComponent = ({ id, type, description, icon, kind }) => (
@@ -61,7 +61,8 @@ const DataTableToolbar = ({ onInputChange, filter, getBatchActionProps, selected
       tooltipPosition="left"
       onClick={(e) => filter(e, type)}
       className={`notifications__table__toolbar__button--${type}`}
-    />
+    >{countNotifications(type).length}
+    </Button>
   );
 
   const setSubscriptions = (subscriptions, ignored) => {
@@ -76,7 +77,7 @@ const DataTableToolbar = ({ onInputChange, filter, getBatchActionProps, selected
         <TableBatchAction
           key="mute"
           tabIndex={getBatchActionProps().shouldShowBatchActions ? 0 : -1}
-          renderIcon={NotificationOff16}
+          renderIcon={NotificationOff}
           onClick={() => setSubscriptions(selectedRows, true)}
         >
           Mute
@@ -84,7 +85,7 @@ const DataTableToolbar = ({ onInputChange, filter, getBatchActionProps, selected
         <TableBatchAction
           key="unmute"
           tabIndex={getBatchActionProps().shouldShowBatchActions ? 0 : -1}
-          renderIcon={Notification16}
+          renderIcon={Notification}
           onClick={() => setSubscriptions(selectedRows, false)}
         >
           Unmute
@@ -92,7 +93,7 @@ const DataTableToolbar = ({ onInputChange, filter, getBatchActionProps, selected
         <TableBatchAction
           key="read"
           tabIndex={getBatchActionProps().shouldShowBatchActions ? 0 : -1}
-          renderIcon={CheckmarkOutline16}
+          renderIcon={CheckmarkOutline}
           onClick={() => {}}
         >
           Mark as read
