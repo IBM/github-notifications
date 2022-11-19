@@ -25,7 +25,7 @@ const avoidDuplications = (array, action) => {
     const newArrayWithoutOldObject = removeObjectFromArrayById(array, index);
     updatedArray = insertObjectIntoArray(newArrayWithoutOldObject, findObjectToReplace, index);
   }
-  return updatedArray;
+  return updatedArray.length ? updatedArray : [...array, action.data];
 }
 
 const reducer = (state = initialState, action) => {
@@ -33,19 +33,17 @@ const reducer = (state = initialState, action) => {
     case 'GET_THREAD_SUBSCRIPTION_IS_LOADING':
       return { ...state, isGetThreadSubscriptionLoading: action.isGetThreadSubscriptionLoading };
     case 'GET_THREAD_SUBSCRIPTION_HAS_ERROR': {
-      const arrayWithoutDuplicates = avoidDuplications(state.erroredSubscriptions, action);
       return {
         ...state,
         getThreadSubscriptionHasError: action.getThreadSubscriptionHasError,
-        erroredSubscriptions: arrayWithoutDuplicates.length ? arrayWithoutDuplicates : [...state.erroredSubscriptions, action.data],
+        erroredSubscriptions: avoidDuplications(state.erroredSubscriptions, action),
         isGetThreadSubscriptionLoading: false
       };
     }
     case 'GET_THREAD_SUBSCRIPTION_SUCCESS': {
-      const arrayWithoutDuplicates = avoidDuplications(state.subscriptions, action);
       return {
         ...state,
-        subscriptions: arrayWithoutDuplicates.length ? arrayWithoutDuplicates : [...state.subscriptions, action.data],
+        subscriptions: avoidDuplications(state.subscriptions, action),
         isGetThreadSubscriptionLoading: false
       }
     }
