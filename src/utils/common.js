@@ -1,5 +1,6 @@
 import React from "react";
 import { findJiraTicketForNotifications } from "./details";
+import { orderBy } from "lodash";
 
 export const processNotifications = (notificationArray, subscriptions) => {
   let processedNotification = [];
@@ -46,7 +47,7 @@ export const processPrUrl = (url) => {
   return `${protocol}//${hostname}/${path[4]}/${path[5]}/pull/${path[7]}`;
 }
 
-const sortNotifications = (notifications) => notifications.slice().sort((a, b) => b.updated_at - a.updated_at);
+const sortNotifications = (notifications) => orderBy(notifications, ['updated_at'], ['desc']);
 
 export const findElementIndexById = (array, id) => array.findIndex((element) => element.id === id);
 
