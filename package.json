@@ -36,6 +36,9 @@
     "concurrently": "^6.2.0",
     "electron": "^13.0.1",
     "electron-builder": "^22.10.5",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.7",
+    "redux-mock-store": "^1.5.4",
     "wait-on": "^6.0.0"
   },
   "scripts": {
