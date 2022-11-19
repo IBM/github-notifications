@@ -30,16 +30,9 @@ export function notificationsFetchNewDataSuccess(notifications) {
   };
 }
 
-export function newNotificationsClear() {
+export function newNotificationsMove() {
   return {
-    type: 'NEW_NOTIFICATIONS_CLEAR'
-  }
-}
-
-export function newNotificationsMove(notifications) {
-  return {
-    type: 'MOVE_NEW_NOTIFICATIONS',
-    notifications
+    type: 'MOVE_NEW_NOTIFICATIONS'
   };
 }
 
@@ -62,10 +55,8 @@ export function fetchNotifications(since, refresh= false) {
   }
 }
 
-export function moveNewNotifications(notifications) {
-  return (dispatch) => dispatch(newNotificationsMove(notifications));
-}
-
-export function clearNewNotifications() {
-  return (dispatch) => dispatch(newNotificationsClear());
+export function moveNewNotifications() {
+  return (dispatch) => {
+    dispatch(newNotificationsMove());
+  }
 }

@@ -22,16 +22,8 @@ const reducer = (state = initialState, action) => {
       return { ...state, notifications: action.notifications, areNotificationsLoading: false };
     case 'NOTIFICATIONS_FETCH_NEW_DATA_SUCCESS':
       return { ...state, newNotifications: action.notifications.concat(state.newNotifications), areNotificationsLoading: false };
-    case 'NEW_NOTIFICATIONS_CLEAR':
-      return { ...state, newNotifications: [] };
     case 'MOVE_NEW_NOTIFICATIONS': {
-      let currentNotifications = state.notifications;
-      for ( const newNotification of action.notifications) {
-        newNotification.index = (currentNotifications.length + 1);
-        newNotification.new = true;
-        currentNotifications.unshift(newNotification);
-      }
-      return { ...state, notifications: currentNotifications }
+      return { ...state, notifications: state.newNotifications.concat(state.notifications), newNotifications: [] }
     }
     default:
       return { ...state };
