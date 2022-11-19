@@ -46,8 +46,8 @@ $carbon--theme: $carbon--theme--g90;
 }
 
 .side-nav {
-  background-color: darken($background, 2%);
-  border-right: 1px solid $border-subtle;
+  background-color: #3d3d3d;
+  border-right: 3px solid #343434;
 
   &__filters-menu {
     border-top: 1px solid $border-subtle;
@@ -94,7 +94,13 @@ $carbon--theme: $carbon--theme--g90;
     }
 
     &__actions button {
+      background-color: #737373;
+      border: 2px solid #353535;
       margin-left: 5px;
+
+      &:hover {
+        background-color: lighten(#737373, 10%);
+      }
     }
 
     &__toolbar__button {
@@ -104,16 +110,54 @@ $carbon--theme: $carbon--theme--g90;
         }
       }
 
-      &--all, &--all:hover {
-        background-color: $carbon--purple-50;
+      &--all {
+        background-color: #8a6eff;
+        border: 1px solid #231755;
+
+        &:hover {
+          background-color: lighten(#8a6eff, 5%);
+          border: 1px solid lighten(#8a6eff, 5%);
+        }
       }
 
-      &--mention, &--mention:hover {
-        background-color: $carbon--green-50;
+      &--mention {
+        background-color: #0e6027;
+        border: 1px solid #083d19;
+
+        &:hover {
+          background-color: lighten(#0e6027, 5%);
+          border: 1px solid lighten(#0e6027, 5%);
+        }
       }
 
-      &--subscribed, &--subscribed:hover {
-        background-color: $background-active;
+      &--subscribed {
+        background-color: #525252;
+        border: 1px solid #353434;
+
+        &:hover {
+          background-color: lighten(#525252, 5%);
+          border: 1px solid lighten(#525252, 5%);
+        }
+      }
+
+      &--review_requested {
+        background-color: #a2191f;
+        border: 1px solid #601619;
+
+        &:hover {
+          background-color: lighten(#a2191f, 5%);
+          border: 1px solid lighten(#a2191f, 5%);
+        }
+      }
+
+      &--author {
+        background-color: #0043ce;
+        border: 1px solid #002b86;
+
+        &:hover {
+          background-color: lighten(#0043ce, 5%);
+          border: 1px solid lighten(#0043ce, 5%);
+        }
       }
     }
   }
@@ -121,6 +165,28 @@ $carbon--theme: $carbon--theme--g90;
   &__inline {
     margin: 2px 0;
     max-width: none;
+  }
+
+  &__tag {
+    &--gray {
+      border: 1px solid #353434;
+      box-shadow: 0 0 0 4px #3c3c3c;
+    }
+
+    &--red {
+      border: 1px solid #601619;
+      box-shadow: 0 0 0 4px #593436;
+    }
+
+    &--green {
+      border: 1px solid #083d19;
+      box-shadow: 0 0 0 4px #294632;
+    }
+
+    &--blue {
+      border: 1px solid #002b86;
+      box-shadow: 0 0 0 4px #244995;
+    }
   }
 }
 

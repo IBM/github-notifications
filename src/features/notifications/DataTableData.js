@@ -6,13 +6,13 @@ import { Launch, Ticket, NotificationOffFilled, FlagFilled } from "@carbon/icons
 const tagReason = (reason) => {
   switch (reason) {
     case 'review_requested':
-      return <Tag type="red" title={reason}>{reason}</Tag>;
+      return <Tag type="red" title={reason} className="notifications__tag--red">{reason}</Tag>;
     case 'mention':
-      return <Tag type="green" title={reason}>{reason}</Tag>;
+      return <Tag type="green" title={reason} className="notifications__tag--green">{reason}</Tag>;
     case 'author':
-      return <Tag type="blue" title={reason}>{reason}</Tag>;
+      return <Tag type="blue" title={reason} className="notifications__tag--blue">{reason}</Tag>;
     default:
-      return <Tag type="gray" title={reason}>{reason}</Tag>;
+      return <Tag type="gray" title={reason} className="notifications__tag--gray">{reason}</Tag>;
   }
 }
 
