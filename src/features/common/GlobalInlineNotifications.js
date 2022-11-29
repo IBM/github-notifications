@@ -13,37 +13,19 @@ const component = (props) => (
 
 const GlobalInlineNotifications = (
   {
-    erroredSubscriptions,
-    isGetThreadSubscriptionLoading,
-    getThreadSubscriptionHasError,
     isSettingSubscriptionLoading,
-    hasSettingSubscriptionError,
-    setSubscription
+    hasSettingSubscriptionError
   }) => {
   return (
     <>
-      {getThreadSubscriptionHasError &&
-        erroredSubscriptions.length &&
-        !isGetThreadSubscriptionLoading &&
-        component({
-          kind: 'warning',
-          title: 'Subscriptions',
-          subtitle: 'Some of the thread subscriptions weren\'t found. ' +
-            `Number of unavailable subscriptions: ${erroredSubscriptions.length}`
-        })
-      }
-      { setSubscription &&
-        !hasSettingSubscriptionError &&
-        !isSettingSubscriptionLoading &&
+      {!hasSettingSubscriptionError && !isSettingSubscriptionLoading &&
         component({
           kind: 'success',
           title: 'Mute Notifications',
           subtitle: 'You have successfully changed subscriptions of the requested notifications.'
         })
       }
-      { setSubscription &&
-        hasSettingSubscriptionError &&
-        !isSettingSubscriptionLoading &&
+      {hasSettingSubscriptionError && !isSettingSubscriptionLoading &&
         component({
           kind: 'error',
           title: 'Mute Notifications',

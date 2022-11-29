@@ -9,58 +9,59 @@ export const initialState = {
   isGetThreadSubscriptionLoading: false,
   getThreadSubscriptionHasError: false,
   subscriptions: [],
-  erroredSubscriptions: [],
   isSettingSubscriptionLoading: false,
   hasSettingSubscriptionError: false,
-  setSubscription: '',
-  settingSubscriptionError: ''
+  settingSubscriptionError: '',
+  error: ''
 };
 
 const avoidDuplications = (array, action) => {
-  const { id } = action.data;
+  const { id, ignored } = action;
   let updatedArray = [];
   const findObjectToReplace = findMatchingElementById(array, id);
   if (findObjectToReplace) {
     const index = findElementIndexById(array, id);
-    const newArrayWithoutOldObject = removeObjectFromArrayById(array, index);
+    const newArrayWithoutOldObject = removeObjectFromArrayById(array, id);
+    findObjectToReplace.ignored = ignored;
     updatedArray = insertObjectIntoArray(newArrayWithoutOldObject, findObjectToReplace, index);
   }
-  return updatedArray.length ? updatedArray : [...array, action.data];
+  return updatedArray.length ? updatedArray : [...array, action];
 }
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case 'GET_THREAD_SUBSCRIPTION_IS_LOADING':
-      return { ...state, isGetThreadSubscriptionLoading: action.isGetThreadSubscriptionLoading };
-    case 'GET_THREAD_SUBSCRIPTION_HAS_ERROR': {
+    case 'GET_SUBSCRIPTION':
+      return { ...state, isGetThreadSubscriptionLoading: true };
+    case 'GET_SUBSCRIPTION_ERROR':
       return {
         ...state,
-        getThreadSubscriptionHasError: action.getThreadSubscriptionHasError,
-        erroredSubscriptions: avoidDuplications(state.erroredSubscriptions, action),
-        isGetThreadSubscriptionLoading: false
-      };
-    }
-    case 'GET_THREAD_SUBSCRIPTION_SUCCESS': {
-      return {
-        ...state,
-        subscriptions: avoidDuplications(state.subscriptions, action),
-        isGetThreadSubscriptionLoading: false
+        getThreadSubscriptionHasError: true,
+        isGetThreadSubscriptionLoading: false,
+        error: action.error
       }
-    }
+    case 'GET_SUBSCRIPTION_SUCCESS':
+      return {
+        ...state,
+        isGetThreadSubscriptionLoading: false,
+        subscriptions: [...state.subscriptions, { id: action.id, ...action.subscription}]
+      }
     case 'SET_SUBSCRIPTION_IS_LOADING':
-      return { ...state, isSettingSubscriptionLoading: action.isSettingSubscriptionLoading };
+      return {
+        ...state,
+        isSettingSubscriptionLoading: true
+      };
     case 'SET_SUBSCRIPTION_HAS_ERROR':
       return {
         ...state,
-        hasSettingSubscriptionError: action.hasSettingSubscriptionError,
-        settingSubscriptionError: action.error,
-        isSettingSubscriptionLoading: false
+        hasSettingSubscriptionError: true,
+        isSettingSubscriptionLoading: false,
+        settingSubscriptionError: action.error
       };
     case 'SET_SUBSCRIPTION_SUCCESS':
       return {
         ...state,
-        setSubscription: action.data,
-        isSettingSubscriptionLoading: false
+        isSettingSubscriptionLoading: false,
+        subscriptions: avoidDuplications(state.subscriptions, action.subscription)
       };
     default:
       return { ...state };

@@ -1,6 +1,5 @@
 import React, { useState }  from 'react';
 import { useDispatch, useSelector } from "react-redux";
-import moment from 'moment';
 import {
   DataTable,
   Table,
@@ -19,15 +18,10 @@ import UseEffects from "./useEffects";
 import DataTableToolbar from './DataTableToolbar';
 import GlobalHeaderContainer from '../common/GlobalHeaderContainer';
 import GlobalInlineNotifications from '../common/GlobalInlineNotifications';
-import {
-  fetchNotifications,
-  moveNewNotifications
-} from '../../actions/notifications';
-import { setSince } from '../../actions/since';
+import { getMoreNotifications, moveNotifications } from '../../actions/notifications';
+import { setSubscription } from "../../actions/subscriptions";
 import { dataTableHeaders, dataTableRows } from './DataTableData';
-import {
-  processNotifications
-} from "../../utils/common";
+import { processNotifications } from "../../utils/common";
 
 const Notifications = () => {
   const dispatch = useDispatch();
@@ -37,23 +31,16 @@ const Notifications = () => {
   const allNotifications = useSelector((state) => state.notifications.notifications);
   const allNewNotifications = useSelector((state) => state.notifications.newNotifications);
   const areNotificationsLoading = useSelector((state) => state.notifications.areNotificationsLoading);
-  const erroredSubscriptions = useSelector((state) => state.subscriptions.erroredSubscriptions);
   const isSettingSubscriptionLoading = useSelector((state) => state.subscriptions.isSettingSubscriptionLoading);
   const hasSettingSubscriptionError = useSelector((state) => state.subscriptions.hasSettingSubscriptionError);
-  const isGetThreadSubscriptionLoading = useSelector((state) => state.subscriptions.isGetThreadSubscriptionLoading);
-  const getThreadSubscriptionHasError = useSelector((state) => state.subscriptions.getThreadSubscriptionHasError);
   const subscriptions = useSelector((state) => state.subscriptions.subscriptions);
-  const setSubscription = useSelector((state) => state.subscriptions.setSubscription);
-  const since = useSelector((state) => state.since.since);
 
   const fetchMoreNotifications = () => {
-    dispatch(setSince(moment().toISOString()));
-    dispatch(fetchNotifications(since, true));
+    dispatch(getMoreNotifications());
   }
 
   const collectNewNotifications = () => {
-    console.log('collectNewNotifications');
-    dispatch(moveNewNotifications());
+    dispatch(moveNotifications());
   }
 
   const countNotifications = (type) => {
@@ -79,6 +66,13 @@ const Notifications = () => {
     }
   }
 
+  const setSubscriptions = (selection, ignored) => {
+    selection.forEach(({ id }) => {
+      const processedId = id.split('-')[0];
+      dispatch(setSubscription({ processedId, thread_id: processedId, ignored }));
+    })
+  }
+
   return (
     <UseEffects
       setNotifications={setNotifications}
@@ -86,13 +80,10 @@ const Notifications = () => {
       notifications={notifications}
       allNewNotifications={allNewNotifications}
       areNotificationsLoading={areNotificationsLoading}
-      erroredSubscriptions={erroredSubscriptions}
       isSettingSubscriptionLoading={isSettingSubscriptionLoading}
       hasSettingSubscriptionError={hasSettingSubscriptionError}
-      setSubscription={setSubscription}
       subscriptions={subscriptions}
       dispatch={dispatch}
-      since={since}
     >
       <GlobalHeaderContainer
         activeLink="notifications"
@@ -103,12 +94,8 @@ const Notifications = () => {
       >
         <div className="notifications">
           <GlobalInlineNotifications
-            erroredSubscriptions={erroredSubscriptions}
-            isGetThreadSubscriptionLoading={isGetThreadSubscriptionLoading}
-            getThreadSubscriptionHasError={getThreadSubscriptionHasError}
             isSettingSubscriptionLoading={isSettingSubscriptionLoading}
             hasSettingSubscriptionError={hasSettingSubscriptionError}
-            setSubscription={setSubscription}
           />
           { !notifications.length
             ? <DataTableSkeleton
@@ -142,6 +129,7 @@ const Notifications = () => {
                     countNotifications={(type) => countNotifications(type)}
                     getBatchActionProps={getBatchActionProps}
                     selectedRows={selectedRows}
+                    setSubscriptions={(selection, ignored) => setSubscriptions(selection, ignored)}
                   />
                   <Table {...getTableProps()}>
                     <TableHead>

@@ -1,9 +1,3 @@
-/**
- * GitHubClient
- *
- * Dependencies: node-fetch https://github.com/bitinn/node-fetch
- *
- */
 const fetch = require('node-fetch');
 
 class HttpException extends Error {

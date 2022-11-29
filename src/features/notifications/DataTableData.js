@@ -78,7 +78,7 @@ export const dataTableRows = (notifications) => {
   notifications.forEach((notification) => {
     const { id, reason, updated_at, title, html_url, full_name, ignored, unread } = notification;
     mappedNotifications.push({
-      id: `${id}`,
+      id,
       reason: tagReason(reason),
       repo: full_name,
       updated_at: moment(moment.utc(updated_at).toDate()).local().format('YYYY-MM-DD HH:mm:ss'),

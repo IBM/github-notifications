@@ -1,5 +1,4 @@
 import React from "react";
-import { useDispatch } from "react-redux";
 import {
   Button, TableBatchAction,
   TableBatchActions,
@@ -7,8 +6,16 @@ import {
   TableToolbarContent,
   TableToolbarSearch
 } from "carbon-components-react";
-import { CheckmarkOutline, Notification, NotificationOff, Rss, Sight, VoiceActivate, Recommend, List } from "@carbon/icons-react";
-import { setSubscription } from "../../actions/subscriptions";
+import {
+  CheckmarkOutline,
+  Notification,
+  NotificationOff,
+  Rss,
+  Sight,
+  VoiceActivate,
+  Recommend,
+  List
+} from "@carbon/icons-react";
 
 const buttons = [
   {
@@ -48,9 +55,36 @@ const buttons = [
   }
 ];
 
-const DataTableToolbar = ({ onInputChange, filter, countNotifications, getBatchActionProps, selectedRows }) => {
-  const dispatch = useDispatch();
+const batchActions = [
+  {
+    id: 'mute',
+    text: 'Mute',
+    icon: NotificationOff,
+    bool: true
+  },
+  {
+    id: 'unmute',
+    text: 'Unmute',
+    icon: Notification,
+    bool: false
+  },
+  {
+    id: 'read',
+    text: 'Mark as read',
+    icon: CheckmarkOutline,
+    bool: false
+  }
+]
 
+const DataTableToolbar = (
+  {
+    onInputChange,
+    filter,
+    countNotifications,
+    getBatchActionProps,
+    selectedRows,
+    setSubscriptions
+  }) => {
   const buttonComponent = ({ id, type, description, icon, kind }) => (
     <Button
       key={id}
@@ -61,43 +95,26 @@ const DataTableToolbar = ({ onInputChange, filter, countNotifications, getBatchA
       tooltipPosition="left"
       onClick={(e) => filter(e, type)}
       className={`notifications__table__toolbar__button--${type}`}
-    >{countNotifications(type).length}
+    >
+      {countNotifications(type).length}
     </Button>
   );
 
-  const setSubscriptions = (subscriptions, ignored) => {
-    subscriptions.forEach(({ id }) => {
-      dispatch(setSubscription(id, { thread_id: id, ignored }));
-    })
-  }
+  const batchActionsComponent = ({ id, icon, bool, text }) => (
+    <TableBatchAction
+      key={id}
+      tabIndex={getBatchActionProps().shouldShowBatchActions ? 0 : -1}
+      renderIcon={icon}
+      onClick={() => setSubscriptions(selectedRows, bool)}
+    >
+      {text}
+    </TableBatchAction>
+  );
 
   return (
     <TableToolbar aria-label="data table toolbar" className="notifications__table__toolbar">
       <TableBatchActions {...getBatchActionProps()}>
-        <TableBatchAction
-          key="mute"
-          tabIndex={getBatchActionProps().shouldShowBatchActions ? 0 : -1}
-          renderIcon={NotificationOff}
-          onClick={() => setSubscriptions(selectedRows, true)}
-        >
-          Mute
-        </TableBatchAction>
-        <TableBatchAction
-          key="unmute"
-          tabIndex={getBatchActionProps().shouldShowBatchActions ? 0 : -1}
-          renderIcon={Notification}
-          onClick={() => setSubscriptions(selectedRows, false)}
-        >
-          Unmute
-        </TableBatchAction>
-        <TableBatchAction
-          key="read"
-          tabIndex={getBatchActionProps().shouldShowBatchActions ? 0 : -1}
-          renderIcon={CheckmarkOutline}
-          onClick={() => {}}
-        >
-          Mark as read
-        </TableBatchAction>
+        {batchActions.map((button) => batchActionsComponent(button))}
       </TableBatchActions>
       <TableToolbarContent>
         <TableToolbarSearch onChange={onInputChange} persistent />

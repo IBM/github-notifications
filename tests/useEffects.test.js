@@ -4,7 +4,7 @@ import Adapter from 'enzyme-adapter-react-16';
 import moment from 'moment';
 import { Provider } from 'react-redux';
 import configureMockStore from 'redux-mock-store';
-import UseEffects from './useEffects';
+import UseEffects from '../src/features/notifications/useEffects';
 import {
   allNotifications,
   allNewNotifications,
