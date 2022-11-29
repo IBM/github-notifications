@@ -18,13 +18,6 @@ const GlobalInlineNotifications = (
   }) => {
   return (
     <>
-      {!hasSettingSubscriptionError && !isSettingSubscriptionLoading &&
-        component({
-          kind: 'success',
-          title: 'Mute Notifications',
-          subtitle: 'You have successfully changed subscriptions of the requested notifications.'
-        })
-      }
       {hasSettingSubscriptionError && !isSettingSubscriptionLoading &&
         component({
           kind: 'error',
