@@ -1,9 +1,21 @@
 import React from 'react';
 import { useHistory } from "react-router-dom";
-import {Header, HeaderName, HeaderGlobalBar, HeaderGlobalAction, Button} from "carbon-components-react";
-import {SidePanelCloseFilled, SidePanelOpenFilled, Renew, UserAvatarFilledAlt} from '@carbon/icons-react';
+import {
+  Header,
+  HeaderName,
+  HeaderGlobalBar,
+  HeaderGlobalAction,
+  Button,
+  Toggle
+} from "carbon-components-react";
+import {
+  SidePanelCloseFilled,
+  SidePanelOpenFilled,
+  Renew,
+  UserAvatarFilledAlt
+} from '@carbon/icons-react';
 
-const GlobalHeader = ({ autoRefreshView, getItems, newItemsNumber, itemsLoading, toggle, isToggled }) => {
+const GlobalHeader = ({ toggleShowAll, showAllRead, autoRefreshView, getItems, newItemsNumber, itemsLoading, toggle, isToggled }) => {
   const history = useHistory()
 
   return (
@@ -21,16 +33,24 @@ const GlobalHeader = ({ autoRefreshView, getItems, newItemsNumber, itemsLoading,
       Notifications
     </HeaderName>
       <HeaderGlobalBar>
-        { autoRefreshView && (
-          <React.Fragment>
-            <HeaderGlobalAction onClick={autoRefreshView} aria-label="CHECK FOR NEW">
-              <Renew className={itemsLoading ? 'global-header__refresh-icon--spin' : ''} />
-            </HeaderGlobalAction>
-            <HeaderGlobalAction onClick={getItems} aria-label="NEW">
-              <div className="global-header__new-notifications-icon">{ newItemsNumber }</div>
-            </HeaderGlobalAction>
-          </React.Fragment>
-        )}
+        <HeaderGlobalAction aria-label="SHOW MARKED AS READ" className="global-header__toggle-show-all">
+          <Toggle
+            defaultToggled
+            hideLabel
+            labelA=""
+            labelB=""
+            size="sm"
+            id="toggle-show-all-read"
+            onClick={toggleShowAll}
+            toggled={showAllRead}
+          />
+        </HeaderGlobalAction>
+        <HeaderGlobalAction onClick={autoRefreshView} aria-label="CHECK FOR NEW">
+          <Renew className={itemsLoading ? 'global-header__refresh-icon--spin' : ''} />
+        </HeaderGlobalAction>
+        <HeaderGlobalAction onClick={getItems} aria-label="NEW">
+          <div className="global-header__new-notifications-icon">{ newItemsNumber }</div>
+        </HeaderGlobalAction>
         <HeaderGlobalAction onClick={() => history.push('/')} aria-label="LOG OUT">
           <UserAvatarFilledAlt />
         </HeaderGlobalAction>

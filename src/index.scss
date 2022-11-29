@@ -30,6 +30,14 @@ $carbon--theme: $carbon--theme--g90;
   background-color: lighten($background, 5%);
   border-bottom: 1px solid $border-subtle;
 
+  &__toggle-show-all .bx--form-item {
+    flex: unset;
+
+    label span {
+      margin-top: 0;
+    }
+  }
+
   &__new-notifications-icon {
     background-color: red;
     padding: 5px 10px;
@@ -186,44 +194,6 @@ $carbon--theme: $carbon--theme--g90;
     &--blue {
       border: 1px solid #002b86;
       box-shadow: 0 0 0 4px #244995;
-    }
-  }
-}
-
-.details__main {
-  &__jira__link {
-    padding: 5px;
-  }
-
-  &__list {
-    &__status {
-      &--green {
-        fill: $carbon--green-50;
-      }
-      &--red {
-        fill: $carbon--red-50;
-      }
-      &--purple {
-        fill: $carbon--purple-50;
-      }
-    }
-    .bx--structured-list-td {
-      vertical-align: middle;
-    }
-  }
-}
-
-.mentions__main, .review-requested__main, .authored__main {
-  &__content {
-    margin-left: 16rem;
-    margin-top: 48px;
-  }
-
-  &__list__wrapper {
-    margin-bottom: 0;
-
-    .bx--structured-list-td {
-      vertical-align: middle;
     }
   }
 }

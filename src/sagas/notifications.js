@@ -12,10 +12,10 @@ import { notify } from "../utils/electronNotifications";
 
 export const getSince = (state) => state.notifications.since;
 
-export function* getNotificationsSaga() {
+export function* getNotificationsSaga(showAllRead) {
   try {
     const since = yield select(getSince);
-    const { data } = yield githubCliEnterprise.getData({path:`/notifications?since=${since}&all=true`});
+    const { data } = yield githubCliEnterprise.getData({path:`/notifications?since=${since}&all=${showAllRead}`});
     yield put(getNotificationsSuccess(data));
     yield put(setSince(moment().toISOString()));
   } catch (e) {
@@ -23,10 +23,10 @@ export function* getNotificationsSaga() {
   }
 }
 
-export function* getMoreNotificationsSaga() {
+export function* getMoreNotificationsSaga(showAllRead) {
   try {
     const since = yield select(getSince);
-    const { data } = yield githubCliEnterprise.getData({path:`/notifications?since=${since}&all=true`});
+    const { data } = yield githubCliEnterprise.getData({path:`/notifications?since=${since}&all=${showAllRead}`});
     if (data.length) notify(data);
     yield put(getMoreNotificationsSuccess(data));
     yield put(setSince(moment().toISOString()));

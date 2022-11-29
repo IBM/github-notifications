@@ -1,6 +1,9 @@
 import * as types from '../actionTypes/notifications';
 
-export const getNotifications = () => ({ type: types.GET_NOTIFICATIONS });
+export const getNotifications = (showAllRead) => ({
+  type: types.GET_NOTIFICATIONS,
+  showAllRead
+});
 export const getNotificationsSuccess = (notifications) => ({
   type: types.GET_NOTIFICATIONS_SUCCESS,
   notifications
@@ -11,7 +14,10 @@ export const getNotificationsError = (error) => ({
   error
 });
 
-export const getMoreNotifications = () => ({ type: types.GET_MORE_NOTIFICATIONS });
+export const getMoreNotifications = (showAllRead) => ({
+  type: types.GET_MORE_NOTIFICATIONS,
+  showAllRead
+});
 
 export const getMoreNotificationsSuccess = (notifications) => ({
   type: types.GET_MORE_NOTIFICATIONS_SUCCESS,

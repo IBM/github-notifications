@@ -27,6 +27,9 @@ const Notifications = () => {
   const dispatch = useDispatch();
 
   const [notifications, setNotifications] = useState([]);
+  const [showAllRead, setShowAllRead] = useState(false);
+
+  console.log(showAllRead);
 
   const allNotifications = useSelector((state) => state.notifications.notifications);
   const allNewNotifications = useSelector((state) => state.notifications.newNotifications);
@@ -34,6 +37,10 @@ const Notifications = () => {
   const isSettingSubscriptionLoading = useSelector((state) => state.subscriptions.isSettingSubscriptionLoading);
   const hasSettingSubscriptionError = useSelector((state) => state.subscriptions.hasSettingSubscriptionError);
   const subscriptions = useSelector((state) => state.subscriptions.subscriptions);
+
+  const toggleShowAll = () => {
+    setShowAllRead(!showAllRead);
+  }
 
   const fetchMoreNotifications = () => {
     dispatch(getMoreNotifications());
@@ -75,6 +82,7 @@ const Notifications = () => {
 
   return (
     <UseEffects
+      showAllRead={showAllRead}
       setNotifications={setNotifications}
       allNotifications={allNotifications}
       notifications={notifications}
@@ -87,6 +95,8 @@ const Notifications = () => {
     >
       <GlobalHeaderContainer
         activeLink="notifications"
+        showAllRead={showAllRead}
+        toggleShowAll={() => toggleShowAll()}
         autoRefreshView={() => fetchMoreNotifications()}
         getItems={() => collectNewNotifications()}
         newItemsNumber={allNewNotifications.length}

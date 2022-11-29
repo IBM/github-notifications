@@ -7,6 +7,7 @@ import { processNotifications } from "../../utils/common";
 const UseEffects = (
   {
     children,
+    showAllRead,
     setNotifications,
     allNotifications,
     notifications,
@@ -22,10 +23,10 @@ const UseEffects = (
 
   useEffect(() => {
     if (!allNotifications.length && !areNotificationsLoading) {
-      dispatch(getNotifications());
+      dispatch(getNotifications(showAllRead));
     } else {
       const interval = setInterval(() => {
-        dispatch(getMoreNotifications());
+        dispatch(getMoreNotifications(showAllRead));
       }, automaticFetchInterval);
       return () => clearInterval(interval);
     }
