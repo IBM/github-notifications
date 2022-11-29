@@ -29,8 +29,6 @@ const Notifications = () => {
   const [notifications, setNotifications] = useState([]);
   const [showAllRead, setShowAllRead] = useState(false);
 
-  console.log(showAllRead);
-
   const allNotifications = useSelector((state) => state.notifications.notifications);
   const allNewNotifications = useSelector((state) => state.notifications.newNotifications);
   const areNotificationsLoading = useSelector((state) => state.notifications.areNotificationsLoading);
