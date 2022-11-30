@@ -1,4 +1,10 @@
 import moment from "moment";
+import {
+  findElementIndexById,
+  findMatchingElementById,
+  insertObjectIntoArray,
+  removeObjectFromArrayById
+} from "../utils/common";
 
 export const initialState = {
   areNotificationsLoading: false,
@@ -7,6 +13,14 @@ export const initialState = {
   newNotifications: [],
   error: '',
   since: moment().subtract(4, 'week').toISOString()
+};
+
+const updateNotification = (array, id) => {
+  const findObjectToReplace = findMatchingElementById(array, id);
+  const index = findElementIndexById(array, id);
+  const newArrayWithoutOldObject = removeObjectFromArrayById(array, id);
+  findObjectToReplace.unread = false;
+  return insertObjectIntoArray(newArrayWithoutOldObject, findObjectToReplace, index);
 };
 
 const reducer = (state = initialState, action) => {
@@ -28,6 +42,8 @@ const reducer = (state = initialState, action) => {
       return { ...state, newNotifications: action.notifications.concat(state.newNotifications), areNotificationsLoading: false };
     case 'MOVE_NOTIFICATIONS':
       return { ...state, notifications: state.newNotifications.concat(state.notifications), newNotifications: [] }
+    case 'SET_NOTIFICATION_AS_READ_SUCCESS':
+      return { ...state, notifications: updateNotification(state.notifications, action.id) }
     case 'SET_SINCE':
       return { ...state, since: action.date }
     default:

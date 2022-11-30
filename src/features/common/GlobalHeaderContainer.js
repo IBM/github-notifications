@@ -3,7 +3,17 @@ import cx from 'classnames';
 import GlobalHeader from './GlobalHeader';
 import GlobalSideNav from "./GlobalSideNav";
 
-const GlobalHeaderContainer = ({ children, toggleShowAll, showAllRead, activeLink, autoRefreshView, getItems, newItemsNumber, itemsLoading }) => {
+const GlobalHeaderContainer = (
+  {
+    children,
+    toggleShowAll,
+    showAllRead,
+    activeLink,
+    autoRefreshView,
+    getItems,
+    newItemsNumber,
+    itemsLoading
+  }) => {
   const [isToggled, setIsToggled] = useState(false);
   const toggle = useCallback(
     () => setIsToggled(!isToggled),

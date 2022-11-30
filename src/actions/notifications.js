@@ -30,3 +30,18 @@ export const setSince = (date) => ({
 });
 
 export const moveNotifications = () => ({ type: types.MOVE_NOTIFICATIONS });
+
+export const setNotificationAsRead = (id) => ({
+  type: types.SET_NOTIFICATION_AS_READ,
+  id
+});
+
+export const setNotificationAsReadSuccess = (id) => ({
+  type: types.SET_NOTIFICATION_AS_READ_SUCCESS,
+  id
+});
+
+export const setNotificationAsReadError = (error) => ({
+  type: types.SET_NOTIFICATION_AS_READ_ERROR,
+  error
+});

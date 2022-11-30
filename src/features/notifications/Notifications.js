@@ -18,7 +18,7 @@ import UseEffects from "./useEffects";
 import DataTableToolbar from './DataTableToolbar';
 import GlobalHeaderContainer from '../common/GlobalHeaderContainer';
 import GlobalInlineNotifications from '../common/GlobalInlineNotifications';
-import { getMoreNotifications, moveNotifications } from '../../actions/notifications';
+import { getMoreNotifications, moveNotifications, setNotificationAsRead } from '../../actions/notifications';
 import { setSubscription } from "../../actions/subscriptions";
 import { dataTableHeaders, dataTableRows } from './DataTableData';
 import { processNotifications } from "../../utils/common";
@@ -75,6 +75,14 @@ const Notifications = () => {
     selection.forEach(({ id }) => {
       const processedId = id.split('-')[0];
       dispatch(setSubscription({ processedId, thread_id: processedId, ignored }));
+    })
+  }
+
+  const markNotificationAsRead = (selection) => {
+    selection.forEach(({ id }) => {
+      const processedId = id.split('-')[0];
+      console.log(processedId);
+      dispatch(setNotificationAsRead(processedId));
     })
   }
 
@@ -138,6 +146,7 @@ const Notifications = () => {
                     getBatchActionProps={getBatchActionProps}
                     selectedRows={selectedRows}
                     setSubscriptions={(selection, ignored) => setSubscriptions(selection, ignored)}
+                    setNotificationsAsRead={(selection) => markNotificationAsRead(selection)}
                   />
                   <Table {...getTableProps()}>
                     <TableHead>

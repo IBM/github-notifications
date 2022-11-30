@@ -26,7 +26,7 @@ const avoidDuplications = (array, action) => {
     updatedArray = insertObjectIntoArray(newArrayWithoutOldObject, findObjectToReplace, index);
   }
   return updatedArray.length ? updatedArray : [...array, action];
-}
+};
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {

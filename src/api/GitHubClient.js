@@ -32,8 +32,11 @@ class GitHubClient {
       _response = response;
       // if response is ok transform response.text to json object
       // else throw error
-      if (response.ok) {
+      if (response.ok && response.status === 200) {
         return response.json()
+      }
+      else if (response.ok && response.status !== 200) {
+        return response;
       } else {
         throw new HttpException({
           message: `HttpException[${method}]`,
@@ -64,6 +67,10 @@ class GitHubClient {
 
   putData({path, data}) {
     return this.callGitHubAPI({method:'PUT', path, data});
+  }
+
+  patchData({path}) {
+    return this.callGitHubAPI({method:'PATCH', path, data: null});
   }
 }
 

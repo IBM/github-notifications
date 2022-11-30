@@ -67,12 +67,6 @@ const batchActions = [
     text: 'Unmute',
     icon: Notification,
     bool: false
-  },
-  {
-    id: 'read',
-    text: 'Mark as read',
-    icon: CheckmarkOutline,
-    bool: false
   }
 ]
 
@@ -83,7 +77,8 @@ const DataTableToolbar = (
     countNotifications,
     getBatchActionProps,
     selectedRows,
-    setSubscriptions
+    setSubscriptions,
+    setNotificationsAsRead
   }) => {
   const buttonComponent = ({ id, type, description, icon, kind }) => (
     <Button
@@ -115,6 +110,14 @@ const DataTableToolbar = (
     <TableToolbar aria-label="data table toolbar" className="notifications__table__toolbar">
       <TableBatchActions {...getBatchActionProps()}>
         {batchActions.map((button) => batchActionsComponent(button))}
+        <TableBatchAction
+          key="read"
+          tabIndex={getBatchActionProps().shouldShowBatchActions ? 0 : -1}
+          renderIcon={CheckmarkOutline}
+          onClick={() => setNotificationsAsRead(selectedRows)}
+        >
+          Mark as read
+        </TableBatchAction>
       </TableBatchActions>
       <TableToolbarContent>
         <TableToolbarSearch onChange={onInputChange} persistent />

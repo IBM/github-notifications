@@ -22,7 +22,7 @@ const actions = (html_url, notification) => (
       <Button
         kind="secondary"
         renderIcon={Launch}
-        iconDescription="Show"
+        iconDescription="Github"
         hasIconOnly
         size="sm"
       />

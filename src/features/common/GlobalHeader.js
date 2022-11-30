@@ -15,7 +15,17 @@ import {
   UserAvatarFilledAlt
 } from '@carbon/icons-react';
 
-const GlobalHeader = ({ toggleShowAll, showAllRead, autoRefreshView, getItems, newItemsNumber, itemsLoading, toggle, isToggled }) => {
+const GlobalHeader = (
+  {
+    toggleShowAll,
+    showAllRead,
+    autoRefreshView,
+    getItems,
+    newItemsNumber,
+    itemsLoading,
+    toggle,
+    isToggled
+  }) => {
   const history = useHistory()
 
   return (
@@ -33,10 +43,9 @@ const GlobalHeader = ({ toggleShowAll, showAllRead, autoRefreshView, getItems, n
       Notifications
     </HeaderName>
       <HeaderGlobalBar>
-        <HeaderGlobalAction aria-label="SHOW MARKED AS READ" className="global-header__toggle-show-all">
+        <HeaderGlobalAction aria-label="FETCH ALSO MARKED AS READ" className="global-header__toggle-show-all">
           <Toggle
             defaultToggled
-            hideLabel
             labelA=""
             labelB=""
             size="sm"

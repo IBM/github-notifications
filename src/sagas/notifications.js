@@ -1,12 +1,18 @@
 import { put, takeEvery, select } from 'redux-saga/effects';
 import moment from 'moment';
-import { GET_NOTIFICATIONS, GET_MORE_NOTIFICATIONS } from '../actionTypes/notifications';
+import {
+  GET_NOTIFICATIONS,
+  GET_MORE_NOTIFICATIONS,
+  SET_NOTIFICATION_AS_READ
+} from '../actionTypes/notifications';
 import { githubCliEnterprise } from '../api/authentication';
 import {
   getNotificationsSuccess,
   getNotificationsError,
   getMoreNotificationsSuccess,
-  setSince
+  setSince,
+  setNotificationAsReadSuccess,
+  setNotificationAsReadError
 } from '../actions/notifications';
 import { notify } from "../utils/electronNotifications";
 
@@ -35,5 +41,15 @@ export function* getMoreNotificationsSaga(showAllRead) {
   }
 }
 
+export function* setNotificationAsReadSaga({ id }) {
+  const response = yield githubCliEnterprise.patchData({path: `/notifications/threads/${id}`});
+  if (response.status === 205) {
+    yield put(setNotificationAsReadSuccess(id));
+  } else {
+    yield put(setNotificationAsReadError());
+  }
+}
+
 export const fetchNotificationsSaga = takeEvery(GET_NOTIFICATIONS, getNotificationsSaga);
 export const fetchMoreNotificationsSaga = takeEvery(GET_MORE_NOTIFICATIONS, getMoreNotificationsSaga);
+export const updateNotificationAsReadSaga = takeEvery(SET_NOTIFICATION_AS_READ, setNotificationAsReadSaga);
