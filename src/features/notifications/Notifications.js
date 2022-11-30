@@ -81,7 +81,6 @@ const Notifications = () => {
   const markNotificationAsRead = (selection) => {
     selection.forEach(({ id }) => {
       const processedId = id.split('-')[0];
-      console.log(processedId);
       dispatch(setNotificationAsRead(processedId));
     })
   }
