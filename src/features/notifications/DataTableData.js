@@ -1,7 +1,8 @@
 import React from "react";
 import moment from "moment";
-import { Button, Link, Tag } from "carbon-components-react";
+import { Button, Tag } from "carbon-components-react";
 import { Launch, Ticket, NotificationOffFilled, FlagFilled } from "@carbon/icons-react";
+import { setNotificationAsRead } from "../../actions/notifications";
 
 const tagReason = (reason) => {
   switch (reason) {
@@ -16,27 +17,31 @@ const tagReason = (reason) => {
   }
 }
 
-const actions = (html_url, notification) => (
+const onClick = (dispatch, id, html_url) => {
+  const processedId = id.split('-')[0];
+  dispatch(setNotificationAsRead(processedId));
+  window.open(html_url, '_blank');
+}
+
+const actions = (dispatch, id, html_url, jira) => (
   <div className="notifications__table__actions">
-    <Link href={html_url} target='_blank'>
+    <Button
+      kind="secondary"
+      renderIcon={Launch}
+      iconDescription="Github"
+      hasIconOnly
+      size="sm"
+      onClick={() => onClick(dispatch, id, html_url)}
+    />
+    {jira && (
       <Button
         kind="secondary"
-        renderIcon={Launch}
-        iconDescription="Github"
+        renderIcon={Ticket}
+        iconDescription="Jira"
         hasIconOnly
         size="sm"
+        onClick={() => onClick(`https://jira.sec.***REMOVED***/browse/${jira}`)}
       />
-    </Link>
-    {notification.jira && (
-      <Link href={`https://jira.sec.***REMOVED***/browse/${notification.jira}`} target='_blank'>
-        <Button
-          kind="secondary"
-          renderIcon={Ticket}
-          iconDescription="Jira"
-          hasIconOnly
-          size="sm"
-        />
-      </Link>
     )
     }
   </div>
@@ -73,17 +78,17 @@ export const dataTableHeaders = [
   }
 ];
 
-export const dataTableRows = (notifications) => {
+export const dataTableRows = (dispatch, notifications) => {
   let mappedNotifications = [];
   notifications.forEach((notification) => {
-    const { id, reason, updated_at, title, html_url, full_name, ignored, unread } = notification;
+    const { id, reason, updated_at, title, html_url, full_name, ignored, unread, jira } = notification;
     mappedNotifications.push({
       id,
-      reason: tagReason(reason),
       repo: full_name,
-      updated_at: moment(moment.utc(updated_at).toDate()).local().format('YYYY-MM-DD HH:mm:ss'),
       title,
-      actions: actions(html_url, notification),
+      reason: tagReason(reason),
+      updated_at: moment(moment.utc(updated_at).toDate()).local().format('YYYY-MM-DD HH:mm:ss'),
+      actions: actions(dispatch, id, html_url, jira),
       muted: ignored ? <NotificationOffFilled /> : null,
       unread: unread ? <FlagFilled /> : null
     })

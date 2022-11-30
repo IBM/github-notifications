@@ -124,7 +124,7 @@ const Notifications = () => {
             : (
               <DataTable
                 isSortable
-                rows={dataTableRows(notifications)}
+                rows={dataTableRows(dispatch, notifications)}
                 headers={dataTableHeaders}
                 render={({
                   rows,
