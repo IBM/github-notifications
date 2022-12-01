@@ -40,7 +40,7 @@ const actions = (dispatch, id, html_url, jira) => (
         iconDescription="Jira"
         hasIconOnly
         size="sm"
-        onClick={() => onClick(`https://jira.sec.***REMOVED***/browse/${jira}`)}
+        onClick={() => window.open(`https://jira.sec.***REMOVED***/browse/${jira}`, '_blank')}
       />
     )
     }
