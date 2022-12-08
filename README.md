@@ -8,18 +8,11 @@ The Electron app has built in MacOS notifications.
 After you clone this project, do the following:
 
 ```bash
-# go into the project
-cd github-notifications
-
-# choose the right npm with nvm
-nvm use 12
-
-# install npm dependencies
 npm install
 
-# run app in the browser
-npm start
+# start app as Electron desktop app (MacOS)
+npm run electron-dev
 
-# run electron desktop app
-npm run electron
+# start app in your browser
+npm run start
 ```
