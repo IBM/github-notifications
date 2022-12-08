@@ -11,6 +11,7 @@ const UseEffects = (
     setNotifications,
     allNotifications,
     notifications,
+    notificationsTypeSelected,
     allNewNotifications,
     areNotificationsLoading,
     isSettingSubscriptionLoading,
@@ -61,6 +62,26 @@ const UseEffects = (
       setNotifications(processedNotifications);
     }
   }, [subscriptions, isSettingSubscriptionLoading, hasSettingSubscriptionError]);
+
+  const countNotifications = (selectedType) => {
+    let notificationsByType = [];
+    allNotifications.forEach((notification) => {
+      const { reason: notificationType } = notification;
+      if (notificationType === selectedType) notificationsByType.push(notification);
+    });
+    return notificationsByType;
+  };
+
+  useEffect(() => {
+    const notificationsByType = [];
+    notificationsTypeSelected.forEach((type) => {
+      if (type.checked) notificationsByType.push(...countNotifications(type.id));
+    });
+    if (notificationsByType.length) {
+      const processedNotifications = processNotifications(notificationsByType, subscriptions);
+      setNotifications(processedNotifications);
+    }
+  }, [notificationsTypeSelected]);
 
   return children;
 }

@@ -2,7 +2,7 @@ import React from "react";
 import moment from "moment";
 import { Button, Tag } from "carbon-components-react";
 import { Launch, Ticket, NotificationOffFilled, FlagFilled } from "@carbon/icons-react";
-import { setNotificationAsRead } from "../../actions/notifications";
+import { setNotificationAsRead } from "../../../actions/notifications";
 
 const tagReason = (reason) => {
   switch (reason) {

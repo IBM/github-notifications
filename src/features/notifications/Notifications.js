@@ -1,4 +1,4 @@
-import React, { useState }  from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import {
   DataTable,
@@ -15,18 +15,19 @@ import {
 } from 'carbon-components-react';
 import classNames from 'classnames';
 import UseEffects from "./useEffects";
-import DataTableToolbar from './DataTableToolbar';
+import DataTableToolbar from './DataTable/DataTableToolbar';
 import GlobalHeaderContainer from '../common/GlobalHeaderContainer';
 import GlobalInlineNotifications from '../common/GlobalInlineNotifications';
 import { getMoreNotifications, moveNotifications, setNotificationAsRead } from '../../actions/notifications';
 import { setSubscription } from "../../actions/subscriptions";
-import { dataTableHeaders, dataTableRows } from './DataTableData';
-import { processNotifications } from "../../utils/common";
+import { dataTableHeaders, dataTableRows } from './DataTable/DataTableData';
+import notificationTypes from './notificationTypes';
 
 const Notifications = () => {
   const dispatch = useDispatch();
 
   const [notifications, setNotifications] = useState([]);
+  const [notificationsTypeSelected, setNotificationsTypeSelected] = useState(notificationTypes);
   const [showAllRead, setShowAllRead] = useState(false);
 
   const allNotifications = useSelector((state) => state.notifications.notifications);
@@ -48,27 +49,12 @@ const Notifications = () => {
     dispatch(moveNotifications());
   }
 
-  const countNotifications = (type) => {
-    let notificationsByType = [];
-    if (type !== 'all') {
-      allNotifications.forEach((notification) => {
-        if (notification.reason === type) notificationsByType.push(notification);
-      });
-    } else {
-      notificationsByType = allNotifications;
-    }
-    return notificationsByType;
-  }
-
-  const filterByType = (event, type) => {
-    event.preventDefault();
-    const notificationsByType = countNotifications(type);
-    if (!notificationsByType.length) {
-      setNotifications(notifications);
-    } else {
-      const processedNotifications = processNotifications(notificationsByType, subscriptions);
-      setNotifications(processedNotifications);
-    }
+  const filterByType = (event, id) => {
+    const updatedArray = notificationsTypeSelected.map(
+      (type) =>
+        (type.id === id ? { ...type, checked: !type.checked } : type)
+    );
+    setNotificationsTypeSelected(updatedArray);
   }
 
   const setSubscriptions = (selection, ignored) => {
@@ -91,6 +77,7 @@ const Notifications = () => {
       setNotifications={setNotifications}
       allNotifications={allNotifications}
       notifications={notifications}
+      notificationsTypeSelected={notificationsTypeSelected}
       allNewNotifications={allNewNotifications}
       areNotificationsLoading={areNotificationsLoading}
       isSettingSubscriptionLoading={isSettingSubscriptionLoading}
@@ -115,7 +102,7 @@ const Notifications = () => {
           { !notifications.length
             ? <DataTableSkeleton
               showHeader={false}
-              showToolbar={false}
+              showToolbar={true}
               headers={dataTableHeaders}
               rowCount={5}
               columnCount={7}
@@ -140,8 +127,8 @@ const Notifications = () => {
                 <TableContainer className="notifications__table">
                   <DataTableToolbar
                     onInputChange={onInputChange}
-                    filter={(e, type) => filterByType(e, type)}
-                    countNotifications={(type) => countNotifications(type)}
+                    filtersChecked={notificationsTypeSelected}
+                    setFilter={(e, id) => filterByType(e, id)}
                     getBatchActionProps={getBatchActionProps}
                     selectedRows={selectedRows}
                     setSubscriptions={(selection, ignored) => setSubscriptions(selection, ignored)}

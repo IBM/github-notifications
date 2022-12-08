@@ -198,6 +198,10 @@ $carbon--theme: $carbon--theme--g90;
   }
 }
 
+.bx--overflow-menu-options {
+  padding: 5px 8px;
+}
+
 @keyframes spin {
   from {
     transform:rotate(0deg);

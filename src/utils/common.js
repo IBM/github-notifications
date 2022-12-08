@@ -71,6 +71,8 @@ export const findMatchingElementById = (array, id) => array.find(element => elem
 
 export const removeObjectFromArrayById = (array, id) => array.filter((object) => object.id !== id);
 
+export const filterById = (array, id) => array.filter((object) => object.id === id);
+
 export const insertObjectIntoArray = (array, object, index) => {
   let newArray = array.slice();
   newArray.splice(index, 0, object);
