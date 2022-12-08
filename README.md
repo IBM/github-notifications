@@ -23,3 +23,10 @@ You will need a Github Personal Access Token (Profile - Settings - Developer set
 URL: ***REMOVED***
 
 Token: Personal Access Token
+
+To receive notifications please adjust your Github Profile notifications settings
+(Profile - Notifications)
+![](src/assets/settings.png)
+
+Add yourself as a watcher to repositories on Github in order to receive notifications from that repo
+![](src/assets/repo-watching.png)
