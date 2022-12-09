@@ -19,6 +19,9 @@ npm run start
 Access locally: http://localhost:5555
 
 You will need a Github Personal Access Token (Profile - Settings - Developer settings) to use on the login page.
+![](src/assets/token-settings.png)
+
+Login page:
 
 URL: ***REMOVED***
 
