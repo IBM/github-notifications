@@ -23,7 +23,7 @@ You will need a Github Personal Access Token (Profile - Settings - Developer set
 
 Login page:
 
-URL: ***REMOVED***
+URL: https://github.***REMOVED***.com
 
 Token: Personal Access Token
 

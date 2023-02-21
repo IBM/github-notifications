@@ -40,7 +40,7 @@ const actions = (dispatch, id, html_url, jira) => (
         iconDescription="Jira"
         hasIconOnly
         size="sm"
-        onClick={() => window.open(`https://jira.sec.***REMOVED***/browse/${jira}`, '_blank')}
+        onClick={() => window.open(`https://jira.sec.***REMOVED***.com/browse/${jira}`, '_blank')}
       />
     )
     }
@@ -50,11 +50,11 @@ const actions = (dispatch, id, html_url, jira) => (
 export const dataTableHeaders = [
   {
     key: 'unread',
-    header: 'Unread',
+    header: <FlagFilled />,
   },
   {
     key: 'muted',
-    header: 'Muted',
+    header: <NotificationOffFilled />,
   },
   {
     key: 'repo',

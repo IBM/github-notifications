@@ -18,7 +18,7 @@ const children = <div>test</div>;
 const notifications = [
   {
     full_name: "managed-security/glass-webui",
-    html_url: "***REMOVED***/managed-security/glass-webui/pull/551",
+    html_url: "https://github.***REMOVED***.com/managed-security/glass-webui/pull/551",
     id: "123",
     ignored: false,
     jira: "XPS-103742",
